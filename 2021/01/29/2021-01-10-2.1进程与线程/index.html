@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;colaxianyu.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="进程的概念和特征 进程的定义  是进程实体（进程映像）的运行过程，是系统进行资源分配的基本单位  特征  动态性：进程的最基本特征 并发性：多个进程进程实体同时存在于内存中，能在一段时间内同时运行 独立性：系统分配资源的基本单位 异步性：各进程以不可预知的速度向前推进，可能导致运行结果的不确定 结构性：每个进程都配置一个PCB对其进行描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程与线程">
+<meta property="og:url" content="https://colaxianyu.github.io/2021/01/29/2021-01-10-2.1%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Colaxy&#39;s Blog">
+<meta property="og:description" content="进程的概念和特征 进程的定义  是进程实体（进程映像）的运行过程，是系统进行资源分配的基本单位  特征  动态性：进程的最基本特征 并发性：多个进程进程实体同时存在于内存中，能在一段时间内同时运行 独立性：系统分配资源的基本单位 异步性：各进程以不可预知的速度向前推进，可能导致运行结果的不确定 结构性：每个进程都配置一个PCB对其进行描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-29T14:45:47.000Z">
+<meta property="article:modified_time" content="2021-06-19T14:43:37.238Z">
+<meta property="article:author" content="Colaxy">
+<meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://colaxianyu.github.io/2021/01/29/2021-01-10-2.1%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;colaxianyu.github.io&#x2F;2021&#x2F;01&#x2F;29&#x2F;2021-01-10-2.1%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;01&#x2F;29&#x2F;2021-01-10-2.1进程与线程&#x2F;&quot;,&quot;title&quot;:&quot;进程与线程&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>进程与线程 | Colaxy's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{&quot;tracking_id&quot;:&quot;UA-189780915-2&quot;,&quot;only_pageview&quot;:false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Colaxy's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">知行合一</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-algorithm"><a href="/categories/algorithm/" rel="section"><i class="fa fa-code fa-fw"></i>算法</a></li>
+        <li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-user-secret fa-fw"></i>逆向</a></li>
+        <li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li>
+        <li class="menu-item menu-item-exam"><a href="/categories/exam/" rel="section"><i class="fa fa-book fa-fw"></i>考研</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E7%89%B9%E5%BE%81"><span class="nav-number">1.</span> <span class="nav-text">进程的概念和特征</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">进程的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E5%BE%81"><span class="nav-number">1.2.</span> <span class="nav-text">特征</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%BB%84%E7%BB%87%E4%B8%8Epcb%E7%9A%84%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">进程的组织与PCB的组织方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%BB%84%E7%BB%87"><span class="nav-number">2.1.</span> <span class="nav-text">进程的组织</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pcb%E7%9A%84%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">PCB的组织方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81%E4%B8%8E%E5%88%87%E6%8D%A2"><span class="nav-number">3.</span> <span class="nav-text">进程的状态与切换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%A7%8D%E7%B1%BB"><span class="nav-number">3.1.</span> <span class="nav-text">状态种类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.2.</span> <span class="nav-text">状态转换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">进程控制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">4.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8E%9F%E8%AF%AD"><span class="nav-number">4.2.</span> <span class="nav-text">相关原语</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="nav-number">5.</span> <span class="nav-text">进程通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8"><span class="nav-number">5.1.</span> <span class="nav-text">共享存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92"><span class="nav-number">5.2.</span> <span class="nav-text">消息传递</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1"><span class="nav-number">5.3.</span> <span class="nav-text">管道通信</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.</span> <span class="nav-text">线程的概念与多线程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%9B%AE%E7%9A%84%E5%8F%8A%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">6.1.</span> <span class="nav-text">引入线程的目的及线程的特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">6.2.</span> <span class="nav-text">线程的实现方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.3.</span> <span class="nav-text">多线程模型</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Colaxy"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Colaxy</p>
+  <div class="site-description" itemprop="description">知行合一</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/colaxianyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;colaxianyu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2021/01/29/2021-01-10-2.1%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          进程与线程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-01-29 22:45:47" itemprop="dateCreated datePublished" datetime="2021-01-29T22:45:47+08:00">2021-01-29</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-06-19 22:43:37" itemprop="dateModified" datetime="2021-06-19T22:43:37+08:00">2021-06-19</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/exam/" itemprop="url" rel="index"><span itemprop="name">考研</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="进程的概念和特征">进程的概念和特征</h3>
+<h4 id="进程的定义">进程的定义</h4>
+<ul>
+<li>是进程实体（进程映像）的运行过程，是系统进行资源分配的基本单位</li>
+</ul>
+<h4 id="特征">特征</h4>
+<ol type="1">
+<li>动态性：进程的最基本特征</li>
+<li>并发性：多个进程进程实体同时存在于内存中，能在一段时间内同时运行</li>
+<li>独立性：系统分配资源的基本单位</li>
+<li>异步性：各进程以不可预知的速度向前推进，可能导致运行结果的不确定</li>
+<li>结构性：每个进程都配置一个PCB对其进行描述</li>
+</ol>
+<span id="more"></span>
+<hr />
+<h3 id="进程的组织与pcb的组织方式">进程的组织与PCB的组织方式</h3>
+<h4 id="进程的组织">进程的组织</h4>
+<ol type="1">
+<li>进程控制块（PCB）：进程存在的唯一标志
+<ul>
+<li>进程描述信息（进程标识符PID、用户标识符UID）</li>
+<li>进程控制管理信息（进程当前状态、进程优先级等）</li>
+<li>资源分配清单（代码段指针、堆栈段指针、文件描述符等）</li>
+<li>处理机相关信息（通用寄存器、地址寄存器、控制寄存器、标志寄存器，状态字）</li>
+</ul></li>
+<li>程序段：存放要执行的程序代码</li>
+<li>数据段：存放程序运行过程中的各种数据，可是原始数据，也可是相关结果</li>
+</ol>
+<h4 id="pcb的组织方式">PCB的组织方式</h4>
+<ol type="1">
+<li>链式方式：将同一状态的PCB链接成一个队列</li>
+<li>索引方式：将同一状态的PCB组织在一个索引表内，索引表的表项指向相应的PCB</li>
+</ol>
+<hr />
+<h3 id="进程的状态与切换">进程的状态与切换</h3>
+<h4 id="状态种类">状态种类</h4>
+<ol type="1">
+<li>运行态：CPU（获得）、其他资源（获得）</li>
+<li>就绪态：CPU（未获得）、其他资源（获得）</li>
+<li>阻塞态：CPU（未获得）、其他资源（未获得）</li>
+<li>创建态：进程正在被创建，系统为新进程分配资源、创建PCB</li>
+<li>结束态：进程正在从消失，系统回收进程资源、撤销PCB</li>
+</ol>
+<h4 id="状态转换">状态转换</h4>
+<ol type="1">
+<li>就绪态 -&gt; 运行态：进程被调度，获得CPU</li>
+<li>运行态 -&gt; 就绪态：时间片用完，或有优先级更高的进程进入，CPU被剥夺</li>
+<li>运行态 -&gt; 阻塞态：进程等待某种资源或某事件发生（主动行为）</li>
+<li>阻塞态 -&gt; 就绪态：进程需要的资源以分配好或等待的事件已发生（被动行为）</li>
+<li>创建态 -&gt; 就绪态：系统完成创建进程的工作</li>
+<li>运行态 -&gt; 结束态：进程运行结束或因其他原因退出运行</li>
+</ol>
+<hr />
+<h3 id="进程控制">进程控制</h3>
+<h4 id="基本概念">基本概念</h4>
+<ol type="1">
+<li>实现进程状态的转换</li>
+<li>进程控制通过原语实现
+<ul>
+<li>原语用开关中断实现</li>
+<li>原语是一种特殊的程序</li>
+<li>执行期间不允许中断，是一个不可分割的基本单位</li>
+</ul></li>
+</ol>
+<h4 id="相关原语">相关原语</h4>
+<ol type="1">
+<li>创建</li>
+<li>终止</li>
+<li>阻塞</li>
+<li>唤醒</li>
+<li>切换</li>
+</ol>
+<hr />
+<h3 id="进程通信">进程通信</h3>
+<h4 id="共享存储">共享存储</h4>
+<ol type="1">
+<li>特点：互斥的访问共享空间</li>
+<li>两种共享方式
+<ul>
+<li>低级方式共享：基于数据结构的共享</li>
+<li>高级方式共享：基于存储区的共享</li>
+</ul></li>
+</ol>
+<h4 id="消息传递">消息传递</h4>
+<ol type="1">
+<li>特点
+<ul>
+<li>以格式化的消息（Message）为单位进行数据交换</li>
+<li>系统提供<strong>发送消息</strong>与<strong>接收消息</strong>两个原语</li>
+</ul></li>
+<li>两种方式
+<ul>
+<li>直接通信方式：消息直接挂到接收方的消息队列中</li>
+<li>间接（信箱）通信方式：消息发送到中间实体（信箱）中</li>
+</ul></li>
+</ol>
+<h4 id="管道通信">管道通信</h4>
+<ol type="1">
+<li>特点
+<ul>
+<li>本质是一个固定大小的缓冲区</li>
+<li>一个管道只能实现半双工通信（即某一时刻只能单向传输），实现双向通信需要建立两个管道</li>
+<li>管道机制需要3中协调能力，即<strong>互斥</strong>、<strong>同步</strong>、<strong>确认对方的存在</strong></li>
+<li>以字符流形式将数据写入管道，读出时亦然</li>
+<li>写满时，不能再写，读空时，不能再读</li>
+<li>没写满，不能读，没读空，不能写</li>
+</ul></li>
+</ol>
+<hr />
+<h3 id="线程的概念与多线程模型">线程的概念与多线程模型</h3>
+<h4 id="引入线程的目的及线程的特点">引入线程的目的及线程的特点</h4>
+<ol type="1">
+<li>目的
+<ul>
+<li>减小程序在并发执行时的时空开销，提高系统的并发性能、资源利用率与吞吐量</li>
+</ul></li>
+<li>特点
+<ul>
+<li>线程是处理机调度的基本单位，进程是拥有资源的基本单位</li>
+<li>线程基本不拥有任何系统资源</li>
+<li>同一进程的各线程共享进程拥有的资源</li>
+<li>同一进程的不同线程切换不会导致进程切换</li>
+</ul></li>
+</ol>
+<h4 id="线程的实现方式">线程的实现方式</h4>
+<ol type="1">
+<li>用户级线程（ULT）：对内核透明，有关线程管理的所有工作都由应用程序完成</li>
+<li>内核级线程（KLT）：内核级线程才是处理机调度的基本单位，线程管理的所有工作都由内核完成</li>
+<li>组合方式：上述两种方式的结合</li>
+</ol>
+<h4 id="多线程模型">多线程模型</h4>
+<ol type="1">
+<li>多对一模型
+<ul>
+<li>优点：线程管理在用户空间进行，故线程管理的开销小、效率高</li>
+<li>缺点：一个线程阻塞，整个进程阻塞，并发度低</li>
+</ul></li>
+<li>一对一模型
+<ul>
+<li>优点：一个线程阻塞，另一个线程仍能继续执行，并发度高</li>
+<li>缺点：线程管理开销大</li>
+</ul></li>
+<li>多对多模型
+<ul>
+<li>特点：n个用户级线程映射到m个内核级线程上，且 <span class="math inline">\(m≤n\)</span></li>
+<li>优点：集上述两者所长，且克服了两者的缺点</li>
+</ul></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/01/28/2021-01-10-2.2%E5%A4%84%E7%90%86%E6%9C%BA%E8%B0%83%E5%BA%A6/" rel="prev" title="处理机调度">
+                  <i class="fa fa-chevron-left"></i> 处理机调度
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/30/2021-01-10-1.1%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0/" rel="next" title="一.操作系统概述">
+                  一.操作系统概述 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Colaxy</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
