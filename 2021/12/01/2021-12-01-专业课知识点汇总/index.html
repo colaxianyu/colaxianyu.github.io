@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;colaxianyu.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="数据结构 循环队列 队空条件：Q.rear &#x3D;&#x3D; Q.front 队满条件：(Q.rear + 1) % MaxSize &#x3D;&#x3D; Q.front 入队：Q.rear &#x3D; (Q.rear + 1) % MaxSize 出队：Q.front &#x3D; (Q.front + 1) % MaxSize 长度：(Q.rear - Q.front + MaxSize) % MaxSize 栈 \(\d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="专业课知识点汇总">
+<meta property="og:url" content="https://colaxianyu.github.io/2021/12/01/2021-12-01-%E4%B8%93%E4%B8%9A%E8%AF%BE%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="Colaxy&#39;s Blog">
+<meta property="og:description" content="数据结构 循环队列 队空条件：Q.rear &#x3D;&#x3D; Q.front 队满条件：(Q.rear + 1) % MaxSize &#x3D;&#x3D; Q.front 入队：Q.rear &#x3D; (Q.rear + 1) % MaxSize 出队：Q.front &#x3D; (Q.front + 1) % MaxSize 长度：(Q.rear - Q.front + MaxSize) % MaxSize 栈 \(\d">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-01T14:45:47.000Z">
+<meta property="article:modified_time" content="2021-12-07T16:35:31.803Z">
+<meta property="article:author" content="Colaxy">
+<meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://colaxianyu.github.io/2021/12/01/2021-12-01-%E4%B8%93%E4%B8%9A%E8%AF%BE%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;colaxianyu.github.io&#x2F;2021&#x2F;12&#x2F;01&#x2F;2021-12-01-%E4%B8%93%E4%B8%9A%E8%AF%BE%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;12&#x2F;01&#x2F;2021-12-01-专业课知识点汇总&#x2F;&quot;,&quot;title&quot;:&quot;专业课知识点汇总&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>专业课知识点汇总 | Colaxy's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{&quot;tracking_id&quot;:&quot;UA-189780915-2&quot;,&quot;only_pageview&quot;:false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Colaxy's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">知行合一</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-algorithm"><a href="/categories/algorithm/" rel="section"><i class="fa fa-code fa-fw"></i>算法</a></li>
+        <li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-user-secret fa-fw"></i>逆向</a></li>
+        <li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li>
+        <li class="menu-item menu-item-exam"><a href="/categories/exam/" rel="section"><i class="fa fa-book fa-fw"></i>考研</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97"><span class="nav-number">1.1.</span> <span class="nav-text">循环队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%88"><span class="nav-number">1.2.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%91%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.3.</span> <span class="nav-text">树与二叉树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE"><span class="nav-number">1.4.</span> <span class="nav-text">图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE"><span class="nav-number">1.5.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">1.6.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-number">1.7.</span> <span class="nav-text">并查集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%A2%E9%BB%91%E6%A0%91"><span class="nav-number">1.8.</span> <span class="nav-text">红黑树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD"><span class="nav-number">2.1.</span> <span class="nav-text">中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98"><span class="nav-number">2.3.</span> <span class="nav-text">磁盘</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%BD%91"><span class="nav-number">3.</span> <span class="nav-text">计网</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">3.1.</span> <span class="nav-text">基础知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82"><span class="nav-number">3.2.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">3.3.</span> <span class="nav-text">数据链路层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-number">3.3.1.</span> <span class="nav-text">流量控制与可靠传输</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8B%E8%B4%A8%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="nav-number">3.4.</span> <span class="nav-text">介质访问控制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91"><span class="nav-number">3.4.1.</span> <span class="nav-text">局域网</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E7%BA%BF%E5%B1%80%E5%9F%9F%E7%BD%91-ieee-802.11"><span class="nav-number">3.4.2.</span> <span class="nav-text">无线局域网 IEEE 802.11</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E5%9F%9F%E7%BD%91%E4%B8%8Eppp%E5%8D%8F%E8%AE%AE"><span class="nav-number">3.5.</span> <span class="nav-text">广域网与PPP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">3.6.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="nav-number">3.7.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">3.8.</span> <span class="nav-text">应用层</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Colaxy"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Colaxy</p>
+  <div class="site-description" itemprop="description">知行合一</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/colaxianyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;colaxianyu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2021/12/01/2021-12-01-%E4%B8%93%E4%B8%9A%E8%AF%BE%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          专业课知识点汇总
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-12-01 22:45:47" itemprop="dateCreated datePublished" datetime="2021-12-01T22:45:47+08:00">2021-12-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-12-08 00:35:31" itemprop="dateModified" datetime="2021-12-08T00:35:31+08:00">2021-12-08</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/exam/" itemprop="url" rel="index"><span itemprop="name">考研</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="数据结构">数据结构</h2>
+<h3 id="循环队列">循环队列</h3>
+<p>队空条件：Q.rear == Q.front<br />
+队满条件：(Q.rear + 1) % MaxSize == Q.front<br />
+入队：Q.rear = (Q.rear + 1) % MaxSize<br />
+出队：Q.front = (Q.front + 1) % MaxSize<br />
+长度：(Q.rear - Q.front + MaxSize) % MaxSize</p>
+<h3 id="栈">栈</h3>
+<p><span class="math inline">\(\displaystyle \begin{aligned}  出栈序列个数 \frac{1}{n+1} C_{2n} ^{n} \end{aligned}\)</span></p>
+<span id="more"></span>
+<h3 id="树与二叉树">树与二叉树</h3>
+<ol type="1">
+<li><p>树相关常用结论<br />
+<span class="math inline">\(\displaystyle \begin{aligned}  &amp;①.度为m的树，第i层至多有m^{i - 1}个节点\\  &amp;②.高度为h的m叉树至多有\frac{m^h-1}{m-1}个结点\\  &amp;③.具有n个结点的m叉树的最小高度为\lceil log_m(n(m-1)+1) \rceil \\  &amp;④.结点数 = 分支数 + 1 \end{aligned}\)</span></p></li>
+<li><p>二叉树常用结论<br />
+<span class="math inline">\(\displaystyle \begin{aligned}  &amp;①.非空二叉树上第i层至多有2^{i-1}个结点\\  &amp;②.高度为h的二叉树至多有2^h-1个结点\\  &amp;③.对于完全二叉树，n个结点的完全二叉树高度为\lceil log_2(n+1) \rceil\\  &amp;④.非空二叉树上的叶子节点数等于度为2的结点数加1，即n_0=n_2+1 \end{aligned}\)</span></p></li>
+</ol>
+<h3 id="图">图</h3>
+<p>无向完全图：e = v(v-1)/2<br />
+有向完全图：e = v(v-1)<br />
+无向图中所有顶点的<strong>度数之和</strong>等于<strong>边数的两倍</strong><br />
+有向图中全部定点的<strong>入度之和</strong>等于<strong>出度之和</strong>等于<strong>边数</strong><br />
+邻接矩阵表示中：行表示该结点的<strong>出度</strong>，列表示该结点的<strong>入度</strong><br />
+边少的图称为稀疏图，反之称为稠密图，当$E &lt; Vlog_2V $时，可将图视为稀疏图</p>
+<h3 id="查找">查找</h3>
+<ol type="1">
+<li><p>顺序查找<br />
+<span class="math inline">\(\displaystyle \begin{aligned}  &amp;ASL_{成功} = \frac{n+1}{2} \\\\  &amp;ASL_{失败} =  \begin{cases}  n+1， \quad 一般线性表 \\\\  \frac{n}{2}+\frac{n}{n+1}, \quad 有序线性表  \end{cases} \end{aligned}\)</span></p></li>
+<li><p>折半查找（只适用于<strong>有序</strong>的<strong>顺序表</strong>）<br />
+<span class="math inline">\(\displaystyle \begin{aligned}  &amp;关键字比较次数：失败=成功=\lfloor log_2(n)+1 \rfloor \\  &amp;ASL_{成功} = \frac{n+1}{n}log_2(n+1)-1 \approx log_2(n+1)-1 \\\\ \end{aligned}\)</span></p></li>
+<li><p>hash表<br />
+<span class="math inline">\(\displaystyle \begin{aligned}  &amp;①hash函数通常采用除留余数法：H(key) = key \% p \\  &amp;②开放地址法处理冲突， 在产生冲突后，第i次探测的地址为：H_i=(H(key)+d_i) \% m\\  &amp;③线性探测法中d_i = 1，2，3，...，m-1 \\  &amp;④平方探测法（二次探测法）中d_i = 1^2，-1^2，2^2，-2^2，...，k^2，-k^2，但表长m必须是一个可表示成4k+3的质数 \\  &amp;⑤填装因子\alpha = \frac{记录数n}{hash表长度m}\\  &amp;⑥填装因子\alpha 越大，冲突的可能性越大\\  &amp;⑦hash表的查找效率取决于：散列函数、处理冲突的方法/填装因子 \end{aligned}\)</span></p></li>
+</ol>
+<h3 id="排序">排序</h3>
+<ol type="1">
+<li>每趟排序都能确定一个<strong>元素的最终位置</strong>：冒泡排序、选择排序、堆排序、快速排序（枢轴元素）</li>
+<li>每趟排序都能确定一个<strong>局部有序的子序列</strong>：插入排序、shell排序、归并排序</li>
+<li>非稳定的排序算法：选择排序、shell排序、快速排序、堆排序</li>
+<li>使用辅助空间的排序算法：快速排序、归并排序、基数排序</li>
+<li>可运用于链表中的排序算法：插入排序、冒泡排序、选择排序</li>
+</ol>
+<p><strong>排序算法小结</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">算法种类</th>
+<th style="text-align: center;">时间复杂度(平均)</th>
+<th style="text-align: center;">空间复杂度</th>
+<th style="text-align: center;">是否稳定</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">插入排序</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(n^2)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;">是</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">冒泡排序</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(n^2)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;">是</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">选择排序</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(n^2)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;">否</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">希尔排序</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;">否</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">快速排序</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(log_2n)\)</span></td>
+<td style="text-align: center;">否</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">堆排序</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;">否</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2路归并排序</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(n)\)</span></td>
+<td style="text-align: center;">是</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">基数排序</td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(d(n+r))\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\displaystyle O(r)\)</span></td>
+<td style="text-align: center;">是</td>
+</tr>
+</tbody>
+</table>
+<h3 id="并查集">并查集</h3>
+<ol type="1">
+<li>逻辑上：是一种集合</li>
+<li>物理上：采用顺序表存储，每个集合构成一颗树，并用双亲表示法表示</li>
+<li>基本操作：
+<ul>
+<li>并(Union)：将两个不相交的集合合并为一个</li>
+<li>查(find)：找到一个指定元素所属的集合</li>
+</ul></li>
+</ol>
+<h3 id="红黑树">红黑树</h3>
+<ol type="1">
+<li>性质：
+<ul>
+<li>红黑树是二叉排序树</li>
+<li>根节点是黑色的</li>
+<li>叶节点（失败结点、外部节点、NULL结点）是黑色的</li>
+<li>不存在两个相邻的红色节点（即红色结点的<strong>父节点</strong>与<strong>子节点</strong>一定是黑色的）</li>
+<li>对每个结点，从该节点到任一叶节点的路径上，所含的黑色结点数量相同</li>
+</ul></li>
+<li>插入操作
+<ul>
+<li>确定插入位置</li>
+<li>新结点是根，染黑</li>
+<li>新节点非根，染红
+<ul>
+<li>若插入新节点后依然满足红黑树的定义，则插入结束</li>
+<li>若插入新结点后不满足红黑树定义，则进行调整（看叔结点的颜色）
+<ul>
+<li>红叔：染色+变新
+<ul>
+<li>叔父结点染色，爷结点变为新节点</li>
+</ul></li>
+<li>黑叔：旋转+染色
+<ul>
+<li>LL型：右单旋，父换爷+染色</li>
+<li>RR型：左单旋，父换爷+染色</li>
+<li>LR型：先左后右旋，儿换爷+染色</li>
+<li>RL型：先右后左旋，儿换爷+染色</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="操作系统">操作系统</h2>
+<h3 id="中断">中断</h3>
+<ol type="1">
+<li>中断隐指令
+<ul>
+<li>关中断</li>
+<li>保存断点</li>
+<li>中断服务程序寻址</li>
+</ul></li>
+<li>中断服务程序
+<ul>
+<li>保存现场</li>
+<li>开中断（多级中断）</li>
+<li>执行中断服务程序</li>
+<li>关中断（多级中断）</li>
+<li>恢复现场</li>
+<li>开中断</li>
+<li>中断返回</li>
+</ul></li>
+</ol>
+<h3 id="进程">进程</h3>
+<p>进程调度 CLOCK（NRU）：选择u=0的页面，并将略过页面的使用位改为u=0;</p>
+<p>改进型CLOCK：优先选择u=0（最近未访问）的页面用于替换 1.优先选择（u, m） = (0, 0)的页面，此轮不修改 2.选择（u, m） = (0, 1)，并对每个掠过的页面，将其使用位改为u=0</p>
+<h3 id="磁盘">磁盘</h3>
+<p>磁盘读写时间 = 寻道时间 + 延迟时间（定位扇区，通常为1/（2*转速）） + 传输时间（磁头划过一个扇区的时间）</p>
+<hr />
+<h2 id="计网">计网</h2>
+<h3 id="基础知识">基础知识</h3>
+<ol type="1">
+<li>各层功能
+<ul>
+<li>物理层：在物理媒体上透明传输比特流</li>
+<li>链路层：组帧、差错控制、流量控制、介质访问控制（对共享信道访问的控制）</li>
+<li>网络层：拥塞控制、网际互连、路由与转发</li>
+<li>传输层：端到端管理、差错控制、流量控制、分用复用</li>
+<li>会话层：建立、管理进程间的会话</li>
+<li>表示层：数据压缩、加密解密</li>
+<li>应用层：用户与网络的界面</li>
+</ul></li>
+<li>各层设备
+<ul>
+<li>物理层：集线器、中继器（转发器）、放大器</li>
+<li>链路层：交换机、网桥</li>
+<li>网络层：路由器</li>
+</ul></li>
+<li>广播域与冲突域</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">设备名称</th>
+<th style="text-align: center;">能否隔离冲突域</th>
+<th style="text-align: center;">能否隔离广播域</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">集线器</td>
+<td style="text-align: center;">不能</td>
+<td style="text-align: center;">不能</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">中继器</td>
+<td style="text-align: center;">不能</td>
+<td style="text-align: center;">不能</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">交换机</td>
+<td style="text-align: center;">能</td>
+<td style="text-align: center;">不能</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">网桥</td>
+<td style="text-align: center;">能</td>
+<td style="text-align: center;">不能</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">路由器</td>
+<td style="text-align: center;">能</td>
+<td style="text-align: center;">能</td>
+</tr>
+</tbody>
+</table>
+<h3 id="物理层">物理层</h3>
+<ol type="1">
+<li><p>奈奎斯特定理<br />
+<span class="math inline">\(\displaystyle \begin{aligned}  &amp;信道极限数据传输速率=2Wlog_2V \\  &amp;其中，W为理想低通信道的带宽，V为每个码元离散的电频数目（即V种不同的码元） \end{aligned}\)</span></p></li>
+<li><p>香农定理<br />
+<span class="math inline">\(\displaystyle \begin{aligned}  &amp;信道极限数据传输速率=Wlog_2{(1+\frac{S}{N})} \\  &amp;其中，W为信道的带宽，S为信道所传输信号的平均功率，N为信道内部的高斯噪声功率，\frac{S}{N}为信号的平均功率与噪声的平均功率之比，信噪比=10log_{10}{\frac{S}{N}}（db） \end{aligned}\)</span></p></li>
+<li><p>3种交换方式</p>
+<ul>
+<li>电路交换</li>
+<li>报文交换</li>
+<li>分组交换</li>
+</ul></li>
+<li><p>发送时延与传播时延</p>
+<ul>
+<li>发送（传输）时延：主机或路由器发送一个报文的时间，发送时延 = 报文长度/报文发送速率</li>
+<li>传播时延：电磁波在信道中的传播一定<strong>距离</strong>所花费的时间，传播时延 = 线路长度/信号传播速度</li>
+</ul></li>
+</ol>
+<blockquote>
+<p><strong>对于分组交换，发送时延 = n个分组在发送端的发送时延 + 1个分组从发送到被接收的时间（1 * m个中间结点发送时延 + 传播时延）</strong></p>
+</blockquote>
+<ol start="5" type="1">
+<li>物理层特性
+<ul>
+<li>机械特性：定义规格、引线数目、引脚数目等</li>
+<li>电气特性：定义线路上信号的电压高低、传输速率、距离限制等</li>
+<li>功能特性：定义某条线路上的某一电平的电压表示什么意义</li>
+<li>过程特性（规程特性）：定义各功能中不同事件的出现顺序</li>
+</ul></li>
+</ol>
+<h3 id="数据链路层">数据链路层</h3>
+<h4 id="流量控制与可靠传输">流量控制与可靠传输</h4>
+<ol type="1">
+<li>停止-等待协议
+<ul>
+<li>发送窗口 = 接收窗口 = 1</li>
+<li>发送方每发送一个数据帧就必须停止并等待接收方确认</li>
+</ul></li>
+<li>后退N帧协议（GBN）
+<ul>
+<li>若采用n比特对帧编号，则：<span class="math inline">\(\displaystyle 1 \le 发送窗口 \le 2^{n-1}\quad \quad 接收窗口 = 1\)</span></li>
+<li>接收方只允许按顺序接收数据帧，故即使收到了n号差错帧之后的所有数据帧，接收方也会将这些帧丢弃，并请求重传n号帧及其之后的帧</li>
+<li>通常采用累计确认机制，如发送方发送0~7 号帧，接收方返回0，2，3号帧的确认，表明接收方已经收到0~3 号帧，只需重传4~7 号帧</li>
+</ul></li>
+<li>选择重传协议（SR）
+<ul>
+<li>若采用n比特对帧编号，则：<span class="math inline">\(\displaystyle 发送窗口=接收窗口= 2^{n-1}\quad 且发送窗口+接收窗口 \le 2^n\)</span></li>
+<li>选择重传不采用累计确认，而是对每个正确收到的帧都返回与之对应的确认帧</li>
+</ul></li>
+</ol>
+<h3 id="介质访问控制">介质访问控制</h3>
+<ol type="1">
+<li>信道划分（静态）
+<ul>
+<li>频分多路复用FDM</li>
+<li>时分多路复用TDM</li>
+<li>波分多路复用WDM</li>
+<li>码分多路复用CDM</li>
+</ul></li>
+<li>随机访问（动态）
+<ol type="1">
+<li>ALPHA协议</li>
+<li>CSMA（载波侦听多路访问）
+<ul>
+<li>1-坚持：发送数据时，先侦听信道，空闲则发，<strong>忙则等待，且一直侦听信道直至信道空闲</strong>，若发生冲突，则随机等待一段时间后，再重新侦听信道</li>
+<li>非坚持：发送数据时，先侦听信道，空闲则发，<strong>忙则放弃，等待一个随机时间后再重复上述过程</strong></li>
+<li>p-坚持：发送数据时，先侦听信道，<strong>若信道忙，则等到下一时隙再侦听；若信道空闲，则以概率p发送数据，以概率1-p推迟到下一时隙，再重复上述过程</strong></li>
+</ul></li>
+<li>CSMA/CD（碰撞检测）
+<ul>
+<li>侦听：发送前先侦听信道，若空闲则立即发送数据并进行冲突检测；若信道忙，则继续侦听信道，直至信道空闲</li>
+<li>碰撞检测：适配器发送数据时检测信道上信号电压变化情况，以判断是否发生冲突，若检测到冲突，适配器停止发送数据，并传输一个拥塞信号，随后采用截断二进制退避算法等待一段随机时间后重新侦听</li>
+<li>争用期：即碰撞窗口，设单程传播时延为<span class="math inline">\(\displaystyle \tau\)</span>，则以太网端到端往返时间<span class="math inline">\(\displaystyle 2\tau\)</span>称为争用期，其意义是，若发送站在发送帧后经过时间<span class="math inline">\(\displaystyle 2\tau\)</span>，如果没有发生碰撞，则该帧就能顺利发送</li>
+<li><span class="math inline">\(\displaystyle 最小帧长=总线传播时延 \times 数据传输时延 \times 2\)</span></li>
+<li><span class="math inline">\(\displaystyle \frac{帧长}{传输速率}\ge 2\tau\)</span></li>
+</ul></li>
+<li>CSMA/CA(碰撞避免)
+<ul>
+<li>帧时间间隔IFS
+<ul>
+<li>SIFS：最短的IFS，使用SIFS的帧有ACK帧，CTS帧、分片后的数据帧、所有回答AP探寻的帧</li>
+<li>PIFS：中等长度的IFS，在PCF操作中使用</li>
+<li>DIFS：最长的IFS，用于异步帧竞争访问（RTS预约信道）</li>
+</ul></li>
+</ul></li>
+</ol></li>
+<li>发送周期于信道利用率
+<ul>
+<li><span class="math inline">\(\displaystyle  \begin{aligned}  &amp;发送周期T=\frac{帧长L}{数据传输速率V}+往返时延RTT+接收端发送确认帧的发送时延t \\  &amp;其中，确认帧很短，通常可将t1忽略  \end{aligned}\)</span></li>
+<li><span class="math inline">\(\displaystyle  \begin{aligned}  &amp;若发送周期为T，发送方的数据传输速率为V，发送方在周期T内共发送L比特的数据，则\\  &amp;信道利用率=\frac{L}{VT} \\  &amp;其中，确认帧很短，通常可将t1忽略  \end{aligned}\)</span></li>
+</ul></li>
+</ol>
+<h4 id="局域网">局域网</h4>
+<ol type="1">
+<li>以太网 IEEE 802.3（逻辑拓扑为总线形，物理拓扑为星形或拓展星形）</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">目的地址</th>
+<th style="text-align: center;">源地址</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">数据</th>
+<th style="text-align: center;">FCS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">6B</td>
+<td style="text-align: center;">6B</td>
+<td style="text-align: center;">2B</td>
+<td style="text-align: center;">46~1500B</td>
+<td style="text-align: center;">4B</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>前导码(8B，在物理层中添加的首部，不属于MAC帧)：前同步码(7B) + 帧开始定界符(1B)</li>
+<li>目的地址(6B)：MAC地址</li>
+<li>源地址码(6B)：MAC地址</li>
+<li>类型(2B)：指出数据域中携带的数据应交给那个协议实体处理</li>
+<li>数据(46~1500B)：包含高层协议信息，由于CSMA/CD算法的限制，由于以太网帧最小长度为64B，所以此部分最小长度为46B（64 - 首部地址14B - 尾部4B = 46B），若数据太少，则填充0~46B</li>
+<li>FCS(4B)：校验范围从目的地址到数据段末尾，算法采用32位CRC</li>
+</ul>
+<p><strong>MTU最大传输单元是指MAC帧的数据最大载荷，而MAC帧本身最大长度为1518B</strong></p>
+<ol type="1">
+<li>令牌环网（逻辑拓扑为环形，物理拓扑为星形）</li>
+<li>光线分布数字接口 FDDI（逻辑拓扑为环形，物理拓扑为双环形）</li>
+</ol>
+<h4 id="无线局域网-ieee-802.11">无线局域网 IEEE 802.11</h4>
+<ol type="1">
+<li>802.11中MAC帧</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">功能</th>
+<th style="text-align: center;">To DS</th>
+<th style="text-align: center;">From DS</th>
+<th style="text-align: center;">Address1(接收端)</th>
+<th style="text-align: center;">Address2(发送端)</th>
+<th style="text-align: center;">Address3</th>
+<th style="text-align: center;">Address4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">IBSS</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">DA</td>
+<td style="text-align: center;">SA</td>
+<td style="text-align: center;">BSSID</td>
+<td style="text-align: center;">未使用</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">To AP</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">BSSID</td>
+<td style="text-align: center;">SA</td>
+<td style="text-align: center;">DA</td>
+<td style="text-align: center;">未使用</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Freom AP</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">DA</td>
+<td style="text-align: center;">BSSID</td>
+<td style="text-align: center;">SA</td>
+<td style="text-align: center;">未使用</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">WDS(无线分布式系统)</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">RA</td>
+<td style="text-align: center;">TA</td>
+<td style="text-align: center;">DA</td>
+<td style="text-align: center;">SA</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" type="1">
+<li>VLAN概念与原理
+<ul>
+<li>性质：将局域网内的设备划分成与物理位置无关的逻辑组</li>
+<li>原理：查交换机中的VLAN表
+<ul>
+<li>基于接口的VLAN技术：VLAN ID —— 端口</li>
+<li>基于MAC地址的VLAN技术：VLAN —— MAC地址</li>
+</ul></li>
+</ul></li>
+<li>VLAN的实现（添加VLAN标记） —— IEEE 802.1Q帧</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">目的地址</th>
+<th style="text-align: center;">源地址</th>
+<th style="text-align: center;">VLAN标记</th>
+<th style="text-align: center;">类型</th>
+<th style="text-align: center;">数据</th>
+<th style="text-align: center;">FCS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">6B</td>
+<td style="text-align: center;">6B</td>
+<td style="text-align: center;">4B</td>
+<td style="text-align: center;">2B</td>
+<td style="text-align: center;">46~1500B</td>
+<td style="text-align: center;">4B</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>1.VLAN标记，<strong>前两个字节</strong>表示这是IEEE 802.1Q帧，<strong>随后4位</strong>没用，<strong>最后12位</strong>为VLAN标识符VID，用于唯一表示该帧属于哪个VLAN<br />
+2.VID取值范围为1~4094<br />
+3.IEEE 802.1Q帧由交换机处理</p>
+</blockquote>
+<h3 id="广域网与ppp协议">广域网与PPP协议</h3>
+<ol type="1">
+<li>PPP协议的功能（如拨号上网）
+<ul>
+<li>只支持全双工链路</li>
+<li>无需纠错，无需流量控制</li>
+<li>封装成帧</li>
+<li>实现透明传输</li>
+<li>实现差错检测（只检查不纠错）</li>
+</ul></li>
+<li>PPP协议的三个部分
+<ul>
+<li>将IP数据报封装到串行链路（同步串行/异步串行）的方法</li>
+<li>链路控制协议LCP：建立并维护数据链路连接（身份验证）</li>
+<li>网络控制协议NCP：PPP支持多种网络层协议，每个不同的网络层协议都需要一个相应的NCP来配置，为网络层协议建立和配置逻辑连接</li>
+</ul></li>
+</ol>
+<h3 id="网络层">网络层</h3>
+<ol type="1">
+<li>IP数据报（首部固定部分<strong>20B</strong>，最大60B）
+<ul>
+<li>固定部分（20B）
+<ul>
+<li>第一行（32位）
+<ul>
+<li>版本4位</li>
+<li>首部长度4位（单位4B）</li>
+<li>区分服务8位</li>
+<li>总长度16位（单位1B）</li>
+</ul></li>
+<li>第二行（32位）
+<ul>
+<li>标识16位</li>
+<li>标志3位：最低位MF（之后是否还有分片）、中间位DF（是否可以分片</li>
+<li>片偏移13位（单位8B）</li>
+</ul></li>
+<li>第三行（32位）
+<ul>
+<li>生存时间8位</li>
+<li>协议8位（6表示TCP协议，17表示UDP协议）</li>
+<li>首部校验和16位（只校验分组首部，不校验数据部分）</li>
+</ul></li>
+<li>第四行（32位）
+<ul>
+<li>源地址32位</li>
+</ul></li>
+<li>第五行（32位）
+<ul>
+<li>目的地址32位</li>
+</ul></li>
+</ul></li>
+<li>可变部分（0~40B）</li>
+</ul></li>
+<li>IPv4地址划分
+<ul>
+<li>A类（1~126）：网络号8位（0 + 后7位），主机号24位</li>
+<li>B类（128~191）：网络号16位（10 + 后14位），主机号16位</li>
+<li>C类（192~223）：网络号24位（110 + 后21位），主机号8位</li>
+<li>D类（224~239）：1110 + 后28位多播地址</li>
+<li>E类（240~255）：1111 + 后28位保留</li>
+</ul></li>
+</ol>
+<ul>
+<li><strong>主机号全0表示本网络本身，主机号全1表示本网络的广播地址</strong></li>
+<li><strong>127.0.0.0 保留为环回自检地址</strong></li>
+<li><strong>32位全0，即0.0.0.0 表示本网络上的本主机</strong></li>
+<li><strong>32位全1，即255.255.255.255 表示整个TCP/IP网络的广播地址，又称受限广播地址</strong></li>
+</ul>
+<ol start="3" type="1">
+<li><p>路由表</p></li>
+<li><p>ARP协议、ICMP协议、DHCP协议</p>
+<ol type="1">
+<li>地址解析协议ARP：完成IP地址到MAC地址的映射</li>
+<li>网际控制报文协议ICMP：使主机与路由器报告差错和异常，具体可分为<strong>ICMP差错报告报文（目标主机或路由器向源主机报告差错与异常）</strong>与<strong>ICMP询问报文</strong>
+<ol type="1">
+<li>ICMP差错报告报文：分为5类
+<ul>
+<li>终点不可达：当路由器或主机<strong>不能交付数据报</strong>时，向源点发送该报文</li>
+<li>源点抑制：当路由器或主机因<strong>拥塞而丢弃数据报时</strong>，向源点发送该报文</li>
+<li>时间超过：当路由器收到<strong>生存时间TTL为0的数据报时</strong>，丢弃该数据报，并向源点发送该报文</li>
+<li>参数问题：当路由器或主机<strong>收到的数据报首部中有的字段的值不正确时</strong>，丢弃该数据报，并向源点发送该报文</li>
+<li>改变路由（重定向）：<strong>路由器把该报文发送给主机，让主机知道下次应将数据报发送给别的路由器</strong></li>
+</ul></li>
+<li>ICMP询问报文分为4类
+<ul>
+<li>回送请求和回答报文</li>
+<li>时间戳请求和回答报文</li>
+<li>掩码地址请求和回答报文</li>
+<li>路由器询问和通告报文</li>
+</ul></li>
+</ol></li>
+<li>动态主机配置协议DHCP：用于给主机动态分配IP地址
+<ul>
+<li>是应用层协议</li>
+<li>是基于UDP的</li>
+</ul></li>
+</ol></li>
+<li><p>路由协议</p>
+<ol type="1">
+<li>内部网关协议
+<ol type="1">
+<li>路由信息协议RIP：基于距离向量的路由选择协议
+<ul>
+<li><strong>应用层协议，使用UDP传送</strong></li>
+<li>网络中每个路由器都要维护从它自己到其他每个目的网络的距离记录</li>
+<li>从一个路由器到直接连接的网络跳数为1，每经过一个路由器，跳数+1</li>
+<li>一条路径最多包含15各路由器（即15跳），故距离大于等于16时，目的网络不可达</li>
+<li><strong>跳数少的路径即为最佳路径</strong></li>
+</ul></li>
+<li>开放最短路径优先协议（OSPF）：分布式链路状态路由算法
+<ul>
+<li><strong>是网络层协议，使用IP数据报传送</strong></li>
+<li><strong>使用Dijkstra最短路径算法</strong></li>
+<li>向本自治系统内所有路由器发送信息，使用洪范法</li>
+<li>发送的信息就是与本路由器相邻的所有路由器的链路状态（包括本路由与哪些路由器相邻，该链路的代价等）</li>
+<li>只有当链路状态发生变化时，路由器才用洪范法向所有路由器发送信息，并且更新过程收敛快，不会出现RIP中“坏消息传得慢”的问题</li>
+<li><strong>代价最低即为最佳路径</strong></li>
+</ul></li>
+</ol></li>
+<li>外部网关协议
+<ol type="1">
+<li>边界网关协议BGP：用于不同自治系统的路由器之间交换路由信息
+<ul>
+<li><strong>是应用层协议，使用TCP传送</strong></li>
+<li>BGP-4使用4种报文
+<ul>
+<li>打开报文Open：用来与另一个BGP发言人建立关系</li>
+<li>更新报文Update：用来发送某一路由的信息，以及要撤销的路由</li>
+<li>保活报文Keepalive：用来确认打开报文并周期性的证实邻站关系</li>
+<li>通知报文Notification：用来发送检测到的差错</li>
+</ul></li>
+<li><strong>选则的路径不一定是最佳路径</strong></li>
+</ul></li>
+</ol></li>
+</ol></li>
+<li><p>路由器功能</p>
+<ol type="1">
+<li>转发：微观上控制数据报如何从该路由器的哪一个输出链路进行发送，通常使用硬件解决（对应数据平面）</li>
+<li>路由选择：宏观上控制数据报从源主机到目的主机的路径（对应控制平面）</li>
+</ol></li>
+<li><p>IPv6</p>
+<ul>
+<li>特点：
+<ul>
+<li>采用无类别编制CIDR</li>
+<li>采用网络地址转换NAT</li>
+<li>128位</li>
+<li>支持单播、多播、任播</li>
+</ul></li>
+</ul></li>
+<li><p>IP组播</p>
+<ul>
+<li>使用英特网组管理协议IGMP</li>
+<li>特点：
+<ul>
+<li>不提供可靠交付</li>
+<li>不产生差错报文</li>
+</ul></li>
+</ul></li>
+<li><p>数据平面与控制平面</p>
+<ol type="1">
+<li>数据平面：通过转发表进行转发（转发表基于路由表生成，且不由数据平面维护）</li>
+<li>控制平面
+<ol type="1">
+<li>传统方法（每路由器法）：<strong>路由选择算法运行在每台路由器中</strong>，且在每台路由器中都包含转发和路由选择两种功能（由<strong>路由选择处理器</strong>执行相关功能）</li>
+<li>SDN方法：控制平面在<strong>物理上</strong>从路由器中分离，路由器仅实现<strong>转发</strong>功能，<strong>远程控制器</strong>计算和分发转发表给每台路由器使用，具体方式是路由器通过交换<strong>包含转发表和其他路由选择信息的报文</strong>与远程控制器通信，而远程控制器使用软件形式实现的，且是可编程的，（<strong>路由选择处理器负责与远程控制器通信</strong>）</li>
+</ol></li>
+<li>对于SDN控制平面
+<ul>
+<li>两个核心组成部分
+<ul>
+<li>SDN控制器（向上有北向API与网络控制应用程序相连，向下有南向API与数据平面相连）</li>
+<li>网络控制应用程序</li>
+</ul></li>
+</ul></li>
+<li>对于SDN控制器
+<ul>
+<li>三个层次
+<ul>
+<li>对于网络控制应用程序的接口：通过北向API与网络控制应用程序交互，允许网络控制应用程序在状态管理层之间读写网络状态</li>
+<li>网络范围状态管理层：SDN控制平面作出最终控制决定</li>
+<li>通信层：SDN控制器与受控网络设备之间的通信（OpenFlow协议），包含南向API</li>
+</ul></li>
+</ul></li>
+</ol></li>
+</ol>
+<h3 id="传输层">传输层</h3>
+<ol type="1">
+<li>TCP协议（首部固定部分<strong>20B</strong>，最大60B，与IP数据报相同）
+<ul>
+<li>固定部分（20B）
+<ul>
+<li>第一行（32位）
+<ul>
+<li>源端口16位</li>
+<li>目的端口16位</li>
+</ul></li>
+<li>第二行（32位）
+<ul>
+<li>序号32位</li>
+</ul></li>
+<li>第三行（32位）
+<ul>
+<li>确认号32位</li>
+</ul></li>
+<li>第四行（32位）
+<ul>
+<li>数据偏移4位</li>
+<li>保留部分6位</li>
+<li>符号位6位
+<ul>
+<li><strong>确认位ACK</strong></li>
+<li><strong>同步位SYN</strong></li>
+<li><strong>终止位FIN</strong></li>
+<li>紧急位URG</li>
+<li>复位位RST</li>
+<li>推送为PSH</li>
+</ul></li>
+<li>窗口</li>
+</ul></li>
+<li>第五行（32位）
+<ul>
+<li>检验和16位</li>
+<li>紧急指针16位</li>
+</ul></li>
+</ul></li>
+<li>可变部分（0~40B）</li>
+</ul></li>
+<li>TCP可靠传输
+<ol type="1">
+<li>序号：TCP面向字节流，故为数据流中的每个字节都编上一个序号，TCP首部中序号字段的值指出本报文段所发送的数据的第一个字节的序号</li>
+<li>确认：TCP首部的确认号是指已接收到的数据中<strong>最后一个字节的序号加1（加1是指期望收到的下一个报文段数据部分的第一个字节的序号）</strong>，且TCP采用累计确认（确认号之前的都正确接收）</li>
+<li>重传
+<ul>
+<li>超时：计时器的重传时间到仍未收到确认，则重传</li>
+<li>冗余ACK：每当接收方收到比期望序号大的失序报文段到达时，发送一个冗余ACK，指明下一个期待的序号，当连续收到队同一个报文段的3个冗余ACK，则重传</li>
+</ul></li>
+</ol></li>
+<li>TCP流量控制与拥塞控制
+<ol type="1">
+<li>流量控制：通过动态控制发送端发送窗口大小实现
+<ul>
+<li>接收窗口：由接收端维护</li>
+<li>拥塞窗口：由发送端维护，发送端根据当前网络的拥塞程度确定</li>
+<li>发送窗口：由发送端维护，发送端在接收到下一个确认前能够发送的最大字节数，且<strong>发送窗口 = min{接收窗口， 拥塞窗口}</strong></li>
+</ul></li>
+<li>拥塞控制：
+<ul>
+<li>慢开始与拥塞避免算法</li>
+<li>快开始和快恢复算法</li>
+</ul></li>
+</ol></li>
+<li>UDP协议（首部8B）
+<ul>
+<li>第一行（32位）
+<ul>
+<li>源端口16位</li>
+<li>目的端口16位</li>
+</ul></li>
+<li>第二行（32位）
+<ul>
+<li>UDP长度16位</li>
+<li>UDP校验和16位</li>
+</ul></li>
+</ul></li>
+<li>TCP与UDP</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;">TCP</th>
+<th style="text-align: center;">UDP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">可靠性</td>
+<td style="text-align: center;">保证可靠传输</td>
+<td style="text-align: center;">不保证可靠传输</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">是否建立连接</td>
+<td style="text-align: center;">是</td>
+<td style="text-align: center;">否</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">数据发送模式</td>
+<td style="text-align: center;">面向字节流</td>
+<td style="text-align: center;">面向报文</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">通信方式</td>
+<td style="text-align: center;">点对点</td>
+<td style="text-align: center;">一对一、一对多、多对一、多对多</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">首部开销</td>
+<td style="text-align: center;">20B</td>
+<td style="text-align: center;">8B</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">拥塞控制机制</td>
+<td style="text-align: center;">有</td>
+<td style="text-align: center;">无</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">流量控制机制</td>
+<td style="text-align: center;">有</td>
+<td style="text-align: center;">无</td>
+</tr>
+</tbody>
+</table>
+<h3 id="应用层">应用层</h3>
+<ol type="1">
+<li>域名系统DNS
+<ul>
+<li>域名服务器
+<ul>
+<li>根域名服务器</li>
+<li>顶级域名服务器</li>
+<li>权限域名服务器</li>
+<li>本地域名服务器</li>
+</ul></li>
+<li>域名解析过程
+<ul>
+<li>递归查询方式</li>
+<li>迭代查询方式</li>
+</ul></li>
+</ul></li>
+<li>文件传输协议FTP
+<ol type="1">
+<li>控制连接：<strong>端口21，采用C/S工作方式，建立在TCP连接上</strong>，用于传送FTP控制命令（如连接请求、传送请求、终止请求等），<strong>整个会话期间一直保持打开状态，且传输文件时可以使用控制连接</strong></li>
+<li>数据连接：<strong>端口20，采用C/S工作方式，建立在TCP连接上</strong>，用于连接客户端与服务器的数据传输进程，<strong>每次数据传输完毕后就关闭</strong></li>
+</ol></li>
+<li>电子邮件
+<ol type="1">
+<li>SMTP协议：<strong>采用C/S工作方式，建立在TCP连接上，端口号25</strong>，采用“<strong>推</strong>“的通信方式，用于<strong>用户代理向邮件服务器</strong>与<strong>邮件服务器之间</strong>发送邮件，只支持传输ASCII码的内容</li>
+<li>POP协议（POP3）：<strong>采用C/S工作方式，建立在TCP连接上，端口号110</strong>，采用“<strong>拉</strong>“的通信方式，<strong>用于用户代理从邮件服务器的用户邮箱中读取邮件</strong></li>
+<li>英特网报文存取协议IMAP：一个更复杂的邮件读取协议</li>
+</ol></li>
+</ol>
+<p><strong>多用途网际邮件扩充MIME：并未改动SMTP，而是增加了邮件主体的结构，并定义了传送非ASCII码的编码规则</strong></p>
+<ol start="4" type="1">
+<li>万维网 WWW
+<ol type="1">
+<li>构成
+<ul>
+<li>统一资源定位符（URL）：负责表示万维网上的各种文档，并使其具有唯一的标识符URL</li>
+<li>超文本传输协议（HTTP）：应用层协议，使用TCP协议保证可靠传输</li>
+<li>超文本标记语言（HTML）：一种文档结构的标记语言，对页面上的各种信息（文字、声音、图像、视频等）格式进行描述</li>
+</ul></li>
+<li>特点
+<ul>
+<li>无状态的：同一个客户第二次访问同一个服务器的页面时，服务器并不记得该客户</li>
+<li>无连接的：虽然使用了TCP连接（保证可靠性），但通信的双方在交换HTTP报文之前不需要建立GTTP连接</li>
+<li>可采用非持久连接或持久连接（HTTP/1.1支持）</li>
+</ul></li>
+<li>非持久连接与持久连接
+<ul>
+<li>对于非持久连接：每个网页元素对象的传输都需要单独建立一个TCP连接，<span class="math inline">\(\displaystyle 请求一个万维网对象所需的时间 = 2RTT+该对象传输时间\)</span>，其中一个RTT用于TCP连接，另一个RTT用于请求和接收文档</li>
+<li>对于持久连接，万维网服务器在发送相应后扔保持这条连接，使同一个客户和服务器可以继续在这条连接上传送后续的HTTP请求和响应报文</li>
+</ul></li>
+<li>流水线与非流水线（持久连接）
+<ul>
+<li>非流水线：客户在收到前一个响应后才能发出下一个请求，在已建立连接的情况下，对于<strong>每个文档</strong> $从发从请求到接收完毕的时间=RTT+文档的传输时间 $</li>
+<li>流水线：客户没遇到一个对象引用就发出一个请求，在已建立连接的情况下，当请求与响应都时连续发送时，<span class="math inline">\(\displaystyle 完成请求的总耗时=RTT+n个文件的传输时间\)</span></li>
+</ul></li>
+<li>cookie的运行过程
+<ul>
+<li>①客户端在浏览器键入web服务器的URL，浏览器发送读取网页的请求</li>
+<li>②服务器接收请求后，产生一个Set-Cookie报头，放在HTTP报文中一起回传客户端，发起一次会话</li>
+<li>③客户端收到应答后，若要继续该次会话，则将Set-Cookie中的内容取出，形成一个Cookie.txt文件存放在客户端计算机中</li>
+<li>④当客户端再次向服务器发出请求时，浏览器在电脑中寻找对应该网站的Cookie.txt文件，若找到，则根据次Cookie.txt产生报头，放在HTTP请求中发给服务器</li>
+<li>⑤服务器接收到包含Cookie报头的请求，检索其Cookie中与用户有关的信息，生成一个客户端所请求的页面应答给客户端，浏览器的每一次网页请求（如刷新）都可以传递已存在的Cookie文件</li>
+</ul></li>
+</ol></li>
+<li>HTTP请求报文中常用的几个方法</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">方法</th>
+<th style="text-align: center;">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;">请求读取由URL标识的信息</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">HEAD</td>
+<td style="text-align: center;">请求读取由URL表示的信息的首部</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">POST</td>
+<td style="text-align: center;">给服务器添加信息（如注释）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">CONNECT</td>
+<td style="text-align: center;">用于代理服务器</td>
+</tr>
+</tbody>
+</table>
+<ol start="6" type="1">
+<li>应用层协议小结</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;">FTP控制连接</th>
+<th style="text-align: center;">FTP数据连接</th>
+<th style="text-align: center;">DNS</th>
+<th style="text-align: center;">HTTP</th>
+<th style="text-align: center;">SMTP</th>
+<th style="text-align: center;">POP3</th>
+<th style="text-align: center;">远程终端协议TELNET</th>
+<th style="text-align: center;">简单文件传输协议TFTP</th>
+<th style="text-align: center;">简单网络管理协议SNMP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">使用协议</td>
+<td style="text-align: center;">TCP</td>
+<td style="text-align: center;">TCP</td>
+<td style="text-align: center;">UDP</td>
+<td style="text-align: center;">TCP</td>
+<td style="text-align: center;">TCP</td>
+<td style="text-align: center;">TCP</td>
+<td style="text-align: center;">TCP</td>
+<td style="text-align: center;">UDP</td>
+<td style="text-align: center;">UDP</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">熟知端口号</td>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">53</td>
+<td style="text-align: center;">80</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">110</td>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;">69</td>
+<td style="text-align: center;">161</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/02/2021-05-02-%E6%95%B0%E5%AD%A6%E5%B8%B8%E7%94%A8%E5%85%AC%E5%BC%8F/" rel="prev" title="数学常用公式">
+                  <i class="fa fa-chevron-left"></i> 数学常用公式
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Colaxy</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
