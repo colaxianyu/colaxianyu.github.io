@@ -27,23 +27,22 @@
 <meta property="og:site_name" content="Colaxy&#39;s Blog">
 <meta property="og:description" content="数据结构 循环队列 队空条件：Q.rear &#x3D;&#x3D; Q.front 队满条件：(Q.rear + 1) % MaxSize &#x3D;&#x3D; Q.front 入队：Q.rear &#x3D; (Q.rear + 1) % MaxSize 出队：Q.front &#x3D; (Q.front + 1) % MaxSize 长度：(Q.rear - Q.front + MaxSize) % MaxSize 栈 \(\d">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://colaxianyu.github.io/images/进程映像.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/调度器.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/多级队列调度.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/锁.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/内存共享.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/内存映射文件.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/混合索引.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/虚拟文件系统.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/FAT外存.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/混合索引外存.png">
-<meta property="og:image" content="https://colaxianyu.github.io/images/文件系统内存.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/jxGBcXVba8TF4ht.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/OdBioqexzltUHaW.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/ziynBqkoGE5D8g2.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/z9HxOURt4yepNK7.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/JCcBRHwOy7I5Dvb.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/zDhPUL1T9EmeZl3.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/Lx354AKV7Syuvoc.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/8oUnyh3scrxRI7P.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/18/DS7BU32gnlqeQuv.png">
 <meta property="article:published_time" content="2021-12-01T14:45:47.000Z">
-<meta property="article:modified_time" content="2021-12-14T17:08:15.016Z">
+<meta property="article:modified_time" content="2021-12-18T14:43:12.035Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://colaxianyu.github.io/images/进程映像.png">
+<meta name="twitter:image" content="https://s2.loli.net/2021/12/18/jxGBcXVba8TF4ht.png">
 
 
 <link rel="canonical" href="https://colaxianyu.github.io/2021/12/01/2021-12-01-%E4%B8%93%E4%B8%9A%E8%AF%BE%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB/">
@@ -235,7 +234,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-12-15 01:08:15" itemprop="dateModified" datetime="2021-12-15T01:08:15+08:00">2021-12-15</time>
+        <time title="修改时间：2021-12-18 22:43:12" itemprop="dateModified" datetime="2021-12-18T22:43:12+08:00">2021-12-18</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1391,7 +1390,7 @@
 <blockquote>
 <p>操作系统通过内存管理部件MMU将进程使用的虚拟地址转换为物理地址 共享库用来存放进程用到的共享库函数代码</p>
 </blockquote>
-<p><img src="/images/进程映像.png" /></p>
+<p><img src="https://s2.loli.net/2021/12/18/jxGBcXVba8TF4ht.png" /></p>
 <h5 id="进程的特点">进程的特点</h5>
 <ul>
 <li>资源分配和拥有的基本单位</li>
@@ -1489,8 +1488,8 @@
 <blockquote>
 <p><strong>上下文切换时会执行大量Load/Store指令，用于保存寄存器的内容，故时间开销较大</strong></p>
 </blockquote>
-<p><img src="/images/调度器.png" /></p>
-<ol start="2" type="1">
+<p><img src="https://s2.loli.net/2021/12/18/OdBioqexzltUHaW.png" /></p>
+<ol type="1">
 <li>调度算法的评测标准
 <ul>
 <li>CPU利用率
@@ -1596,7 +1595,7 @@
 </tbody>
 </table>
 <p><strong>多级反馈队列中队列的划分原则是优先级，而多级队列中划分的原则则是进程的类型（各队列可设置优先级高低，也可设置时间片不同）</strong></p>
-<p><img src="/images/多级队列调度.png" /></p>
+<p><img src="https://s2.loli.net/2021/12/18/ziynBqkoGE5D8g2.png" /></p>
 <p><strong>优先级设置的原则：①系统进程 &gt; 用户进程 ②交互型进程 &gt; 非交互型进程（或前台进程 &gt; 后台进程） ③IO型进程 &gt; 计算型进程</strong></p>
 <h4 id="同步与互斥">同步与互斥</h4>
 <ol type="1">
@@ -1622,7 +1621,7 @@
 <li>条件变量：类似于等待队列（<strong>信号量机制有初值，条件变量没有</strong>），包含两个操作：wait操作（类似于P操作），signal操作（类似于V操作），与锁配合使用</li>
 </ul></li>
 </ol>
-<p><img src="/images/锁.png" /></p>
+<p><img src="https://s2.loli.net/2021/12/18/z9HxOURt4yepNK7.png" /></p>
 <h4 id="死锁">死锁</h4>
 <ol type="1">
 <li>死锁产生的四个条件
@@ -1745,8 +1744,8 @@
 </ul></li>
 <li>内存共享：是指多个进程访问内存的同一部分，通过内存映射完成（可以是”页“映射，也可以是”段“映射）</li>
 </ol>
-<p><img src="/images/内存共享.png" /></p>
-<ol start="5" type="1">
+<p><img src="https://s2.loli.net/2021/12/18/JCcBRHwOy7I5Dvb.png" /></p>
+<ol type="1">
 <li>内存映射文件
 <ul>
 <li>方式：将磁盘中文件的全部或部分内容与进程的虚拟空间的某个区域建立映射</li>
@@ -1754,8 +1753,8 @@
 <li>映射的实际交互都是在内存中完成的（并不是进程与磁盘直接映射，内存是一个中转站），即，通过Open系统调用打开文件后，再通过mmap系统调用，<strong>将文件页映射到进程的虚拟空间中时，操作系统页会自动分配一些内存空间保存这些文件页，故当进程修改了文件的数据之后，退出文件或解除文件映射，所有改动的页面会从内存中写回磁盘文件</strong></li>
 </ul></li>
 </ol>
-<p><img src="/images/内存映射文件.png" /></p>
-<ol start="6" type="1">
+<p><img src="https://s2.loli.net/2021/12/18/zDhPUL1T9EmeZl3.png" /></p>
+<ol type="1">
 <li>虚拟纯初期性能的影响因素
 <ul>
 <li>性能指标
@@ -1771,7 +1770,7 @@
 <li>分配的页框数量：影响缺页率</li>
 <li>页面置换算法：影响缺页率</li>
 <li>程序局部性：影响缺页率，TLB命中率、Cache命中率</li>
-<li>外村交换区读写速度：影响页面置换速度</li>
+<li>存交换区读写速度：影响页面置换速度</li>
 </ul></li>
 </ul></li>
 <li>页面分配策略
@@ -1780,6 +1779,7 @@
 <li>可变分配全局置换</li>
 <li>固定分配局部置换</li>
 </ul></li>
+<li>工作集合：任意时刻T，最近t次访问的页面（t=窗口大小）</li>
 </ol>
 <h3 id="文件管理">文件管理</h3>
 <h4 id="文件目录">文件目录</h4>
@@ -1849,8 +1849,8 @@
 <li>混合索引方式：包含直接索引地址与间接索引地址，如下所示</li>
 </ul></li>
 </ol>
-<p><img src="/images/混合索引.png" /></p>
-<ol start="2" type="1">
+<p><img src="https://s2.loli.net/2021/12/18/Lx354AKV7Syuvoc.png" /></p>
+<ol type="1">
 <li>虚拟文件系统VFS
 <ul>
 <li>目的：向用户提供同一的系统调用接口，屏蔽下层不同文件系统的实现差异（若系统盘使用FAT文件系统，U盘使用NTFS文件系统，但并不影响在计算机中的访问）</li>
@@ -1862,8 +1862,8 @@
 <li>虚拟文件系统只存在于内存中，作为内核空间中的一个软件层（抽象层），在系统启动时建立，系统关闭时消亡</li>
 </ul></li>
 </ol>
-<p><img src="/images/虚拟文件系统.png" /></p>
-<ol start="3" type="1">
+<p>[][虚拟文件系统](https://s2.loli.net/2021/12/18/hB1IdVXAgeE6yUz.png)</p>
+<ol type="1">
 <li>文件系统挂载（mounting）
 <ul>
 <li>目的：将一个文件系统挂载到操作系统中（插U盘）</li>
@@ -1878,11 +1878,11 @@
 </ol>
 <h4 id="两种文件系统在外存中的结构">两种文件系统在外存中的结构</h4>
 <ol type="1">
-<li><p>FAT在外存中 <img src="/images/FAT外存.png" /></p></li>
-<li><p>混合索引在外存中 <img src="/images/混合索引外存.png" /></p></li>
+<li><p>FAT在外存中 <img src="https://s2.loli.net/2021/12/18/8oUnyh3scrxRI7P.png" /></p></li>
+<li><p>混合索引在外存中 <img src="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png" /></p></li>
 </ol>
 <h4 id="文件系统在内存中的结构">文件系统在内存中的结构</h4>
-<p><img src="/images/文件系统内存.png" /></p>
+<p><img src="https://s2.loli.net/2021/12/18/DS7BU32gnlqeQuv.png" /></p>
 <h4 id="磁盘">磁盘</h4>
 <ol type="1">
 <li>磁盘读写时间
@@ -2132,7 +2132,7 @@
 <li>侦听：发送前先侦听信道，若空闲则立即发送数据并进行冲突检测；若信道忙，则继续侦听信道，直至信道空闲</li>
 <li>碰撞检测：适配器发送数据时检测信道上信号电压变化情况，以判断是否发生冲突，若检测到冲突，适配器停止发送数据，并传输一个拥塞信号，随后采用截断二进制退避算法等待一段随机时间后重新侦听</li>
 <li>争用期：即碰撞窗口，设单程传播时延为<span class="math inline">\(\displaystyle \tau\)</span>，则以太网端到端往返时间<span class="math inline">\(\displaystyle 2\tau\)</span>称为争用期，其意义是，若发送站在发送帧后经过时间<span class="math inline">\(\displaystyle 2\tau\)</span>，如果没有发生碰撞，则该帧就能顺利发送</li>
-<li><span class="math inline">\(\displaystyle 最小帧长=总线传播时延 \times 数据传输时延 \times 2\)</span></li>
+<li><span class="math inline">\(\displaystyle 最小帧长=总线传播时延 \times 数据传输速率 \times 2\)</span></li>
 <li><span class="math inline">\(\displaystyle \frac{帧长}{传输速率}\ge 2\tau\)</span></li>
 </ul></li>
 <li>CSMA/CA(碰撞避免)
