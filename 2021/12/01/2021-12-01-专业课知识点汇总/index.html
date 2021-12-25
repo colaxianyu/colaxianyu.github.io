@@ -38,7 +38,7 @@
 <meta property="og:image" content="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png">
 <meta property="og:image" content="https://s2.loli.net/2021/12/18/DS7BU32gnlqeQuv.png">
 <meta property="article:published_time" content="2021-12-01T14:45:47.000Z">
-<meta property="article:modified_time" content="2021-12-23T03:07:16.300Z">
+<meta property="article:modified_time" content="2021-12-25T13:54:34.735Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
@@ -153,7 +153,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -234,7 +234,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-12-23 11:07:16" itemprop="dateModified" datetime="2021-12-23T11:07:16+08:00">2021-12-23</time>
+        <time title="修改时间：2021-12-25 21:54:34" itemprop="dateModified" datetime="2021-12-25T21:54:34+08:00">2021-12-25</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -271,7 +271,8 @@
 <ol type="1">
 <li><p>树<br />
 <span class="math inline">\(\displaystyle \begin{aligned}  &amp;①.度为m的树，第i层至多有m^{i - 1}个节点\\  &amp;②.高度为h的m叉树至多有\frac{m^h-1}{m-1}个结点\\  &amp;③.具有n个结点的m叉树的最小高度为\lceil log_m(n(m-1)+1) \rceil \\  &amp;④.结点数 = 分支数 + 1 \end{aligned}\)</span></p></li>
-<li><p>二叉树 <span class="math inline">\(\displaystyle \begin{aligned}  &amp;①.非空二叉树上第i层至多有2^{i-1}个结点\\  &amp;②.高度为h的二叉树至多有2^h-1个结点\\  &amp;③.对于完全二叉树，n个结点的完全二叉树高度为\lceil log_2(n+1) \rceil\\  &amp;④.非空二叉树上的叶子节点数等于度为2的结点数加1，即n_0=n_2+1 \end{aligned}\)</span></p></li>
+<li><p>二叉树<br />
+<span class="math inline">\(\displaystyle \begin{aligned}  &amp;①.非空二叉树上第i层至多有2^{i-1}个结点\\  &amp;②.高度为h的二叉树至多有2^h-1个结点\\  &amp;③.对于完全二叉树，n个结点的完全二叉树高度为\lceil log_2(n+1) \rceil\\  &amp;④.非空二叉树上的叶子节点数等于度为2的结点数加1，即n_0=n_2+1 \end{aligned}\)</span></p></li>
 </ol>
 <h4 id="红黑树">红黑树</h4>
 <ol type="1">
@@ -304,14 +305,14 @@
 <ul>
 <li>红叔：染色+变新
 <ul>
-<li>叔父结点染色，爷结点变为新节点</li>
+<li>叔父结点换色，爷结点变为新节点</li>
 </ul></li>
 <li>黑叔：旋转+染色
 <ul>
-<li>LL型：右单旋，父换爷+染色</li>
-<li>RR型：左单旋，父换爷+染色</li>
-<li>LR型：先左后右旋，儿换爷+染色</li>
-<li>RL型：先右后左旋，儿换爷+染色</li>
+<li>LL型：右单旋，父换爷+换色</li>
+<li>RR型：左单旋，父换爷+换色</li>
+<li>LR型：先左后右旋，儿换爷+换色</li>
+<li>RL型：先右后左旋，儿换爷+换色</li>
 </ul></li>
 </ul></li>
 </ul></li>
@@ -2771,9 +2772,6 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/12/19/2021-12-19-%E8%82%964%E5%A4%A7%E9%A2%98/" rel="next" title="肖4大题">
-                  肖4大题 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
