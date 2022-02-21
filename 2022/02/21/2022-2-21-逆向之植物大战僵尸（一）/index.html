@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;colaxianyu.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;right&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能： 1. 无限阳光和无限金币 2. 取消植物放置的CD 3. 同一个位置可以重复放置植物 4. 全屏樱桃炸弹">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逆向之植物大战僵尸（一）">
+<meta property="og:url" content="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="Colaxy&#39;s Blog">
+<meta property="og:description" content="植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能： 1. 无限阳光和无限金币 2. 取消植物放置的CD 3. 同一个位置可以重复放置植物 4. 全屏樱桃炸弹">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%891.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%892.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%893.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%894.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%895.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%896.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%897.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%898.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%899.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%8910.png">
+<meta property="article:published_time" content="2022-02-21T08:36:11.000Z">
+<meta property="article:modified_time" content="2022-02-21T14:44:33.976Z">
+<meta property="article:author" content="Colaxy">
+<meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%891.png">
+
+
+<link rel="canonical" href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;colaxianyu.github.io&#x2F;2022&#x2F;02&#x2F;21&#x2F;2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89&#x2F;&quot;,&quot;path&quot;:&quot;2022&#x2F;02&#x2F;21&#x2F;2022-2-21-逆向之植物大战僵尸（一）&#x2F;&quot;,&quot;title&quot;:&quot;逆向之植物大战僵尸（一）&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>逆向之植物大战僵尸（一） | Colaxy's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{&quot;tracking_id&quot;:&quot;UA-189780915-2&quot;,&quot;only_pageview&quot;:false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Colaxy's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">知行合一</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-algorithm"><a href="/categories/algorithm/" rel="section"><i class="fa fa-code fa-fw"></i>算法</a></li>
+        <li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-user-secret fa-fw"></i>逆向</a></li>
+        <li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li>
+        <li class="menu-item menu-item-exam"><a href="/categories/exam/" rel="section"><i class="fa fa-book fa-fw"></i>考研</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E9%99%90%E9%98%B3%E5%85%89"><span class="nav-number">1.</span> <span class="nav-text">无限阳光</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%9F%BA%E5%9D%80%E4%B8%8E%E5%8A%A8%E6%80%81%E5%9C%B0%E5%9D%80"><span class="nav-number">1.1.</span> <span class="nav-text">静态基址与动态地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E9%98%B3%E5%85%89%E5%8A%A8%E6%80%81%E5%9C%B0%E5%9D%80"><span class="nav-number">1.2.</span> <span class="nav-text">寻找阳光动态地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E5%9F%BA%E5%9D%80"><span class="nav-number">1.3.</span> <span class="nav-text">寻找基址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%97%A0%E9%99%90%E9%98%B3%E5%85%89%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">1.4.</span> <span class="nav-text">实现无限阳光的功能</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Colaxy"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Colaxy</p>
+  <div class="site-description" itemprop="description">知行合一</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/colaxianyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;colaxianyu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          逆向之植物大战僵尸（一）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-02-21 16:36:11 / 修改时间：22:44:33" itemprop="dateCreated datePublished" datetime="2022-02-21T16:36:11+08:00">2022-02-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能：<br />
+1. 无限阳光和无限金币<br />
+2. 取消植物放置的CD<br />
+3. 同一个位置可以重复放置植物<br />
+4. 全屏樱桃炸弹</p>
+<span id="more"></span>
+<h3 id="无限阳光">无限阳光</h3>
+<h4 id="静态基址与动态地址">静态基址与动态地址</h4>
+<ol type="1">
+<li><p>静态基址：是指静态基址中的内容，不会因程序的重新启动而改变，只有在程序重新编译后才会变动</p></li>
+<li><p>动态地址：是指地址中的内容，会因程序的重新启动而变动的地址，也就是说，当前状态下，地址中保存的信息是我们所需的信息，但程序重新启动后，该地址中的内容就不再是我们所需的信息了</p></li>
+</ol>
+<h4 id="寻找阳光动态地址">寻找阳光动态地址</h4>
+<ol type="1">
+<li>首先通过CE附加植物大战僵尸进程，因为阳光是一个精确的数值50，所以可以选择exact value来进行搜索，首次搜索会得到很多相关的结果</li>
+</ol>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%891.png" alt="2022-02-21-阳光1" /><figcaption aria-hidden="true">2022-02-21-阳光1</figcaption>
+</figure>
+<ol start="2" type="1">
+<li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%892.png" alt="2022-02-21-阳光2" /> 为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
+<p>如何判断这个地址是否是静态基址呢：若CE标识的地址为绿色，则该地址为静态基址，而此处的地址并不是绿色的，所以这是个动态地址，因此我们需要寻找基址</p>
+<h4 id="寻找基址">寻找基址</h4>
+<ol type="1">
+<li>我们已经找到了阳光的动态地址，那么如何寻找基址，思路是，阳光每次变动就意味着一定有一条指令修改了这个地址中的值，那么我们可以下一个内存写入断点，看看哪条指令写入了这个地址，所以我们再CE中选中这个地址，右键找到find out what writes to this address</li>
+</ol>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%893.png" alt="2022-02-21-阳光3" /><figcaption aria-hidden="true">2022-02-21-阳光3</figcaption>
+</figure>
+<p>之后我们收集一个阳光，发现得到了一条指令，我们双击打开</p>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%894.png" alt="2022-02-21-阳光4" /><figcaption aria-hidden="true">2022-02-21-阳光4</figcaption>
+</figure>
+<p>此时我们可以知道，ecx的值0x19，也就是25，写入了阳光地址标识的内存中，因此阳光的地址 = eax + 0x5560，该地址内存放了当前阳光的具体数值，其中eax = 0x17326B58，而0x5560为偏移地址</p>
+<ol start="2" type="1">
+<li>此时我们猜想，内存中有没有一个位置存放了0x17326B58这个值，因此我们可以使用CE，并以16进制搜索0x17326B58，发现很多搜索结果</li>
+</ol>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%895.png" alt="2022-02-21-阳光5" /><figcaption aria-hidden="true">2022-02-21-阳光5</figcaption>
+</figure>
+<p>首先可以排除地址在0x00400000以下的内容，这部分是不进行映射的，以便捕获异常的空指针引用，因此我们找到第一个大于0x00400000的地址，这个值通常是我们需要的，即0x0290A938</p>
+<p>此时我们可以知道0x0290A938这个地址内保存了0x17326B58这个值，但是0x0290A938这个地址仍是个动态地址，所以我们还需要进一步寻找基址，此时我们用CE下个内存访问断点，查看哪条指令访问了0x0290A938这个地址内的值</p>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%896.png" alt="2022-02-21-阳光6" /><figcaption aria-hidden="true">2022-02-21-阳光6</figcaption>
+</figure>
+<p>可以看到4个结果，我们点进第一个指令发现0x0290A938 = edi + 0x768，其中edi = 0290A1D0，0x768也是偏移地址，那么同理我们可以看看内存中哪里存放了0290A1D0，得到如下结果</p>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%897.png" alt="2022-02-21-阳光7" /><figcaption aria-hidden="true">2022-02-21-阳光7</figcaption>
+</figure>
+<p>这时我们看到几个绿色的地址，这就代表这些地址就是静态基址，我们选择第一个，可以看到其地址为0x6A9EC0，这就是我们需要的静态基址，那么如何通过静态基址找到最后的阳光地址呢</p>
+<ol start="3" type="1">
+<li>现在梳理一下这个过程
+<ul>
+<li>阳光的动态地址 = 0x17326B58 + 0x5560，而0x17326B58存在地址为0x0290A938的内存中，即[0x0290A938] = 0x17326B58</li>
+<li>地址0x0290A938 = 0290A1D0 + 0x768，而0290A1D0存在地址为静态基址为0x6A9EC0的内存中，即[0x6A9EC0] = 0x0290A1D0</li>
+<li>所以我们可以得到，阳光地址 = [[0x6A9EC0] + 0x768] + 0x5560</li>
+</ul></li>
+</ol>
+<p>之后我们在CE中验证我们的结果，选择add address manually</p>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%898.png" alt="2022-02-21-阳光8" /><figcaption aria-hidden="true">2022-02-21-阳光8</figcaption>
+</figure>
+<p>之后选择Point，因为此处包含两个偏移地址，因此再点击add offset，然后填入我们找到的基址与偏移地址</p>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%899.png" alt="2022-02-21-阳光9" /><figcaption aria-hidden="true">2022-02-21-阳光9</figcaption>
+</figure>
+<p>最终我们可以看到，这个地址内，存的就是当前阳光的数值，修改后，游戏内的阳光也随之改变，且重启游戏后，该地址仍然存的是阳光的数值</p>
+<figure>
+<img src="https://raw.githubusercontent.com/colaxianyu/PicGoBed/master/img/2022-02-21-%E9%98%B3%E5%85%8910.png" alt="2022-02-21-阳光10" /><figcaption aria-hidden="true">2022-02-21-阳光10</figcaption>
+</figure>
+<h4 id="实现无限阳光的功能">实现无限阳光的功能</h4>
+<p>基于MFC编写相关代码，向阳光地址处写入所需阳光数，即可实现无限阳光的功能，具体实现细节就不做赘述，给出核心代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将寻找地址封装成GetThirdLevelAddress()函数，方便后续寻找金币地址</span></span><br><span class="line">DWORD sunAddress = <span class="built_in">GetThirdLevelAddress</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义阳光数量</span></span><br><span class="line">DWORD dwSun = <span class="number">9999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入             </span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess, (LPVOID)sunAddress, (LPCVOID)&amp;dwSun, <span class="built_in"><span class="keyword">sizeof</span></span>(DWORD), &amp;pid)          </span><br></pre></td></tr></table></figure>
+<p>金币地址的寻找大同小异，这里也不再赘述，这样我们就完成了无限阳光与无限金币的功能</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/16/2022-2-16-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="prev" title="二分查找">
+                  <i class="fa fa-chevron-left"></i> 二分查找
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Colaxy</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
