@@ -120,73 +120,6 @@
       </categories>
   </entry>
   <entry>
-    <title>逆向之植物大战僵尸（一）</title>
-    <url>/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<p>植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能：<br />
-1. 无限阳光和无限金币<br />
-2. 取消植物放置的CD<br />
-3. 同一个位置可以重复放置植物</p>
-<span id="more"></span>
-<h3 id="无限阳光">无限阳光</h3>
-<h4 id="静态基址与动态地址">静态基址与动态地址</h4>
-<ol type="1">
-<li><p>静态基址：是指静态基址中的内容，不会因程序的重新启动而改变，只有在程序重新编译后才会变动</p></li>
-<li><p>动态地址：是指地址中的内容，会因程序的重新启动而变动的地址，也就是说，当前状态下，地址中保存的信息是我们所需的信息，但程序重新启动后，该地址中的内容就不再是我们所需的信息了</p></li>
-</ol>
-<h4 id="寻找阳光动态地址">寻找阳光动态地址</h4>
-<ol type="1">
-<li>首先通过CE附加植物大战僵尸进程，因为阳光是一个精确的数值50，所以可以选择exact value来进行搜索，首次搜索会得到很多相关的结果</li>
-</ol>
-<figure>
-<img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png" alt="1" /><figcaption aria-hidden="true">1</figcaption>
-</figure>
-<ol start="2" type="1">
-<li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-%E9%98%B3%E5%85%892.png" /> 为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
-<p>如何判断这个地址是否是静态基址，若CE标识的地址为绿色，则该地址为静态基址，而此处的地址并不是绿色的，所以这是个动态地址，因此我们需要寻找基址</p>
-<h4 id="寻找基址">寻找基址</h4>
-<ol type="1">
-<li>我们已经找到了阳光的动态地址，那么如何寻找基址，思路是，阳光每次变动就意味着一定有一条指令修改了这个地址中的值，那么我们可以下一个内存写入断点，看看哪条指令写入了这个地址，所以我们再CE中选中这个地址，右键找到find out what writes to this address</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光3.png" /></p>
-<p>之后我们收集一个阳光，发现得到了一条指令，我们双击打开</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光4.png" /></p>
-<p>此时我们可以知道，ecx的值0x19，也就是25，写入了阳光地址标识的内存中，因此阳光的地址 = eax + 0x5560，该地址内存放了当前阳光的具体数值，其中eax = 0x17326B58，而0x5560为偏移地址</p>
-<ol start="2" type="1">
-<li>此时我们猜想，内存中有没有一个位置存放了0x17326B58这个值，因此我们可以使用CE，并以16进制搜索0x17326B58，发现很多搜索结果，首先可以排除地址在0x00400000以下的内容，这部分是不进行映射的，以便捕获异常的空指针引用，因此我们找到第一个大于0x00400000的地址，这个值通常是我们需要的，即0x0290A938</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光5.png" /></p>
-<p>此时我们可以知道0x0290A938这个地址内保存了0x17326B58这个值，但是0x0290A938这个地址仍是个动态地址，所以我们还需要进一步寻找基址</p>
-<p>此时我们用CE下个内存访问断点，查看哪条指令访问了0x0290A938这个地址内的值，可以看到4个结果，我们点进第一个指令发现0x0290A938 = edi + 0x768，其中edi = 0290A1D0，0x768也是偏移地址</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光6.png" /></p>
-<p>那么同理我们可以看看内存中哪里存放了0290A1D0，得到如下结果</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光7.png" /></p>
-<p>这时我们看到几个绿色的地址，这就代表这些地址就是静态基址，我们选择第一个，可以看到其地址为0x6A9EC0，这就是我们需要的静态基址，那么如何通过静态基址找到最后的阳光地址呢</p>
-<ol type="1">
-<li>现在梳理一下这个过程
-<ul>
-<li>阳光的动态地址 = 0x17326B58 + 0x5560，而0x17326B58存在地址为0x0290A938的内存中，即[0x0290A938] = 0x17326B58</li>
-<li>地址0x0290A938 = 0290A1D0 + 0x768，而0290A1D0存在地址为静态基址为0x6A9EC0的内存中，即[0x6A9EC0] = 0x0290A1D0</li>
-<li>所以我们可以得到，阳光地址 = [[0x6A9EC0] + 0x768] + 0x5560</li>
-</ul></li>
-</ol>
-<p>之后我们在CE中验证我们的结果，选择add address manually</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光8.png" /></p>
-<p>之后选择Point，因为此处包含两个偏移地址，因此再点击add offset，然后填入我们找到的基址与偏移地址</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光9.png" /></p>
-<p>最终我们可以看到，这个地址内，存的就是当前阳光的数值，修改后，游戏内的阳光也随之改变，且重启游戏后，该地址仍然存的是阳光的数值</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光10.png" /></p>
-<h4 id="实现无限阳光的功能">实现无限阳光的功能</h4>
-<p>的到进程空间中阳光的地址，并向阳光地址处写入所需阳光数，即可实现无限阳光的功能，具体实现细节就不做赘述，给出核心代码</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将寻找地址功能封装成GetThirdLevelAddress()函数，方便后续寻找金币地址</span></span><br><span class="line">DWORD sunAddress = <span class="built_in">GetThirdLevelAddress</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义阳光数量</span></span><br><span class="line">DWORD dwSun = <span class="number">9999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入             </span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess, (LPVOID)sunAddress, (LPCVOID)&amp;dwSun, <span class="built_in"><span class="keyword">sizeof</span></span>(DWORD), &amp;pid)          </span><br></pre></td></tr></table></figure>
-<p>金币地址的寻找大同小异，这里也不再赘述，这样我们就完成了无限阳光与无限金币的功能</p>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
     <title>逆向之植物大战僵尸（二）</title>
     <url>/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
     <content><![CDATA[<p>回顾一下<a href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89">上一章</a>实现无限阳光的方法，我们首先猜想有一个变量存储了当前阳光的值，即在内存中有一块空间存储了阳光的值，只需要找到该空间，再将期望的阳光数写入该空间即可实现无限阳光的功能，通过CE多次搜索阳光，我们最终通过基址 + 2次间址的形式定位到了阳光的具体地址</p>
@@ -254,6 +187,73 @@
 <p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-nop.png" /></p>
 <h4 id="实现取消cd功能">实现取消CD功能</h4>
 <p>其过程就是用代码的形式将jle指令用nop填充 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// nop指令的机器码，保证与原jle指令长度相同</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0x90</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在jle指令地址处，用nop填充</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x00487296</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>逆向之植物大战僵尸（一）</title>
+    <url>/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<p>植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能：<br />
+1. 无限阳光和无限金币<br />
+2. 取消植物放置的CD<br />
+3. 同一个位置可以重复放置植物</p>
+<span id="more"></span>
+<h3 id="无限阳光">无限阳光</h3>
+<h4 id="静态基址与动态地址">静态基址与动态地址</h4>
+<ol type="1">
+<li><p>静态基址：是指静态基址中的内容，不会因程序的重新启动而改变，只有在程序重新编译后才会变动</p></li>
+<li><p>动态地址：是指地址中的内容，会因程序的重新启动而变动的地址，也就是说，当前状态下，地址中保存的信息是我们所需的信息，但程序重新启动后，该地址中的内容就不再是我们所需的信息了</p></li>
+</ol>
+<h4 id="寻找阳光动态地址">寻找阳光动态地址</h4>
+<ol type="1">
+<li>首先通过CE附加植物大战僵尸进程，因为阳光是一个精确的数值50，所以可以选择exact value来进行搜索，首次搜索会得到很多相关的结果</li>
+</ol>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png" alt="1" /><figcaption aria-hidden="true">1</figcaption>
+</figure>
+<ol start="2" type="1">
+<li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-%E9%98%B3%E5%85%892.png" /> 为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
+<p>如何判断这个地址是否是静态基址，若CE标识的地址为绿色，则该地址为静态基址，而此处的地址并不是绿色的，所以这是个动态地址，因此我们需要寻找基址</p>
+<h4 id="寻找基址">寻找基址</h4>
+<ol type="1">
+<li>我们已经找到了阳光的动态地址，那么如何寻找基址，思路是，阳光每次变动就意味着一定有一条指令修改了这个地址中的值，那么我们可以下一个内存写入断点，看看哪条指令写入了这个地址，所以我们再CE中选中这个地址，右键找到find out what writes to this address</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光3.png" /></p>
+<p>之后我们收集一个阳光，发现得到了一条指令，我们双击打开</p>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光4.png" /></p>
+<p>此时我们可以知道，ecx的值0x19，也就是25，写入了阳光地址标识的内存中，因此阳光的地址 = eax + 0x5560，该地址内存放了当前阳光的具体数值，其中eax = 0x17326B58，而0x5560为偏移地址</p>
+<ol start="2" type="1">
+<li>此时我们猜想，内存中有没有一个位置存放了0x17326B58这个值，因此我们可以使用CE，并以16进制搜索0x17326B58，发现很多搜索结果，首先可以排除地址在0x00400000以下的内容，这部分是不进行映射的，以便捕获异常的空指针引用，因此我们找到第一个大于0x00400000的地址，这个值通常是我们需要的，即0x0290A938</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光5.png" /></p>
+<p>此时我们可以知道0x0290A938这个地址内保存了0x17326B58这个值，但是0x0290A938这个地址仍是个动态地址，所以我们还需要进一步寻找基址</p>
+<p>此时我们用CE下个内存访问断点，查看哪条指令访问了0x0290A938这个地址内的值，可以看到4个结果，我们点进第一个指令发现0x0290A938 = edi + 0x768，其中edi = 0290A1D0，0x768也是偏移地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光6.png" /></p>
+<p>那么同理我们可以看看内存中哪里存放了0290A1D0，得到如下结果</p>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光7.png" /></p>
+<p>这时我们看到几个绿色的地址，这就代表这些地址就是静态基址，我们选择第一个，可以看到其地址为0x6A9EC0，这就是我们需要的静态基址，那么如何通过静态基址找到最后的阳光地址呢</p>
+<ol type="1">
+<li>现在梳理一下这个过程
+<ul>
+<li>阳光的动态地址 = 0x17326B58 + 0x5560，而0x17326B58存在地址为0x0290A938的内存中，即[0x0290A938] = 0x17326B58</li>
+<li>地址0x0290A938 = 0290A1D0 + 0x768，而0290A1D0存在地址为静态基址为0x6A9EC0的内存中，即[0x6A9EC0] = 0x0290A1D0</li>
+<li>所以我们可以得到，阳光地址 = [[0x6A9EC0] + 0x768] + 0x5560</li>
+</ul></li>
+</ol>
+<p>之后我们在CE中验证我们的结果，选择add address manually</p>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光8.png" /></p>
+<p>之后选择Point，因为此处包含两个偏移地址，因此再点击add offset，然后填入我们找到的基址与偏移地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光9.png" /></p>
+<p>最终我们可以看到，这个地址内，存的就是当前阳光的数值，修改后，游戏内的阳光也随之改变，且重启游戏后，该地址仍然存的是阳光的数值</p>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光10.png" /></p>
+<h4 id="实现无限阳光的功能">实现无限阳光的功能</h4>
+<p>的到进程空间中阳光的地址，并向阳光地址处写入所需阳光数，即可实现无限阳光的功能，具体实现细节就不做赘述，给出核心代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将寻找地址功能封装成GetThirdLevelAddress()函数，方便后续寻找金币地址</span></span><br><span class="line">DWORD sunAddress = <span class="built_in">GetThirdLevelAddress</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义阳光数量</span></span><br><span class="line">DWORD dwSun = <span class="number">9999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入             </span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess, (LPVOID)sunAddress, (LPCVOID)&amp;dwSun, <span class="built_in"><span class="keyword">sizeof</span></span>(DWORD), &amp;pid)          </span><br></pre></td></tr></table></figure>
+<p>金币地址的寻找大同小异，这里也不再赘述，这样我们就完成了无限阳光与无限金币的功能</p>
 ]]></content>
       <categories>
         <category>逆向</category>
@@ -470,7 +470,7 @@
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_SECTION_HEADER</span> &#123;</span></span><br><span class="line">    BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];      <span class="comment">// 8字节大小的块名</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">            DWORD   PhysicalAddress;</span><br><span class="line">            DWORD   VirtualSize;</span><br><span class="line">    &#125; Misc;                                     <span class="comment">// 实际被使用的区块的大小，未对齐</span></span><br><span class="line">    DWORD   VirtualAddress;                     <span class="comment">// 该块装载到内存中的RVA</span></span><br><span class="line">    DWORD   SizeOfRawData;                      <span class="comment">// 在磁盘中区块的大小，已对齐</span></span><br><span class="line">    DWORD   PointerToRawData;                   <span class="comment">// 该块在磁盘中的偏移FOA</span></span><br><span class="line">    DWORD   PointerToRelocations;               <span class="comment">// 在EXE中无意义，在OBJ文件中表示本块重定位信息表的偏移</span></span><br><span class="line">    DWORD   PointerToLinenumbers;               <span class="comment">// 调试信息，行号表在文件中的偏移</span></span><br><span class="line">    WORD    NumberOfRelocations;                <span class="comment">// 在EXE中无意义，在OBJ文件中表示本块在重定位表中重定位数量</span></span><br><span class="line">    WORD    NumberOfLinenumbers;                <span class="comment">// 该块在行号表中的行号数量</span></span><br><span class="line">    DWORD   Characteristics;                    <span class="comment">// 块属性</span></span><br><span class="line">&#125; IMAGE_SECTION_HEADER</span><br></pre></td></tr></table></figure>
 <p>块属性中的一些重要字段值如下所示</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_CNT_CODE                   0x00000020  <span class="comment">// 包含代码，通常与0x10000000一起设置</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_CNT_INITIALIZED_DATA       0x00000040  <span class="comment">// 包含已初始化数据</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_CNT_UNINITIALIZED_DATA     0x00000080  <span class="comment">// 包含未初始化数据</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_DISCARDABLE            0x02000000  <span class="comment">// 该块可被丢弃，因为它一旦被载入，进程就不再需要它了，常见的可丢弃块是.reloc（重定位块）</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_SHARED                 0x10000000  <span class="comment">// 该块为共享块</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_EXECUTE                0x20000000  <span class="comment">// 该块可执行，通常当0x00000020标志被设置时，该标志也被设置</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_READ                   0x40000000  <span class="comment">// 该块可读，可执行文件中总是设置该标志</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_WRITE                  0x80000000  <span class="comment">// 该块可写，若PE文件中没有设置该标志，装载程序就会将内存映像页标记为可读或可执行</span></span></span><br></pre></td></tr></table></figure>
-<p>在十六进制编辑器中的区块表信息如下图所示</p>
+<p>在十六进制编辑器中的区块表信息如下图所示，可以观察到该exe文件包含4个区块表，其中四个区块的信息名称分别为 - .text - .rdata - .data - .rsrc</p>
 <p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-区块表.png" /></p>
 ]]></content>
       <categories>
