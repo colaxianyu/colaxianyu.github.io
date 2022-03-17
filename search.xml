@@ -1,6 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>逆向之植物大战僵尸（二）</title>
+    <url>/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <content><![CDATA[<p>回顾一下<a href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89">上一章</a>实现无限阳光的方法，我们首先猜想有一个变量存储了当前阳光的值，即在内存中有一块空间存储了阳光的值，只需要找到该空间，再将期望的阳光数写入该空间即可实现无限阳光的功能，通过CE多次搜索阳光，我们最终通过基址 + 2次间址的形式定位到了阳光的具体地址</p>
+<span id="more"></span>
+<h3 id="取消植物放置cd">取消植物放置CD</h3>
+<h4 id="思路">思路</h4>
+<p>现在我们实现取消植物放置CD的功能，可以猜想有一个变量存放了某个植物的放置CD，而另一个变量存放了CD计时器，然后通过一个函数判断，当<strong>CD计时器从0开始增长到大于等于CD时</strong>或<strong>CD计时器从CD值开始减少到0时</strong>，可以再次放置植物，即</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> plantCD = xxx</span><br><span class="line"><span class="keyword">int</span> CDTimers = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers增加</span></span><br><span class="line"><span class="keyword">if</span>(CDTimers &gt;= plantCD)&#123;     </span><br><span class="line">     可以放置植物;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  or</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers减少</span></span><br><span class="line">CDTimers = plantCD</span><br><span class="line"><span class="keyword">if</span>(CDtimer &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">    可以放置植物;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此猜想上我们不难发现两种实现思路：<br />
+1. 方法一是置植物CD为0<br />
+2. 方法二是让if判断能一直成立</p>
+<p>对于方法一，因为每个植物都有其独立的CD，要搜索每一个植物的CD值工作量相对较大，且我们并不知道植物CD的具体数值，在搜索中也较为困难，且在搜索到植物CD后还需要再定位其静态基址</p>
+<p>对于方法二，无论植物CD是多少，能否放置植物都依赖于函数的判断，如果我们能定位到该if判断的位置，那么我们就能通过修改程序执行的流程，使其无条件的执行可以放置植物的代码</p>
+<p>因此我们的思路就是： 首先找到CDTimers，然后定位if判断的位置，修改程序执行的流程</p>
+<h4 id="寻找cdtimers">寻找CDTimers</h4>
+<ol type="1">
+<li>因为我们无法确定CDTimers的初始值，所以在CE的搜索方式中我们选择未知初始值，并点击First Scan</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-搜索.png" /></p>
+<ol start="2" type="1">
+<li>我们以向日葵作为对象，此时放置向日葵，并选择changed value，然后再次搜索</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次搜索.png" /></p>
+<ol start="3" type="1">
+<li>我们发现CE得到了非常多的搜索结果，此时游戏处于暂停阶段，CDTimers并未改变，所以我们可以在CE中选择unchanged value，并多次搜索过滤大量无关数据</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-多次搜索过滤.png" /></p>
+<ol start="4" type="1">
+<li>此时搜索结果减少的量已经很少了，此时我们让游戏继续一段时间，此时CDTimers的值改变，因此再CE中再次选择changed value并搜索</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次精准搜索.png" /></p>
+<ol start="5" type="1">
+<li>我们重复步骤3和4，直至搜索到少量结果（向日葵CD结束可再放置一次重复搜索）</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-最终结果.png" /></p>
+<ol start="6" type="1">
+<li>我们发现最后一个结果的值172比较符合我们的猜想，并发现在游戏进行时，该值不断增大，此时向日葵处于不可放置的状态，那么该值是否会增大到某一个界限后导致向日葵可以重新安放呢，为印证猜想，我们在此处将该值改为1000</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-修改可疑值.png" /></p>
+<p>我们发现此时向日葵恢复了可放置的状态，猜想正确，该值就是CDTimers</p>
+<h4 id="定位if判断的位置">定位If判断的位置</h4>
+<ol type="1">
+<li>我们知道当植物处于不可放置状态时，CDTimers的值会不断增加，因此我们可以得知必定有一条指令像该内存写入了数据，因此我们可以对CDTimer下一个内存写入断点</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-内存写入断点.png" /></p>
+<ol start="2" type="1">
+<li>此时我们选择show disassembler可以看到如下内容，我们发现该值增加后存入了eax寄存器，而之后eax与内存中[edi+0x24]处的值进行了对比，我们猜测该CMP指令就是我们要找的if判断指令，我们记下该CMP指令的地址</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-反汇编.png" /></p>
+<ol start="3" type="1">
+<li>用x64Dbg附加植物大战僵尸进程（若附加失败可关闭CE后再尝试附加），之后我们在x64Dbg中通过地址找到CMP指令，并在该处下断点，是程序运行到CMP指令处</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-调试器.png" /></p>
+<ol start="4" type="1">
+<li>此时我们单步执行一次，发现跳转指令jle执行，而此时向日葵是处于无法安置状态的，如果该CMP就是我们需要的if判断，那么可以推测出，若跳转执行，则植物仍在CD，不可放置；若跳转不执行，则植物没有CD，可以放置</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-jle指令.png" /></p>
+<ol start="5" type="1">
+<li>为验证猜想，我们可以改变程序的执行流程，即让jle指令不跳转，因为jle跳转与否是由标志寄存器（ZF == 1 || SF != OF）决定，此时SF != OF，跳转执行，因此我们将SF的值该为0，此时跳转就不会执行，之后我们运行程序，可以观察到植物的CD取消</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-改执行流程.png" /></p>
+<ol start="6" type="1">
+<li>此时我们可以确定该CMP就是我们需要的if判断，而其结果决定了jle指令是否跳转，若我们让jle指令永不跳转，那就实现了植物放置无CD的功能，因此我们在x64Dbg中将jle指令用nop填充并取消断点，回到游戏中，我们发现放置植物之后将不会有CD，功能实现成功</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-nop.png" /></p>
+<h4 id="实现取消cd功能">实现取消CD功能</h4>
+<p>其过程就是用代码的形式将jle指令用nop填充 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// nop指令的机器码，保证与原jle指令长度相同</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0x90</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在jle指令地址处，用nop填充</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x00487296</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
     <title>二分查找</title>
     <url>/2022/02/16/2022-2-16-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<blockquote>
@@ -185,79 +258,6 @@
       </categories>
   </entry>
   <entry>
-    <title>逆向之植物大战僵尸（二）</title>
-    <url>/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
-    <content><![CDATA[<p>回顾一下<a href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89">上一章</a>实现无限阳光的方法，我们首先猜想有一个变量存储了当前阳光的值，即在内存中有一块空间存储了阳光的值，只需要找到该空间，再将期望的阳光数写入该空间即可实现无限阳光的功能，通过CE多次搜索阳光，我们最终通过基址 + 2次间址的形式定位到了阳光的具体地址</p>
-<span id="more"></span>
-<h3 id="取消植物放置cd">取消植物放置CD</h3>
-<h4 id="思路">思路</h4>
-<p>现在我们实现取消植物放置CD的功能，可以猜想有一个变量存放了某个植物的放置CD，而另一个变量存放了CD计时器，然后通过一个函数判断，当<strong>CD计时器从0开始增长到大于等于CD时</strong>或<strong>CD计时器从CD值开始减少到0时</strong>，可以再次放置植物，即</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> plantCD = xxx</span><br><span class="line"><span class="keyword">int</span> CDTimers = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers增加</span></span><br><span class="line"><span class="keyword">if</span>(CDTimers &gt;= plantCD)&#123;     </span><br><span class="line">     可以放置植物;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  or</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers减少</span></span><br><span class="line">CDTimers = plantCD</span><br><span class="line"><span class="keyword">if</span>(CDtimer &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">    可以放置植物;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在此猜想上我们不难发现两种实现思路：<br />
-1. 方法一是置植物CD为0<br />
-2. 方法二是让if判断能一直成立</p>
-<p>对于方法一，因为每个植物都有其独立的CD，要搜索每一个植物的CD值工作量相对较大，且我们并不知道植物CD的具体数值，在搜索中也较为困难，且在搜索到植物CD后还需要再定位其静态基址</p>
-<p>对于方法二，无论植物CD是多少，能否放置植物都依赖于函数的判断，如果我们能定位到该if判断的位置，那么我们就能通过修改程序执行的流程，使其无条件的执行可以放置植物的代码</p>
-<p>因此我们的思路就是： 首先找到CDTimers，然后定位if判断的位置，修改程序执行的流程</p>
-<h4 id="寻找cdtimers">寻找CDTimers</h4>
-<ol type="1">
-<li>因为我们无法确定CDTimers的初始值，所以在CE的搜索方式中我们选择未知初始值，并点击First Scan</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-搜索.png" /></p>
-<ol start="2" type="1">
-<li>我们以向日葵作为对象，此时放置向日葵，并选择changed value，然后再次搜索</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次搜索.png" /></p>
-<ol start="3" type="1">
-<li>我们发现CE得到了非常多的搜索结果，此时游戏处于暂停阶段，CDTimers并未改变，所以我们可以在CE中选择unchanged value，并多次搜索过滤大量无关数据</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-多次搜索过滤.png" /></p>
-<ol start="4" type="1">
-<li>此时搜索结果减少的量已经很少了，此时我们让游戏继续一段时间，此时CDTimers的值改变，因此再CE中再次选择changed value并搜索</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次精准搜索.png" /></p>
-<ol start="5" type="1">
-<li>我们重复步骤3和4，直至搜索到少量结果（向日葵CD结束可再放置一次重复搜索）</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-最终结果.png" /></p>
-<ol start="6" type="1">
-<li>我们发现最后一个结果的值172比较符合我们的猜想，并发现在游戏进行时，该值不断增大，此时向日葵处于不可放置的状态，那么该值是否会增大到某一个界限后导致向日葵可以重新安放呢，为印证猜想，我们在此处将该值改为1000</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-修改可疑值.png" /></p>
-<p>我们发现此时向日葵恢复了可放置的状态，猜想正确，该值就是CDTimers</p>
-<h4 id="定位if判断的位置">定位If判断的位置</h4>
-<ol type="1">
-<li>我们知道当植物处于不可放置状态时，CDTimers的值会不断增加，因此我们可以得知必定有一条指令像该内存写入了数据，因此我们可以对CDTimer下一个内存写入断点</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-内存写入断点.png" /></p>
-<ol start="2" type="1">
-<li>此时我们选择show disassembler可以看到如下内容，我们发现该值增加后存入了eax寄存器，而之后eax与内存中[edi+0x24]处的值进行了对比，我们猜测该CMP指令就是我们要找的if判断指令，我们记下该CMP指令的地址</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-反汇编.png" /></p>
-<ol start="3" type="1">
-<li>用x64Dbg附加植物大战僵尸进程（若附加失败可关闭CE后再尝试附加），之后我们在x64Dbg中通过地址找到CMP指令，并在该处下断点，是程序运行到CMP指令处</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-调试器.png" /></p>
-<ol start="4" type="1">
-<li>此时我们单步执行一次，发现跳转指令jle执行，而此时向日葵是处于无法安置状态的，如果该CMP就是我们需要的if判断，那么可以推测出，若跳转执行，则植物仍在CD，不可放置；若跳转不执行，则植物没有CD，可以放置</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-jle指令.png" /></p>
-<ol start="5" type="1">
-<li>为验证猜想，我们可以改变程序的执行流程，即让jle指令不跳转，因为jle跳转与否是由标志寄存器（ZF == 1 || SF != OF）决定，此时SF != OF，跳转执行，因此我们将SF的值该为0，此时跳转就不会执行，之后我们运行程序，可以观察到植物的CD取消</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-改执行流程.png" /></p>
-<ol start="6" type="1">
-<li>此时我们可以确定该CMP就是我们需要的if判断，而其结果决定了jle指令是否跳转，若我们让jle指令永不跳转，那就实现了植物放置无CD的功能，因此我们在x64Dbg中将jle指令用nop填充并取消断点，回到游戏中，我们发现放置植物之后将不会有CD，功能实现成功</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-nop.png" /></p>
-<h4 id="实现取消cd功能">实现取消CD功能</h4>
-<p>其过程就是用代码的形式将jle指令用nop填充 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// nop指令的机器码，保证与原jle指令长度相同</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0x90</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在jle指令地址处，用nop填充</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x00487296</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
     <title>逆向之植物大战僵尸（三）</title>
     <url>/2022/03/01/2022-3-1-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/</url>
     <content><![CDATA[<p><a href="https://colaxianyu.github.io/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89">上一章</a>我们实现了植物无CD的功能，主要使通过定位CDTimers间接定位到了if判断的位置，并通过使用nop填充jle指令，改变了程序的执行流程，使其总是运行植物不处于CD状态中的代码</p>
@@ -308,165 +308,6 @@
 <p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改为jmp.png" /></p>
 <h4 id="实现重复放置功能">实现重复放置功能</h4>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// JMP 0x00410754的硬编码，硬编码的操作码部分为偏移地址</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0xE9</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x20</span>;</span><br><span class="line">buffer[<span class="number">2</span>] = <span class="number">0x09</span>;</span><br><span class="line">buffer[<span class="number">3</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">4</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">5</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 填充至原je跳转指令处</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x0040FE2F</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>PE文件解析（一）</title>
-    <url>/2022/03/05/2022-03-05-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="基本概念">基本概念</h3>
-<h4 id="什么是pe文件">什么是PE文件</h4>
-<ol type="1">
-<li>PE文件的全程：Portable Executable，即可移植的可执行文件</li>
-<li>常见的PE文件：EXE文件、DLL文件、OCX文件、SYS文件、COM文件</li>
-<li>PE文件通常是指32位的，而64位的PE文件通常称为PE32+、PE+、PE64</li>
-</ol>
-<h4 id="文件偏移地址虚拟地址与相对虚拟地址">文件偏移地址、虚拟地址与相对虚拟地址</h4>
-<ol type="1">
-<li>文件偏移地址：PE文件存储在磁盘中时，某个数据的位置相对于文件头部的偏移量，通常将其称为文件偏移地址（File Offset Address）或物理地址（RAW Offset）</li>
-<li>虚拟地址：在Windows系统中，PE文件会被系统加载器映射到内存中，而每个PE文件都有其自己的独立的虚拟空间，这个虚拟空间的内存地址就被称为虚拟地址（Virtual Address）</li>
-<li>相对虚拟地址：当PE文件映射到内存之后，某个数据相对于文件载入点地址（即基地址，ImageBase）的偏移量，通常称其为相对虚拟地址（Relative Virtual Address），虚拟地址与相对虚拟地址存在如下关系：虚拟地址(VA) = 基地址(ImageBase) + 相对虚拟地址(RVA)</li>
-</ol>
-<h3 id="pe-headers解析">PE Headers解析</h3>
-<p>由于个人习惯的原因，我更喜欢将IMAGE_DOS_HEADER、IMAGE_NT_HEADERS、IMAGE_FILE_HEADER、IMAGE_OPTIONAL_HEADER、IMAGE_SECTION_HEADER这五个部分都视作PE的头部部分，但需要知道的是，严格意义上的PE文件头是指<strong>IMAGE_NT_HEADERS</strong></p>
-<h4 id="image_dos_header">IMAGE_DOS_HEADER</h4>
-<p>MS-DOS头部，每个PE文件都是以一个DPS程序开始的，且DOS可以识别出一个文件是不是一个有效的执行体，若其首部的e_magic被置为0x5A4D（即ASCII的 "MZ"，这个值在winnt.h中有一个#define，名为IMAGE_DOS_SIGNATURE），那么该文件就是一个DOS可执行文件</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_DOS_HEADER</span> &#123;</span>      </span><br><span class="line">    WORD   e_magic;                     <span class="comment">// DOS可执行文件标记 &quot;MZ&quot;</span></span><br><span class="line">    WORD   e_cblp;                      </span><br><span class="line">    WORD   e_cp;                        </span><br><span class="line">    WORD   e_crlc;                      </span><br><span class="line">    WORD   e_cparhdr;                   </span><br><span class="line">    WORD   e_minalloc;                  </span><br><span class="line">    WORD   e_maxalloc;                  </span><br><span class="line">    WORD   e_ss;                        </span><br><span class="line">    WORD   e_sp;                        </span><br><span class="line">    WORD   e_csum;                      </span><br><span class="line">    WORD   e_ip;                        <span class="comment">// DOS代码入口IP</span></span><br><span class="line">    WORD   e_cs;                        <span class="comment">// DOS代码入口CS</span></span><br><span class="line">    WORD   e_lfarlc;                    </span><br><span class="line">    WORD   e_ovno;                      </span><br><span class="line">    WORD   e_res[<span class="number">4</span>];                    </span><br><span class="line">    WORD   e_oemid;                     </span><br><span class="line">    WORD   e_oeminfo;                   </span><br><span class="line">    WORD   e_res2[<span class="number">10</span>];                  </span><br><span class="line">    LONG   e_lfanew;                    <span class="comment">// 偏移地址，指向IMAGE_NT_HEADERS，&quot;PE00&quot;(0x00004550)</span></span><br><span class="line">  &#125; IMAGE_DOS_HEADER</span><br></pre></td></tr></table></figure>
-<p>其中比较重要的两个字段分别是e_magic与e_lfanew，前者的作用已经解释过，而后者e_lfanew是真正的PE文件头IMAGE_NT_HEADERS的相对偏移（既是FOA也是RVA）</p>
-<p>用十六进制编辑器打开exe文件可以发现，起始位置的"MZ" 标记就是e_magic字段的值，而e_lfanew的值为"0x000000F0"，在相对文件起始位置0x000000F0的位置我们可以找到真正的PE文件头标记"PE00"</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-dos头.png" /></p>
-<p>我们可以观察到在e_lfanew和真正的PE头之间还有一些数据，这部分数据被称为DOS stub（即DOS块），DOS stub 实际上是一个有效的exe，在不支持PE文件格式的操作系统中，它将小时一个错误提示，即"This program cannot be run in DOS mode"，DOS stub的数据大多由编译器自动生成，我们也可根据自己的需要修改其中的内容，我们将IMAGE_DOS_HEADER与DOS stub合称为DOS文件头</p>
-<h4 id="image_nt_headers">IMAGE_NT_HEADERS</h4>
-<p>紧跟着DOS stub de就是真正的PE文件头了，这部分也被称为NT映像头，在一个有效PE文件中，其Signature字段被置为0x00004550（即ASCII的"PE00"，这个值在winnt.h中也有一个#define，名为IMAGE_NT_SIGNATURE），而紧跟在Signature字段之后的就是IMAGE_FILE_HEADER映像文件头，在此之后紧跟的是IMAGE_OPTIONAL_HEADER可选映像头</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_NT_HEADERS</span> &#123;</span></span><br><span class="line">    DWORD Signature;                                  <span class="comment">// PE文件标识</span></span><br><span class="line">    IMAGE_FILE_HEADER FileHeader;                     <span class="comment">// 偏移地址，指向 IMAGE_FILE_HEADER</span></span><br><span class="line">    IMAGE_OPTIONAL_HEADER32 OptionalHeader;           <span class="comment">// 偏移地址，指向 IMAGE_FILE_HEADER</span></span><br><span class="line">&#125; IMAGE_NT_HEADERS32</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-NT头.png" /></p>
-<h4 id="image_file_header">IMAGE_FILE_HEADER</h4>
-<p>映像文件头中包含PE文件的一些基本信息，大小为20字节，其中较为重要的两个字段为NumberOfSections字段与SizeOfOptionalHeader字段，前者指出了区块Section的数量（同时也指明了IMAGE_SECTION_HEADER区块表的数量，因为每一个区块表记录了对应区块的相关信息），后者指出了IMAGE_OPTIONAL_HEADER可选映像头的大小</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_FILE_HEADER</span> &#123;</span></span><br><span class="line">    WORD    Machine;                          <span class="comment">// 运行平台</span></span><br><span class="line">    WORD    NumberOfSections;                 <span class="comment">// 区块数</span></span><br><span class="line">    DWORD   TimeDateStamp;                    <span class="comment">// 文件创建的日期和时间</span></span><br><span class="line">    DWORD   PointerToSymbolTable;             <span class="comment">// 指向符号表（用于调试）</span></span><br><span class="line">    DWORD   NumberOfSymbols;                  <span class="comment">// 符号表中的符号的个数（用于调试）</span></span><br><span class="line">    WORD    SizeOfOptionalHeader;             <span class="comment">// 可选映像头的大小</span></span><br><span class="line">    WORD    Characteristics;                  <span class="comment">// 文件属性</span></span><br><span class="line">&#125; IMAGE_FILE_HEADER</span><br></pre></td></tr></table></figure>
-<p>这里对字段进行详细的解释：<br />
-1. Machine：可执行文件的目标CPU类型，因为不同平台上指令集不同，因此需要该字段标识运行的平台，如Inter i386及其之后的处理器，该字段的值都为0x14C<br />
-2. NumberOfSections：区块数<br />
-3. TimeDateStamp：文件创建的时间，将该值翻译为易读字符串需要使用_ctime函数<br />
-4. PointerToSymbolTable：COFF符号表的文件偏移位置（FOA），现较为少见<br />
-5. NumberOfSymbols：如果有文件符号表，其指出了文件符号表中符号的数目<br />
-6. SizeOfOptionalHeader：可选映像头的大小，其大小通常依赖于文件是32位还是64位的，若是32位文件，这个值默认为0x00E0，若是64位文件，这个值默认为0x00F0，这表示了选映像头大小的最小值，因此该值是可以修改的<br />
-7. Characteristics：文件属性，通过选择几个有效值计算得到，有效值在winnt.h定义</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_RELOCS_STRIPPED           0x0001  <span class="comment">// 不存在重定位信息</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_EXECUTABLE_IMAGE          0x0002  <span class="comment">// 文件可执行 若为0，通常是链接时出问题</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_LINE_NUMS_STRIPPED        0x0004  <span class="comment">// 行号信息被移除</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_LOCAL_SYMS_STRIPPED       0x0008  <span class="comment">// 符号信息被移除</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_AGGRESIVE_WS_TRIM         0x0010  <span class="comment">// Aggressively trim working set</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020  <span class="comment">// 应用程序可以处理超过2GB的地址，因为大部分数据库服务器需要很大的内存，而NT仅提供2GB给应用程序，因此从NT SP3开始，可以通过设置此参数，使应用程序分配2 ~ 3GB区域的地址（此部分原本为系统内存区）</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_BYTES_REVERSED_LO         0x0080  <span class="comment">// 处理器的低位字节是相反的</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_32BIT_MACHINE             0x0100  <span class="comment">// 目标平台为32为机器</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_DEBUG_STRIPPED            0x0200  <span class="comment">// .DBG文件的调试信息被移除</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   0x0400  <span class="comment">// 如果映像文件在可移动介质中，则先复制到交换文件中再运行</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_NET_RUN_FROM_SWAP         0x0800  <span class="comment">// 如果映像文件在网络中，则先复制到交换文件后再运行</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_SYSTEM                    0x1000  <span class="comment">// 系统文件</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_DLL                       0x2000  <span class="comment">// DLL文件</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_UP_SYSTEM_ONLY            0x4000  <span class="comment">// 文件只能运行在单处理上</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_FILE_BYTES_REVERSED_HI         0x8000  <span class="comment">// 处理器的高位字节是相反的</span></span></span><br></pre></td></tr></table></figure>
-<h4 id="image_optional_header">IMAGE_OPTIONAL_HEADER</h4>
-<p>虽然称为可选映像头，但该结构是必不可少的，其中定义了更多的数据 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_OPTIONAL_HEADER</span> &#123;</span></span><br><span class="line">    WORD    Magic;                            <span class="comment">// 标志字</span></span><br><span class="line">    BYTE    MajorLinkerVersion;               <span class="comment">// 链接器主版本号</span></span><br><span class="line">    BYTE    MinorLinkerVersion;               <span class="comment">// 连接器次版本号</span></span><br><span class="line">    DWORD   SizeOfCode;                       <span class="comment">// 所有含有代码的区块的大小</span></span><br><span class="line">    DWORD   SizeOfInitializedData;            <span class="comment">// 所有初始化数据区块大小</span></span><br><span class="line">    DWORD   SizeOfUninitializedData;          <span class="comment">// 所有未初始化数据区块大小</span></span><br><span class="line">    DWORD   AddressOfEntryPoint;              <span class="comment">// 程序执行入口RVA</span></span><br><span class="line">    DWORD   BaseOfCode;                       <span class="comment">// 代码区块起始RVA</span></span><br><span class="line">    DWORD   BaseOfData;                       <span class="comment">// 数据区块起始RVA</span></span><br><span class="line">    DWORD   ImageBase;                        <span class="comment">// 程序默认载入基地址</span></span><br><span class="line">    DWORD   SectionAlignment;                 <span class="comment">// 内存中块的对齐值</span></span><br><span class="line">    DWORD   FileAlignment;                    <span class="comment">// 磁盘文件中块的对齐值</span></span><br><span class="line">    WORD    MajorOperatingSystemVersion;      <span class="comment">// 操作系统主版本号</span></span><br><span class="line">    WORD    MinorOperatingSystemVersion;      <span class="comment">// 操作系统次版本号</span></span><br><span class="line">    WORD    MajorImageVersion;                <span class="comment">// 用户自定义主版本号</span></span><br><span class="line">    WORD    MinorImageVersion;                <span class="comment">// 用户自定义次版本号</span></span><br><span class="line">    WORD    MajorSubsystemVersion;            <span class="comment">// 所需子系统主版本号</span></span><br><span class="line">    WORD    MinorSubsystemVersion;            <span class="comment">// 所需子系统此版本号</span></span><br><span class="line">    DWORD   Win32VersionValue;                <span class="comment">// 保留，通常设置为0</span></span><br><span class="line">    DWORD   SizeOfImage;                      <span class="comment">// 映像载入内存后的总大小</span></span><br><span class="line">    DWORD   SizeOfHeaders;                    <span class="comment">// DOS头、PE文件头、区块表的总大小</span></span><br><span class="line">    DWORD   CheckSum;                         <span class="comment">// 映像校验和</span></span><br><span class="line">    WORD    Subsystem;                        <span class="comment">// 文件子系统</span></span><br><span class="line">    WORD    DllCharacteristics;               <span class="comment">// 显示DLL特性的旗标</span></span><br><span class="line">    DWORD   SizeOfStackReserve;               <span class="comment">// 初始化时栈的大小</span></span><br><span class="line">    DWORD   SizeOfStackCommit;                <span class="comment">// 初始化时实际提交的栈大小</span></span><br><span class="line">    DWORD   SizeOfHeapReserve;                <span class="comment">// 初始化时保留的堆大小</span></span><br><span class="line">    DWORD   SizeOfHeapCommit;                 <span class="comment">// 初始化时实际保留的堆大小</span></span><br><span class="line">    DWORD   LoaderFlags;                      <span class="comment">// 调试相关，默认值为0</span></span><br><span class="line">    DWORD   NumberOfRvaAndSizes;              <span class="comment">// 数据目录项的数量</span></span><br><span class="line">    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];       <span class="comment">// 数据目录表数组</span></span><br><span class="line">&#125; IMAGE_OPTIONAL_HEADER32</span><br></pre></td></tr></table></figure></p>
-<p>这里对一些较为关键的字段进行详细的解释：<br />
-1. Magic：标志字，ROM映像为0x107，32位可执行映像为0x010B，64位可执行映像位0x020B<br />
-2. SizeOfCode：所有含有IMAGE_SCN_CNT_CODE属性的区块的总大小，必须是FileAlignment的整数倍，由编译器填写，通常情况下，大多数文件只有一个Code块，所以该字段与.text块的大小匹配<br />
-3. SizeOfUninitializedData：所有未初始化数据区块大小，装载程序需要在虚拟地址空间中位这些数据分配空间，这些块在磁盘文件中不占空间，在程序开始运行时没有指定值，未初始化数据通常在.bss块中<br />
-4. AddressOfEntryPoint：程序执行入口RVA。对于DLL，这个入口点在进程初始化和关闭时与线程创建和销毁时被调用，在大多数可执行文件中，这个地址不直接指向Main、WinMain或DllMain，而是指向运行时的库代码，并由它来调用上述函数<br />
-5. ImageBase：程序默认载入基地址，如果PE文件在这个地址载入，加载器将会跳过应用基址重定位的步骤<br />
-6. SectionAlignment：载入内存时，内存中块的对齐值，也就是说每个区块被载入的地址必定是本字段指定数值的整数倍，默认的对齐尺寸是目标CPU的页尺寸（通常是0x10000，也就是4KB）<br />
-7. FileAlignment：磁盘文件中块的对齐值，区块在磁盘文件中存储的首地址必定是本字段指定数值的整数倍，对于x86可执行文件，这个值常为0x200或0x1000，这是为了保证块总是从磁盘的扇区开始，该值必须是2的幂<br />
-8. SizeOfImage：映像载入内存后的总大小，即从ImageBase到最后一个块结束，且按照<strong>SectionAlignment</strong>对齐的大小<br />
-9. SizeOfHeaders：DOS头、PE文件头、区块表的总大小，按<strong>FileAlignment</strong>对齐<br />
-10. CheckSum：映像校验和，CheckSumMappedFile函数可以计算该值，通常情况下，普通的EXE文件该值为0，但内核模式的驱动程序和系统DLL必须有一个校验和<br />
-11. NumberOfRvaAndSizes：数据目录项的数量，该值至今一直为16<br />
-12. DataDirectory[16]：数据目录数组，由数个相同的IMAGE_DATA_DIRECTORY结构组成，其具体的结构如下</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_DATA_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   VirtualAddress;         <span class="comment">// 数据块的RVA</span></span><br><span class="line">    DWORD   Size;                   <span class="comment">// 数据块的大小</span></span><br><span class="line">&#125; IMAGE_DATA_DIRECTORY</span><br></pre></td></tr></table></figure>
-<p>数据目录表成员的结构如下所示</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">序号</th>
-<th style="text-align: center;">表名</th>
-<th style="text-align: center;">结构</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">Export Table</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_EXPORT</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">Import Table</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_IMPORT</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">Resources Table</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_RESOURCE</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">Exception Table</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_EXCEPTION</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">Security Table</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_SECURITY</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">5</td>
-<td style="text-align: center;">Base Relocation Table</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_BASERELOC</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">6</td>
-<td style="text-align: center;">Debug</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_DEBUG</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">7</td>
-<td style="text-align: center;">Copyright</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_COPYRIGHT</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">8</td>
-<td style="text-align: center;">Global Ptr</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_GLOBALPTR</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">9</td>
-<td style="text-align: center;">Thread Local Storage (TLS)</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_TLS</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">10</td>
-<td style="text-align: center;">Load Configuration</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">11</td>
-<td style="text-align: center;">Bound Import</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">12</td>
-<td style="text-align: center;">Import Address Table (IAT)</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_IAT</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">13</td>
-<td style="text-align: center;">Delay Import</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">14</td>
-<td style="text-align: center;">COM Descriptor</td>
-<td style="text-align: center;">IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">15</td>
-<td style="text-align: center;">保留，必须为0</td>
-<td style="text-align: center;">-</td>
-</tr>
-</tbody>
-</table>
-<h4 id="区块表">区块表</h4>
-<p>区块表中记录了区块的具体信息，每个区块表分别指向了不同的区块实体，紧跟在 IMAGE_OPTIONAL_HEADER 之后</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_SECTION_HEADER</span> &#123;</span></span><br><span class="line">    BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];      <span class="comment">// 8字节大小的块名</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">            DWORD   PhysicalAddress;</span><br><span class="line">            DWORD   VirtualSize;</span><br><span class="line">    &#125; Misc;                                     <span class="comment">// 实际被使用的区块的大小，未对齐</span></span><br><span class="line">    DWORD   VirtualAddress;                     <span class="comment">// 该块装载到内存中的RVA</span></span><br><span class="line">    DWORD   SizeOfRawData;                      <span class="comment">// 在磁盘中区块的大小，已对齐</span></span><br><span class="line">    DWORD   PointerToRawData;                   <span class="comment">// 该块在磁盘中的偏移FOA</span></span><br><span class="line">    DWORD   PointerToRelocations;               <span class="comment">// 在EXE中无意义，在OBJ文件中表示本块重定位信息表的偏移</span></span><br><span class="line">    DWORD   PointerToLinenumbers;               <span class="comment">// 调试信息，行号表在文件中的偏移</span></span><br><span class="line">    WORD    NumberOfRelocations;                <span class="comment">// 在EXE中无意义，在OBJ文件中表示本块在重定位表中重定位数量</span></span><br><span class="line">    WORD    NumberOfLinenumbers;                <span class="comment">// 该块在行号表中的行号数量</span></span><br><span class="line">    DWORD   Characteristics;                    <span class="comment">// 块属性</span></span><br><span class="line">&#125; IMAGE_SECTION_HEADER</span><br></pre></td></tr></table></figure>
-<p>块属性中的一些重要字段值如下所示</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_CNT_CODE                   0x00000020  <span class="comment">// 包含代码，通常与0x10000000一起设置</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_CNT_INITIALIZED_DATA       0x00000040  <span class="comment">// 包含已初始化数据</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_CNT_UNINITIALIZED_DATA     0x00000080  <span class="comment">// 包含未初始化数据</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_DISCARDABLE            0x02000000  <span class="comment">// 该块可被丢弃，因为它一旦被载入，进程就不再需要它了，常见的可丢弃块是.reloc（重定位块）</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_SHARED                 0x10000000  <span class="comment">// 该块为共享块</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_EXECUTE                0x20000000  <span class="comment">// 该块可执行，通常当0x00000020标志被设置时，该标志也被设置</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_READ                   0x40000000  <span class="comment">// 该块可读，可执行文件中总是设置该标志</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IMAGE_SCN_MEM_WRITE                  0x80000000  <span class="comment">// 该块可写，若PE文件中没有设置该标志，装载程序就会将内存映像页标记为可读或可执行</span></span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>逆向</category>
