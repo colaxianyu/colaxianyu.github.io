@@ -137,7 +137,9 @@
 <ol type="1">
 <li>首先通过CE附加植物大战僵尸进程，因为阳光是一个精确的数值50，所以可以选择exact value来进行搜索，首次搜索会得到很多相关的结果</li>
 </ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png" /></p>
+<figure>
+<img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png" alt="1" /><figcaption aria-hidden="true">1</figcaption>
+</figure>
 <ol start="2" type="1">
 <li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
 </ol>
