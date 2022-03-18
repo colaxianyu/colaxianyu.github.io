@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="基本概念 什么是PE文件  PE文件的全程：Portable Executable，即可移植的可执行文件 常见的PE文件：EXE文件、DLL文件、OCX文件、SYS文件、COM文件 PE文件通常是指32位的，而64位的PE文件通常称为PE32+、PE+、PE64  文件偏移地址、虚拟地址与相对虚拟地址  文件偏移地址：PE文件存储在磁盘中时，某个数据的位置相对于文件头部的偏移量，">
 <meta property="og:type" content="article">
@@ -28,16 +28,18 @@
 <meta property="og:site_name" content="Colaxy&#39;s Blog">
 <meta property="og:description" content="基本概念 什么是PE文件  PE文件的全程：Portable Executable，即可移植的可执行文件 常见的PE文件：EXE文件、DLL文件、OCX文件、SYS文件、COM文件 PE文件通常是指32位的，而64位的PE文件通常称为PE32+、PE+、PE64  文件偏移地址、虚拟地址与相对虚拟地址  文件偏移地址：PE文件存储在磁盘中时，某个数据的位置相对于文件头部的偏移量，">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PeFormat.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE框架结构.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-详细结构.PNG">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE内存映像.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-dos头.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-NT头.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-区块表.png">
 <meta property="article:published_time" content="2022-03-05T13:49:34.000Z">
-<meta property="article:modified_time" content="2022-03-18T14:55:11.410Z">
+<meta property="article:modified_time" content="2022-03-18T16:07:25.776Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PeFormat.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE框架结构.png">
 
 
 <link rel="canonical" href="https://colaxianyu.github.io/2022/03/05/2022-03-05-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/">
@@ -159,7 +161,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFpe%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">什么是PE文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%81%8F%E7%A7%BB%E5%9C%B0%E5%9D%80%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E4%B8%8E%E7%9B%B8%E5%AF%B9%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80"><span class="nav-number">1.2.</span> <span class="nav-text">文件偏移地址、虚拟地址与相对虚拟地址</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pe-headers%E8%A7%A3%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">PE Headers解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#image_dos_header"><span class="nav-number">2.1.</span> <span class="nav-text">IMAGE_DOS_HEADER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image_nt_headers"><span class="nav-number">2.2.</span> <span class="nav-text">IMAGE_NT_HEADERS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image_file_header"><span class="nav-number">2.3.</span> <span class="nav-text">IMAGE_FILE_HEADER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image_optional_header"><span class="nav-number">2.4.</span> <span class="nav-text">IMAGE_OPTIONAL_HEADER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image_section_header"><span class="nav-number">2.5.</span> <span class="nav-text">IMAGE_SECTION_HEADER</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFpe%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">什么是PE文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%81%8F%E7%A7%BB%E5%9C%B0%E5%9D%80%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E4%B8%8E%E7%9B%B8%E5%AF%B9%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80"><span class="nav-number">1.2.</span> <span class="nav-text">文件偏移地址、虚拟地址与相对虚拟地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pe%E7%BB%93%E6%9E%84%E5%9B%BE"><span class="nav-number">1.3.</span> <span class="nav-text">PE结构图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pe-headers%E8%A7%A3%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">PE Headers解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#image_dos_header"><span class="nav-number">2.1.</span> <span class="nav-text">IMAGE_DOS_HEADER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image_nt_headers"><span class="nav-number">2.2.</span> <span class="nav-text">IMAGE_NT_HEADERS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image_file_header"><span class="nav-number">2.3.</span> <span class="nav-text">IMAGE_FILE_HEADER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image_optional_header"><span class="nav-number">2.4.</span> <span class="nav-text">IMAGE_OPTIONAL_HEADER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image_section_header"><span class="nav-number">2.5.</span> <span class="nav-text">IMAGE_SECTION_HEADER</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -260,7 +262,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-18 22:55:11" itemprop="dateModified" datetime="2022-03-18T22:55:11+08:00">2022-03-18</time>
+      <time title="修改时间：2022-03-19 00:07:25" itemprop="dateModified" datetime="2022-03-19T00:07:25+08:00">2022-03-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -296,9 +298,14 @@
 <li>相对虚拟地址：当PE文件映射到内存之后，某个数据相对于文件载入点地址（即基地址，ImageBase）的偏移量，通常称其为相对虚拟地址（Relative Virtual Address），虚拟地址与相对虚拟地址存在如下关系：虚拟地址(VA) = 基地址(ImageBase) + 相对虚拟地址(RVA)</li>
 </ol>
 <span id="more"></span>
-<p>PE文件的详细结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PeFormat.png" /></p>
+<h4 id="pe结构图">PE结构图</h4>
+<ol type="1">
+<li><p>PE文件框架结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE框架结构.png" /></p></li>
+<li><p>PE文件的详细结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-详细结构.PNG" /></p></li>
+<li><p>PE文件磁盘结构与内存结构（对齐原因） <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE内存映像.png" /></p></li>
+</ol>
 <h3 id="pe-headers解析">PE Headers解析</h3>
-<p>由于个人习惯的原因，我更喜欢将IMAGE_DOS_HEADER、IMAGE_NT_HEADERS、IMAGE_FILE_HEADER、IMAGE_OPTIONAL_HEADER、IMAGE_SECTION_HEADER这五个部分都视作PE的头部部分，但需要知道的是，严格意义上的PE文件头是指<strong>IMAGE_NT_HEADERS</strong></p>
+<p>首先需要明确的是，严格意义上的PE文件头是指<strong>IMAGE_NT_HEADERS</strong>，但这里将IMAGE_DOS_HEADER、IMAGE_NT_HEADERS、IMAGE_FILE_HEADER、IMAGE_OPTIONAL_HEADER、IMAGE_SECTION_HEADER这五个部分都视作PE的头部部分一并进行解析</p>
 <h4 id="image_dos_header">IMAGE_DOS_HEADER</h4>
 <p>MS-DOS头部，每个PE文件都是以一个DPS程序开始的，且DOS可以识别出一个文件是不是一个有效的执行体，若其首部的e_magic被置为0x5A4D（即ASCII的 "MZ"，这个值在winnt.h中有一个#define，名为IMAGE_DOS_SIGNATURE），那么该文件就是一个DOS可执行文件</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_DOS_HEADER</span> &#123;</span>      </span><br><span class="line">    WORD   e_magic;                     <span class="comment">// DOS可执行文件标记 &quot;MZ&quot;</span></span><br><span class="line">    WORD   e_cblp;                      </span><br><span class="line">    WORD   e_cp;                        </span><br><span class="line">    WORD   e_crlc;                      </span><br><span class="line">    WORD   e_cparhdr;                   </span><br><span class="line">    WORD   e_minalloc;                  </span><br><span class="line">    WORD   e_maxalloc;                  </span><br><span class="line">    WORD   e_ss;                        </span><br><span class="line">    WORD   e_sp;                        </span><br><span class="line">    WORD   e_csum;                      </span><br><span class="line">    WORD   e_ip;                        <span class="comment">// DOS代码入口IP</span></span><br><span class="line">    WORD   e_cs;                        <span class="comment">// DOS代码入口CS</span></span><br><span class="line">    WORD   e_lfarlc;                    </span><br><span class="line">    WORD   e_ovno;                      </span><br><span class="line">    WORD   e_res[<span class="number">4</span>];                    </span><br><span class="line">    WORD   e_oemid;                     </span><br><span class="line">    WORD   e_oeminfo;                   </span><br><span class="line">    WORD   e_res2[<span class="number">10</span>];                  </span><br><span class="line">    LONG   e_lfanew;                    <span class="comment">// 偏移地址，指向IMAGE_NT_HEADERS，&quot;PE00&quot;(0x00004550)</span></span><br><span class="line">  &#125; IMAGE_DOS_HEADER</span><br></pre></td></tr></table></figure>
@@ -496,8 +503,8 @@
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
