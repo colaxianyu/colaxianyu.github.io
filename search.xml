@@ -332,12 +332,7 @@
 <li>相对虚拟地址：当PE文件映射到内存之后，某个数据相对于文件载入点地址（即基地址，ImageBase）的偏移量，通常称其为相对虚拟地址（Relative Virtual Address），虚拟地址与相对虚拟地址存在如下关系：虚拟地址(VA) = 基地址(ImageBase) + 相对虚拟地址(RVA)</li>
 </ol>
 <span id="more"></span>
-<h3 id="pe文件详细结构">PE文件详细结构</h3>
-<ol type="1">
-<li><p>PE文件的框架结构如图所示 <img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE框架结构.png" /></p></li>
-<li><p>PE文件的详细结构 <img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PeFormat.png" /></p></li>
-<li><p>PE文件的磁盘结构与内存结构（对齐的尺寸可能不同） <img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE内存映像.png" alt="2022-03-05-PE内存映像" /></p></li>
-</ol>
+<p>PE文件的详细结构 <img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PeFormat.png" /></p>
 <h3 id="pe-headers解析">PE Headers解析</h3>
 <p>由于个人习惯的原因，我更喜欢将IMAGE_DOS_HEADER、IMAGE_NT_HEADERS、IMAGE_FILE_HEADER、IMAGE_OPTIONAL_HEADER、IMAGE_SECTION_HEADER这五个部分都视作PE的头部部分，但需要知道的是，严格意义上的PE文件头是指<strong>IMAGE_NT_HEADERS</strong></p>
 <h4 id="image_dos_header">IMAGE_DOS_HEADER</h4>
