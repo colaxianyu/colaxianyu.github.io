@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能： 1. 无限阳光和无限金币 2. 取消植物放置的CD 3. 同一个位置可以重复放置植物">
 <meta property="og:type" content="article">
@@ -304,30 +304,30 @@
 <li>首先通过CE附加植物大战僵尸进程，因为阳光是一个精确的数值50，所以可以选择exact value来进行搜索，首次搜索会得到很多相关的结果</li>
 </ol>
 <figure>
-<img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png" alt="1" /><figcaption aria-hidden="true">1</figcaption>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png" alt="1" /><figcaption aria-hidden="true">1</figcaption>
 </figure>
 <ol start="2" type="1">
 <li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
 </ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-%E9%98%B3%E5%85%892.png" /> 为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-%E9%98%B3%E5%85%892.png" /> 为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
 <p>如何判断这个地址是否是静态基址，若CE标识的地址为绿色，则该地址为静态基址，而此处的地址并不是绿色的，所以这是个动态地址，因此我们需要寻找基址</p>
 <h4 id="寻找基址">寻找基址</h4>
 <ol type="1">
 <li>我们已经找到了阳光的动态地址，那么如何寻找基址，思路是，阳光每次变动就意味着一定有一条指令修改了这个地址中的值，那么我们可以下一个内存写入断点，看看哪条指令写入了这个地址，所以我们再CE中选中这个地址，右键找到find out what writes to this address</li>
 </ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光3.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光3.png" /></p>
 <p>之后我们收集一个阳光，发现得到了一条指令，我们双击打开</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光4.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光4.png" /></p>
 <p>此时我们可以知道，ecx的值0x19，也就是25，写入了阳光地址标识的内存中，因此阳光的地址 = eax + 0x5560，该地址内存放了当前阳光的具体数值，其中eax = 0x17326B58，而0x5560为偏移地址</p>
 <ol start="2" type="1">
 <li>此时我们猜想，内存中有没有一个位置存放了0x17326B58这个值，因此我们可以使用CE，并以16进制搜索0x17326B58，发现很多搜索结果，首先可以排除地址在0x00400000以下的内容，这部分是不进行映射的，以便捕获异常的空指针引用，因此我们找到第一个大于0x00400000的地址，这个值通常是我们需要的，即0x0290A938</li>
 </ol>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光5.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光5.png" /></p>
 <p>此时我们可以知道0x0290A938这个地址内保存了0x17326B58这个值，但是0x0290A938这个地址仍是个动态地址，所以我们还需要进一步寻找基址</p>
 <p>此时我们用CE下个内存访问断点，查看哪条指令访问了0x0290A938这个地址内的值，可以看到4个结果，我们点进第一个指令发现0x0290A938 = edi + 0x768，其中edi = 0290A1D0，0x768也是偏移地址</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光6.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光6.png" /></p>
 <p>那么同理我们可以看看内存中哪里存放了0290A1D0，得到如下结果</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光7.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光7.png" /></p>
 <p>这时我们看到几个绿色的地址，这就代表这些地址就是静态基址，我们选择第一个，可以看到其地址为0x6A9EC0，这就是我们需要的静态基址，那么如何通过静态基址找到最后的阳光地址呢</p>
 <ol type="1">
 <li>现在梳理一下这个过程
@@ -338,11 +338,11 @@
 </ul></li>
 </ol>
 <p>之后我们在CE中验证我们的结果，选择add address manually</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光8.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光8.png" /></p>
 <p>之后选择Point，因为此处包含两个偏移地址，因此再点击add offset，然后填入我们找到的基址与偏移地址</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光9.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光9.png" /></p>
 <p>最终我们可以看到，这个地址内，存的就是当前阳光的数值，修改后，游戏内的阳光也随之改变，且重启游戏后，该地址仍然存的是阳光的数值</p>
-<p><img src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光10.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光10.png" /></p>
 <h4 id="实现无限阳光的功能">实现无限阳光的功能</h4>
 <p>的到进程空间中阳光的地址，并向阳光地址处写入所需阳光数，即可实现无限阳光的功能，具体实现细节就不做赘述，给出核心代码</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将寻找地址功能封装成GetThirdLevelAddress()函数，方便后续寻找金币地址</span></span><br><span class="line">DWORD sunAddress = <span class="built_in">GetThirdLevelAddress</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义阳光数量</span></span><br><span class="line">DWORD dwSun = <span class="number">9999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入             </span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess, (LPVOID)sunAddress, (LPCVOID)&amp;dwSun, <span class="built_in"><span class="keyword">sizeof</span></span>(DWORD), &amp;pid)          </span><br></pre></td></tr></table></figure>
@@ -402,6 +402,8 @@
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   

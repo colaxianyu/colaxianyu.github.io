@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="数据结构 循环队列 队空条件：Q.rear &#x3D;&#x3D; Q.front 队满条件：(Q.rear + 1) % MaxSize &#x3D;&#x3D; Q.front 入队：Q.rear &#x3D; (Q.rear + 1) % MaxSize 出队：Q.front &#x3D; (Q.front + 1) % MaxSize 长度：(Q.rear - Q.front + MaxSize) % MaxSize 栈 \(\d">
 <meta property="og:type" content="article">
@@ -1428,7 +1428,7 @@
 <blockquote>
 <p>操作系统通过内存管理部件MMU将进程使用的虚拟地址转换为物理地址 共享库用来存放进程用到的共享库函数代码</p>
 </blockquote>
-<p><img src="https://s2.loli.net/2021/12/18/jxGBcXVba8TF4ht.png" /></p>
+<p><img data-src="https://s2.loli.net/2021/12/18/jxGBcXVba8TF4ht.png" /></p>
 <h5 id="进程的特点">进程的特点</h5>
 <ul>
 <li>资源分配和拥有的基本单位</li>
@@ -1526,7 +1526,7 @@
 <blockquote>
 <p><strong>上下文切换时会执行大量Load/Store指令，用于保存寄存器的内容，故时间开销较大</strong></p>
 </blockquote>
-<p><img src="https://s2.loli.net/2021/12/18/OdBioqexzltUHaW.png" /></p>
+<p><img data-src="https://s2.loli.net/2021/12/18/OdBioqexzltUHaW.png" /></p>
 <ol type="1">
 <li>调度算法的评测标准
 <ul>
@@ -1633,7 +1633,7 @@
 </tbody>
 </table>
 <p><strong>多级反馈队列中队列的划分原则是优先级，而多级队列中划分的原则则是进程的类型（各队列可设置优先级高低，也可设置时间片不同）</strong></p>
-<p><img src="https://s2.loli.net/2021/12/18/ziynBqkoGE5D8g2.png" /></p>
+<p><img data-src="https://s2.loli.net/2021/12/18/ziynBqkoGE5D8g2.png" /></p>
 <p><strong>优先级设置的原则：①系统进程 &gt; 用户进程 ②交互型进程 &gt; 非交互型进程（或前台进程 &gt; 后台进程） ③IO型进程 &gt; 计算型进程</strong></p>
 <h4 id="同步与互斥">同步与互斥</h4>
 <ol type="1">
@@ -1659,7 +1659,7 @@
 <li>条件变量：类似于等待队列（<strong>信号量机制有初值，条件变量没有</strong>），包含两个操作：wait操作（类似于P操作），signal操作（类似于V操作），与锁配合使用</li>
 </ul></li>
 </ol>
-<p><img src="https://s2.loli.net/2021/12/18/z9HxOURt4yepNK7.png" /></p>
+<p><img data-src="https://s2.loli.net/2021/12/18/z9HxOURt4yepNK7.png" /></p>
 <h4 id="死锁">死锁</h4>
 <ol type="1">
 <li>死锁产生的四个条件
@@ -1782,7 +1782,7 @@
 </ul></li>
 <li>内存共享：是指多个进程访问内存的同一部分，通过内存映射完成（可以是”页“映射，也可以是”段“映射）</li>
 </ol>
-<p><img src="https://s2.loli.net/2021/12/18/JCcBRHwOy7I5Dvb.png" /></p>
+<p><img data-src="https://s2.loli.net/2021/12/18/JCcBRHwOy7I5Dvb.png" /></p>
 <ol type="1">
 <li>内存映射文件
 <ul>
@@ -1791,7 +1791,7 @@
 <li>映射的实际交互都是在内存中完成的（并不是进程与磁盘直接映射，内存是一个中转站），即，通过Open系统调用打开文件后，再通过mmap系统调用，<strong>将文件页映射到进程的虚拟空间中时，操作系统页会自动分配一些内存空间保存这些文件页，故当进程修改了文件的数据之后，退出文件或解除文件映射，所有改动的页面会从内存中写回磁盘文件</strong></li>
 </ul></li>
 </ol>
-<p><img src="https://s2.loli.net/2021/12/18/zDhPUL1T9EmeZl3.png" /></p>
+<p><img data-src="https://s2.loli.net/2021/12/18/zDhPUL1T9EmeZl3.png" /></p>
 <ol type="1">
 <li>虚拟纯初期性能的影响因素
 <ul>
@@ -1887,7 +1887,7 @@
 <li>混合索引方式：包含直接索引地址与间接索引地址，如下所示</li>
 </ul></li>
 </ol>
-<p><img src="https://s2.loli.net/2021/12/18/Lx354AKV7Syuvoc.png" /></p>
+<p><img data-src="https://s2.loli.net/2021/12/18/Lx354AKV7Syuvoc.png" /></p>
 <ol type="1">
 <li>虚拟文件系统VFS
 <ul>
@@ -1916,11 +1916,11 @@
 </ol>
 <h4 id="两种文件系统在外存中的结构">两种文件系统在外存中的结构</h4>
 <ol type="1">
-<li><p>FAT在外存中 <img src="https://s2.loli.net/2021/12/18/8oUnyh3scrxRI7P.png" /></p></li>
-<li><p>混合索引在外存中 <img src="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png" /></p></li>
+<li><p>FAT在外存中 <img data-src="https://s2.loli.net/2021/12/18/8oUnyh3scrxRI7P.png" /></p></li>
+<li><p>混合索引在外存中 <img data-src="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png" /></p></li>
 </ol>
 <h4 id="文件系统在内存中的结构">文件系统在内存中的结构</h4>
-<p><img src="https://s2.loli.net/2021/12/18/DS7BU32gnlqeQuv.png" /></p>
+<p><img data-src="https://s2.loli.net/2021/12/18/DS7BU32gnlqeQuv.png" /></p>
 <h4 id="磁盘">磁盘</h4>
 <ol type="1">
 <li>磁盘读写时间
@@ -2838,6 +2838,8 @@
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
