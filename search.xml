@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>文件解析（二）</title>
+    <title>PE文件解析（二）</title>
     <url>/2022/03/09/2022-03-09-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
     <content><![CDATA[<p>之前已经对PE文件的总体结构进行了解析，但PE文件中的很多重要的数据还存放在各类数据表中，因此我们还需要对这些表信息进行解析，这里主要包块输入表与输入地址表、输出表、重定位表、资源表五个部分</p>
 <h3 id="输入表与输入地址表">输入表与输入地址表</h3>
@@ -13,7 +13,7 @@
 <h4 id="输入表的结构">输入表的结构</h4>
 <p>在了解什么是输入表、什么是输入地址表之后，我们了解下它们载入内存前的大致结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-输入表.png" /></p>
 <p>我们发现图中一共包含了4张表，分别是输入表IMAGE_IMPORT_DESCRIPTOR、输入名称表（INT）、输入地址表（IAT）、函数表IMAGE_IMPORT_BY_NAME，现在我们分别给出这四个表在winnt.h的具体定义</p>
-<p>输入表 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_IMPORT_DESCRIPTOR</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   Characteristics;            </span><br><span class="line">        DWORD   OriginalFirstThunk;         </span><br><span class="line">    &#125; DUMMYUNIONNAME;                       <span class="comment">// INT表的RVA</span></span><br><span class="line">    DWORD   TimeDateStamp;                  <span class="comment">// 0 if not bound,</span></span><br><span class="line">                                            <span class="comment">// -1 if bound, and real date\time stamp</span></span><br><span class="line">                                            <span class="comment">//     in IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT (new BIND)</span></span><br><span class="line">                                            <span class="comment">// O.W. date/time stamp of DLL bound to (Old BIND)</span></span><br><span class="line"></span><br><span class="line">    DWORD   ForwarderChain;                 </span><br><span class="line">    DWORD   Name;                           <span class="comment">// DLL名字的RVA</span></span><br><span class="line">    DWORD   FirstThunk;                     <span class="comment">// IAT表的RVA</span></span><br><span class="line">&#125; IMAGE_IMPORT_DESCRIPTOR</span><br></pre></td></tr></table></figure></p>
+<p>输入表 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_IMPORT_DESCRIPTOR</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   Characteristics;            </span><br><span class="line">        DWORD   OriginalFirstThunk;         </span><br><span class="line">    &#125; DUMMYUNIONNAME;                       <span class="comment">// INT表的RVA</span></span><br><span class="line">    DWORD   TimeDateStamp;                  </span><br><span class="line">    DWORD   ForwarderChain;                 </span><br><span class="line">    DWORD   Name;                           <span class="comment">// DLL名字的RVA</span></span><br><span class="line">    DWORD   FirstThunk;                     <span class="comment">// IAT表的RVA</span></span><br><span class="line">&#125; IMAGE_IMPORT_DESCRIPTOR</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>OriginalFirstThunk：指向输入名称表INT的RVA，INT是一个IMAGE_THUNK_DATA结构的数组，数组以一个全0内容来标识数组的结束</li>
 <li>TimeDateStamp：32位时间标记</li>
@@ -23,8 +23,8 @@
 </ul>
 <p>IMAGE_THUNK_DATA的结构 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_THUNK_DATA32</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD ForwarderString;      </span><br><span class="line">        DWORD Function;             </span><br><span class="line">        DWORD Ordinal;</span><br><span class="line">        DWORD AddressOfData;        </span><br><span class="line">    &#125; u1;                                   </span><br><span class="line">&#125; IMAGE_THUNK_DATA32;</span><br></pre></td></tr></table></figure> 每个IMAGE_THUNK_DATA都对应一个输入函数，由于是一个联合结构，所以其本质是一个大小为4字节的数，但该数在不同时刻具有不同含义</p>
 <ul>
-<li>一是当该数的最高位为1时，表示该函数以序号方式输入，此时低31位就是该函数的序号</li>
-<li>二是当该数的最高位为0时，表示该函数以名称方式输入，此时整个32位就代表一个指向IMAGE_IMPORT_BY_NAME的RVA</li>
+<li>当该数的最高位为1时，表示该函数以序号方式输入，此时低31位就是该函数的序号</li>
+<li>当该数的最高位为0时，表示该函数以名称方式输入，此时整个32位就代表一个指向IMAGE_IMPORT_BY_NAME的RVA</li>
 </ul>
 <p>IMAGE_IMPORT_BY_NAME的结构 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_IMPORT_BY_NAME</span> &#123;</span></span><br><span class="line">    WORD    Hint;</span><br><span class="line">    CHAR   Name[<span class="number">1</span>];</span><br><span class="line">&#125; IMAGE_IMPORT_BY_NAME</span><br></pre></td></tr></table></figure></p>
 <ul>
@@ -42,83 +42,14 @@
 </ul>
 <p>也就是说在实际的程序中，当我们调用一个DLL中的函数，其采用了一种间接调用的形式call dword ptr [xxxxxxx]，这个xxxxx就是IAT表的地址，当载入内存前，[xxxxxx]指向了IMAGE_IMPORT_BY_NAME中的对应的函数，而载入内存后[xxxxxx]就指向了函数的实际地址，这就是转换工作在程序中的体现</p>
 <h4 id="实例">实例</h4>
-<p>为了解释这一过程，我们先通过一个例子来理解其中的转换过程，例如此处我们的程序使用了一个TestDLL.dll中的Plus函数，首先我们在反汇编程序中观察反汇编代码，可以发现我们我们并不是call了一个绝对地址，而是call了ds:[0x402000]内存里的内容，我们在内存窗口里观察到0x402000处的4字节信息为0x10001050 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-反汇编.png" /></p>
+<p>为了解释这一过程，我们通过一个例子来理解其中的转换过程，例如此处我们的程序使用了一个TestDLL.dll中的Plus函数，首先我们在反汇编程序中观察反汇编代码，可以发现我们我们并不是call了一个绝对地址，而是call了ds:[0x402000]内存里的内容，我们在内存窗口里观察到0x402000处的4字节信息为0x10001050 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-反汇编.png" /></p>
 <p>之后我们跟进call中，可以发现来到了Plus函数内部，而地址正是0x10001050，也就是说调用Plus函数是以一种间接调用的形式实现的，且ds:[0x402000]中存了Plus函数载入内存后的实际地址0x10001050 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-DllTest.png" /></p>
 <p>此时程序已经载入内存，而我们需要查看其载入内存前ds:[0x402000]的内容，因为该程序的ImageBase为0x400000，那么RVA = 0x2000，将其转换为FOA即是0x1200，现在我们打开16进制编辑器，找到此处观察发现里面存了一个RVA偏移值0x2778（指向IMAGE_IMPORT_BY_NAME中的对应的函数） <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus偏移.png" /></p>
 <p>我们将0x2778转换为其对应的FOA，即0x1978，我们来到该处可以看到这里记录了函数的名字 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus具体位置.png" alt="2022-03-09-Plus具体位置" /></p>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>逆向之植物大战僵尸（二）</title>
-    <url>/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
-    <content><![CDATA[<p>回顾一下<a href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89">上一章</a>实现无限阳光的方法，我们首先猜想有一个变量存储了当前阳光的值，即在内存中有一块空间存储了阳光的值，只需要找到该空间，再将期望的阳光数写入该空间即可实现无限阳光的功能，通过CE多次搜索阳光，我们最终通过基址 + 2次间址的形式定位到了阳光的具体地址</p>
-<span id="more"></span>
-<h3 id="取消植物放置cd">取消植物放置CD</h3>
-<h4 id="思路">思路</h4>
-<p>现在我们实现取消植物放置CD的功能，可以猜想有一个变量存放了某个植物的放置CD，而另一个变量存放了CD计时器，然后通过一个函数判断，当<strong>CD计时器从0开始增长到大于等于CD时</strong>或<strong>CD计时器从CD值开始减少到0时</strong>，可以再次放置植物，即</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> plantCD = xxx</span><br><span class="line"><span class="keyword">int</span> CDTimers = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers增加</span></span><br><span class="line"><span class="keyword">if</span>(CDTimers &gt;= plantCD)&#123;     </span><br><span class="line">     可以放置植物;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  or</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers减少</span></span><br><span class="line">CDTimers = plantCD</span><br><span class="line"><span class="keyword">if</span>(CDtimer &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">    可以放置植物;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在此猜想上我们不难发现两种实现思路：<br />
-1. 方法一是置植物CD为0<br />
-2. 方法二是让if判断能一直成立</p>
-<p>对于方法一，因为每个植物都有其独立的CD，要搜索每一个植物的CD值工作量相对较大，且我们并不知道植物CD的具体数值，在搜索中也较为困难，且在搜索到植物CD后还需要再定位其静态基址</p>
-<p>对于方法二，无论植物CD是多少，能否放置植物都依赖于函数的判断，如果我们能定位到该if判断的位置，那么我们就能通过修改程序执行的流程，使其无条件的执行可以放置植物的代码</p>
-<p>因此我们的思路就是： 首先找到CDTimers，然后定位if判断的位置，修改程序执行的流程</p>
-<h4 id="寻找cdtimers">寻找CDTimers</h4>
-<ol type="1">
-<li>因为我们无法确定CDTimers的初始值，所以在CE的搜索方式中我们选择未知初始值，并点击First Scan</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-搜索.png" /></p>
-<ol start="2" type="1">
-<li>我们以向日葵作为对象，此时放置向日葵，并选择changed value，然后再次搜索</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次搜索.png" /></p>
-<ol start="3" type="1">
-<li>我们发现CE得到了非常多的搜索结果，此时游戏处于暂停阶段，CDTimers并未改变，所以我们可以在CE中选择unchanged value，并多次搜索过滤大量无关数据</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-多次搜索过滤.png" /></p>
-<ol start="4" type="1">
-<li>此时搜索结果减少的量已经很少了，此时我们让游戏继续一段时间，此时CDTimers的值改变，因此再CE中再次选择changed value并搜索</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次精准搜索.png" /></p>
-<ol start="5" type="1">
-<li>我们重复步骤3和4，直至搜索到少量结果（向日葵CD结束可再放置一次重复搜索）</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-最终结果.png" /></p>
-<ol start="6" type="1">
-<li>我们发现最后一个结果的值172比较符合我们的猜想，并发现在游戏进行时，该值不断增大，此时向日葵处于不可放置的状态，那么该值是否会增大到某一个界限后导致向日葵可以重新安放呢，为印证猜想，我们在此处将该值改为1000</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-修改可疑值.png" /></p>
-<p>我们发现此时向日葵恢复了可放置的状态，猜想正确，该值就是CDTimers</p>
-<h4 id="定位if判断的位置">定位If判断的位置</h4>
-<ol type="1">
-<li>我们知道当植物处于不可放置状态时，CDTimers的值会不断增加，因此我们可以得知必定有一条指令像该内存写入了数据，因此我们可以对CDTimer下一个内存写入断点</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-内存写入断点.png" /></p>
-<ol start="2" type="1">
-<li>此时我们选择show disassembler可以看到如下内容，我们发现该值增加后存入了eax寄存器，而之后eax与内存中[edi+0x24]处的值进行了对比，我们猜测该CMP指令就是我们要找的if判断指令，我们记下该CMP指令的地址</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-反汇编.png" /></p>
-<ol start="3" type="1">
-<li>用x64Dbg附加植物大战僵尸进程（若附加失败可关闭CE后再尝试附加），之后我们在x64Dbg中通过地址找到CMP指令，并在该处下断点，是程序运行到CMP指令处</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-调试器.png" /></p>
-<ol start="4" type="1">
-<li>此时我们单步执行一次，发现跳转指令jle执行，而此时向日葵是处于无法安置状态的，如果该CMP就是我们需要的if判断，那么可以推测出，若跳转执行，则植物仍在CD，不可放置；若跳转不执行，则植物没有CD，可以放置</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-jle指令.png" /></p>
-<ol start="5" type="1">
-<li>为验证猜想，我们可以改变程序的执行流程，即让jle指令不跳转，因为jle跳转与否是由标志寄存器（ZF == 1 || SF != OF）决定，此时SF != OF，跳转执行，因此我们将SF的值该为0，此时跳转就不会执行，之后我们运行程序，可以观察到植物的CD取消</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-改执行流程.png" /></p>
-<ol start="6" type="1">
-<li>此时我们可以确定该CMP就是我们需要的if判断，而其结果决定了jle指令是否跳转，若我们让jle指令永不跳转，那就实现了植物放置无CD的功能，因此我们在x64Dbg中将jle指令用nop填充并取消断点，回到游戏中，我们发现放置植物之后将不会有CD，功能实现成功</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-nop.png" /></p>
-<h4 id="实现取消cd功能">实现取消CD功能</h4>
-<p>其过程就是用代码的形式将jle指令用nop填充 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// nop指令的机器码，保证与原jle指令长度相同</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0x90</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在jle指令地址处，用nop填充</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x00487296</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure></p>
+<p>现在我们已经分析完了输入表的整个工作流程，通过PE tools我们可以查看完整的输入表信息</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus.png" /></p>
+<p>需要注意的是，我们的程序使用了多少个DLL，就会有多少个输入表，且输入表也是以一个全0的结构作为判空标识的，最后，我们用一个简单的图来回顾整个过程</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-总结.png" /></p>
 ]]></content>
       <categories>
         <category>逆向</category>
@@ -244,6 +175,62 @@
       </categories>
   </entry>
   <entry>
+    <title>逆向之植物大战僵尸（三）</title>
+    <url>/2022/03/01/2022-3-1-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/</url>
+    <content><![CDATA[<p><a href="https://colaxianyu.github.io/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89">上一章</a>我们实现了植物无CD的功能，主要使通过定位CDTimers间接定位到了if判断的位置，并通过使用nop填充jle指令，改变了程序的执行流程，使其总是运行植物不处于CD状态中的代码</p>
+<p>现在我们希望实现另一个功能，即在同一个位置能够重复的放置植物</p>
+<span id="more"></span>
+<h3 id="同一格重复放置植物">同一格重复放置植物</h3>
+<h4 id="思路">思路</h4>
+<ol type="1">
+<li><p>思路一：我们假设放置植物是通过一个二维数组记录的，当二维数组中记录如-1之类的值时，代表位置空闲，可以放置植物，当数组中记录植物编号时，代表位置被占用，不可放置，该思路需要我们能定位到该二维数组，在放置植物时保证二维数组中的值不变，使该位置为空位置</p></li>
+<li><p>思路二：在我们放置植物时，我们需要一个if判断，用于判断该位置是否可放植物，若可放置，则阳光会减少放置植物所需的cost，即该思路需要我们定位一个cmp指令，即</p></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(可以放置植物)&#123;</span><br><span class="line">    阳光减少</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>通过对比我们可以发现思路二更简单，且方法与上一章实现植物无CD相同，同时，阳光在内存中的位置，我们在第一章中也已经定位到，因此使用思路二能使我们更快的定位到CMP位置，</li>
+</ol>
+<h4 id="定位是否可以放置跳转">定位是否可以放置跳转</h4>
+<ol type="1">
+<li>我们已经知道，若在一个空位置放置植物，阳光会减少相应的cost，因此我们在阳光的内存处下一个内存写入断点，之后在一个空位放置向日葵，可以发现CE显示了一条指令，我们双击该指令观察esi的值，发现其中的值正是放置向日葵后的阳光数</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-植物cost.png" /></p>
+<ol start="2" type="1">
+<li>我们记下该指令的地址，用x64Dbg附加游戏，找到该指令并在此处下一个断点，在游戏中再放一个向日葵，使游戏执行到该处，我们可以看到该指令之后将会返回至另一个位置，在堆栈窗口中，我们可以看到其返回的具体地址</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-堆栈中.png" /></p>
+<ol start="3" type="1">
+<li>跟进到返回后的位置，我们将该call假设为阳光减少call，我们发现该call周围有大量的跳转指令，且整个代码段中都有大量跳转指令，因此我们无法判断代码段中的哪个跳转指令，此时我们需要一个方法来筛选哪些跳转指令是我们需要关注的</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-阳光call.png" /></p>
+<ol start="4" type="1">
+<li>一个可行的方法是，我们向上找到该代码段的起始位置，并下一个断点，在游戏中我们先在空闲位置放置一个向日葵，此时程序会断在代码段起始位置，我们单步调试，在每一个跳转指令处记录其是否跳转，以0标记不跳转，1标记跳转，直至该代码段结束</li>
+</ol>
+<figure>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-空闲跳.png" alt="2022-03-01-空闲跳" /><figcaption aria-hidden="true">2022-03-01-空闲跳</figcaption>
+</figure>
+<p>之后我们返回游戏，选择向日葵，将其放置在一个有植物的位置，再次单步调试跟进每一个跳转指令，寻找发生变化的跳转指令，之后我们定位到该跳转指令发生了变化</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-非空闲跳转.png" /></p>
+<ol type="1">
+<li>为了印证该跳转是不是决定了该位置为空位置，我们先在此处下个断点，然后修改其执行流程，因为此次放置非空位置，若修改后可以在同一位置重复放置植物，则成功，若不能重复放置，方便我们从此处再对后续的跳转指令进行对比，这里我们将ZF标志位置为1，je指令从不跳转变为跳转</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改ZF.png" /></p>
+<ol start="6" type="1">
+<li>运行游戏，此时我们发现向日葵重复放置在了同一位置，因此该跳转使得我们可以实现重复放置的功能，即跳转则可放，不跳转则不可放，且通过分析反汇编我们不难得出，跳转指令之前的call实现了判断位置是否为空的功能</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-判空.png" /></p>
+<ol start="7" type="1">
+<li>如果要让跳转指令一直跳转，我们可以将其改为jmp无条件跳转指令，此时回到游戏我们就已经实现了重复种植的功能</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改为jmp.png" /></p>
+<h4 id="实现重复放置功能">实现重复放置功能</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// JMP 0x00410754的硬编码，硬编码的操作码部分为偏移地址</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0xE9</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x20</span>;</span><br><span class="line">buffer[<span class="number">2</span>] = <span class="number">0x09</span>;</span><br><span class="line">buffer[<span class="number">3</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">4</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">5</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 填充至原je跳转指令处</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x0040FE2F</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
     <title>逆向之植物大战僵尸（一）</title>
     <url>/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
     <content><![CDATA[<p>植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能：<br />
@@ -311,56 +298,73 @@
       </categories>
   </entry>
   <entry>
-    <title>逆向之植物大战僵尸（三）</title>
-    <url>/2022/03/01/2022-3-1-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/</url>
-    <content><![CDATA[<p><a href="https://colaxianyu.github.io/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89">上一章</a>我们实现了植物无CD的功能，主要使通过定位CDTimers间接定位到了if判断的位置，并通过使用nop填充jle指令，改变了程序的执行流程，使其总是运行植物不处于CD状态中的代码</p>
-<p>现在我们希望实现另一个功能，即在同一个位置能够重复的放置植物</p>
+    <title>逆向之植物大战僵尸（二）</title>
+    <url>/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <content><![CDATA[<p>回顾一下<a href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89">上一章</a>实现无限阳光的方法，我们首先猜想有一个变量存储了当前阳光的值，即在内存中有一块空间存储了阳光的值，只需要找到该空间，再将期望的阳光数写入该空间即可实现无限阳光的功能，通过CE多次搜索阳光，我们最终通过基址 + 2次间址的形式定位到了阳光的具体地址</p>
 <span id="more"></span>
-<h3 id="同一格重复放置植物">同一格重复放置植物</h3>
+<h3 id="取消植物放置cd">取消植物放置CD</h3>
 <h4 id="思路">思路</h4>
+<p>现在我们实现取消植物放置CD的功能，可以猜想有一个变量存放了某个植物的放置CD，而另一个变量存放了CD计时器，然后通过一个函数判断，当<strong>CD计时器从0开始增长到大于等于CD时</strong>或<strong>CD计时器从CD值开始减少到0时</strong>，可以再次放置植物，即</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> plantCD = xxx</span><br><span class="line"><span class="keyword">int</span> CDTimers = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers增加</span></span><br><span class="line"><span class="keyword">if</span>(CDTimers &gt;= plantCD)&#123;     </span><br><span class="line">     可以放置植物;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  or</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers减少</span></span><br><span class="line">CDTimers = plantCD</span><br><span class="line"><span class="keyword">if</span>(CDtimer &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">    可以放置植物;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此猜想上我们不难发现两种实现思路：<br />
+1. 方法一是置植物CD为0<br />
+2. 方法二是让if判断能一直成立</p>
+<p>对于方法一，因为每个植物都有其独立的CD，要搜索每一个植物的CD值工作量相对较大，且我们并不知道植物CD的具体数值，在搜索中也较为困难，且在搜索到植物CD后还需要再定位其静态基址</p>
+<p>对于方法二，无论植物CD是多少，能否放置植物都依赖于函数的判断，如果我们能定位到该if判断的位置，那么我们就能通过修改程序执行的流程，使其无条件的执行可以放置植物的代码</p>
+<p>因此我们的思路就是： 首先找到CDTimers，然后定位if判断的位置，修改程序执行的流程</p>
+<h4 id="寻找cdtimers">寻找CDTimers</h4>
 <ol type="1">
-<li><p>思路一：我们假设放置植物是通过一个二维数组记录的，当二维数组中记录如-1之类的值时，代表位置空闲，可以放置植物，当数组中记录植物编号时，代表位置被占用，不可放置，该思路需要我们能定位到该二维数组，在放置植物时保证二维数组中的值不变，使该位置为空位置</p></li>
-<li><p>思路二：在我们放置植物时，我们需要一个if判断，用于判断该位置是否可放植物，若可放置，则阳光会减少放置植物所需的cost，即该思路需要我们定位一个cmp指令，即</p></li>
+<li>因为我们无法确定CDTimers的初始值，所以在CE的搜索方式中我们选择未知初始值，并点击First Scan</li>
 </ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(可以放置植物)&#123;</span><br><span class="line">    阳光减少</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="3" type="1">
-<li>通过对比我们可以发现思路二更简单，且方法与上一章实现植物无CD相同，同时，阳光在内存中的位置，我们在第一章中也已经定位到，因此使用思路二能使我们更快的定位到CMP位置，</li>
-</ol>
-<h4 id="定位是否可以放置跳转">定位是否可以放置跳转</h4>
-<ol type="1">
-<li>我们已经知道，若在一个空位置放置植物，阳光会减少相应的cost，因此我们在阳光的内存处下一个内存写入断点，之后在一个空位放置向日葵，可以发现CE显示了一条指令，我们双击该指令观察esi的值，发现其中的值正是放置向日葵后的阳光数</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-植物cost.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-搜索.png" /></p>
 <ol start="2" type="1">
-<li>我们记下该指令的地址，用x64Dbg附加游戏，找到该指令并在此处下一个断点，在游戏中再放一个向日葵，使游戏执行到该处，我们可以看到该指令之后将会返回至另一个位置，在堆栈窗口中，我们可以看到其返回的具体地址</li>
+<li>我们以向日葵作为对象，此时放置向日葵，并选择changed value，然后再次搜索</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-堆栈中.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次搜索.png" /></p>
 <ol start="3" type="1">
-<li>跟进到返回后的位置，我们将该call假设为阳光减少call，我们发现该call周围有大量的跳转指令，且整个代码段中都有大量跳转指令，因此我们无法判断代码段中的哪个跳转指令，此时我们需要一个方法来筛选哪些跳转指令是我们需要关注的</li>
+<li>我们发现CE得到了非常多的搜索结果，此时游戏处于暂停阶段，CDTimers并未改变，所以我们可以在CE中选择unchanged value，并多次搜索过滤大量无关数据</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-阳光call.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-多次搜索过滤.png" /></p>
 <ol start="4" type="1">
-<li>一个可行的方法是，我们向上找到该代码段的起始位置，并下一个断点，在游戏中我们先在空闲位置放置一个向日葵，此时程序会断在代码段起始位置，我们单步调试，在每一个跳转指令处记录其是否跳转，以0标记不跳转，1标记跳转，直至该代码段结束</li>
+<li>此时搜索结果减少的量已经很少了，此时我们让游戏继续一段时间，此时CDTimers的值改变，因此再CE中再次选择changed value并搜索</li>
 </ol>
-<figure>
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-空闲跳.png" alt="2022-03-01-空闲跳" /><figcaption aria-hidden="true">2022-03-01-空闲跳</figcaption>
-</figure>
-<p>之后我们返回游戏，选择向日葵，将其放置在一个有植物的位置，再次单步调试跟进每一个跳转指令，寻找发生变化的跳转指令，之后我们定位到该跳转指令发生了变化</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-非空闲跳转.png" /></p>
-<ol type="1">
-<li>为了印证该跳转是不是决定了该位置为空位置，我们先在此处下个断点，然后修改其执行流程，因为此次放置非空位置，若修改后可以在同一位置重复放置植物，则成功，若不能重复放置，方便我们从此处再对后续的跳转指令进行对比，这里我们将ZF标志位置为1，je指令从不跳转变为跳转</li>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次精准搜索.png" /></p>
+<ol start="5" type="1">
+<li>我们重复步骤3和4，直至搜索到少量结果（向日葵CD结束可再放置一次重复搜索）</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改ZF.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-最终结果.png" /></p>
 <ol start="6" type="1">
-<li>运行游戏，此时我们发现向日葵重复放置在了同一位置，因此该跳转使得我们可以实现重复放置的功能，即跳转则可放，不跳转则不可放，且通过分析反汇编我们不难得出，跳转指令之前的call实现了判断位置是否为空的功能</li>
+<li>我们发现最后一个结果的值172比较符合我们的猜想，并发现在游戏进行时，该值不断增大，此时向日葵处于不可放置的状态，那么该值是否会增大到某一个界限后导致向日葵可以重新安放呢，为印证猜想，我们在此处将该值改为1000</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-判空.png" /></p>
-<ol start="7" type="1">
-<li>如果要让跳转指令一直跳转，我们可以将其改为jmp无条件跳转指令，此时回到游戏我们就已经实现了重复种植的功能</li>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-修改可疑值.png" /></p>
+<p>我们发现此时向日葵恢复了可放置的状态，猜想正确，该值就是CDTimers</p>
+<h4 id="定位if判断的位置">定位If判断的位置</h4>
+<ol type="1">
+<li>我们知道当植物处于不可放置状态时，CDTimers的值会不断增加，因此我们可以得知必定有一条指令像该内存写入了数据，因此我们可以对CDTimer下一个内存写入断点</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改为jmp.png" /></p>
-<h4 id="实现重复放置功能">实现重复放置功能</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// JMP 0x00410754的硬编码，硬编码的操作码部分为偏移地址</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0xE9</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x20</span>;</span><br><span class="line">buffer[<span class="number">2</span>] = <span class="number">0x09</span>;</span><br><span class="line">buffer[<span class="number">3</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">4</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">5</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 填充至原je跳转指令处</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x0040FE2F</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-内存写入断点.png" /></p>
+<ol start="2" type="1">
+<li>此时我们选择show disassembler可以看到如下内容，我们发现该值增加后存入了eax寄存器，而之后eax与内存中[edi+0x24]处的值进行了对比，我们猜测该CMP指令就是我们要找的if判断指令，我们记下该CMP指令的地址</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-反汇编.png" /></p>
+<ol start="3" type="1">
+<li>用x64Dbg附加植物大战僵尸进程（若附加失败可关闭CE后再尝试附加），之后我们在x64Dbg中通过地址找到CMP指令，并在该处下断点，是程序运行到CMP指令处</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-调试器.png" /></p>
+<ol start="4" type="1">
+<li>此时我们单步执行一次，发现跳转指令jle执行，而此时向日葵是处于无法安置状态的，如果该CMP就是我们需要的if判断，那么可以推测出，若跳转执行，则植物仍在CD，不可放置；若跳转不执行，则植物没有CD，可以放置</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-jle指令.png" /></p>
+<ol start="5" type="1">
+<li>为验证猜想，我们可以改变程序的执行流程，即让jle指令不跳转，因为jle跳转与否是由标志寄存器（ZF == 1 || SF != OF）决定，此时SF != OF，跳转执行，因此我们将SF的值该为0，此时跳转就不会执行，之后我们运行程序，可以观察到植物的CD取消</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-改执行流程.png" /></p>
+<ol start="6" type="1">
+<li>此时我们可以确定该CMP就是我们需要的if判断，而其结果决定了jle指令是否跳转，若我们让jle指令永不跳转，那就实现了植物放置无CD的功能，因此我们在x64Dbg中将jle指令用nop填充并取消断点，回到游戏中，我们发现放置植物之后将不会有CD，功能实现成功</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-nop.png" /></p>
+<h4 id="实现取消cd功能">实现取消CD功能</h4>
+<p>其过程就是用代码的形式将jle指令用nop填充 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// nop指令的机器码，保证与原jle指令长度相同</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0x90</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在jle指令地址处，用nop填充</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x00487296</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <categories>
         <category>逆向</category>
