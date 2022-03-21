@@ -61,6 +61,7 @@
     <content><![CDATA[<p>之前讲解了输入表与输入地址表以及他们的工作原理，现在我们开始分析输出表与重定位表</p>
 <h3 id="输出表">输出表</h3>
 <p>创建一个DLL时，实际上创建了一组能让exe或其他DLL调用的函数，而PE装载器将根据DLL文件中的输出信息修正正被执行文件中的IAT。通常exe文件中不存在输出表（并不绝对），而大部分DLL文件中则存在输出表</p>
+<span id="more"></span>
 <h4 id="输出表的结构">输出表的结构</h4>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_EXPORT_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;            <span class="comment">// 旗标，未使用，总是为0</span></span><br><span class="line">    DWORD   TimeDateStamp;</span><br><span class="line">    WORD    MajorVersion;               <span class="comment">// 主版本号，一般为0</span></span><br><span class="line">    WORD    MinorVersion;               <span class="comment">// 次版本号，一般为0</span></span><br><span class="line">    DWORD   Name;</span><br><span class="line">    DWORD   Base;</span><br><span class="line">    DWORD   NumberOfFunctions;</span><br><span class="line">    DWORD   NumberOfNames;</span><br><span class="line">    DWORD   AddressOfFunctions;     </span><br><span class="line">    DWORD   AddressOfNames;         </span><br><span class="line">    DWORD   AddressOfNameOrdinals;  </span><br><span class="line">&#125; IMAGE_EXPORT_DIRECTORY</span><br></pre></td></tr></table></figure>
 <p>现在对一些重要属性做出解释</p>
