@@ -1,6 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>2022-03-15-PE文件解析（三）</title>
+    <url>/2022/03/20/2022-03-15-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89/</url>
+    <content><![CDATA[<p>之前讲解了输入表与输入地址表以及他们的工作原理，现在我们开始分析输出表与重定位表</p>
+<h3 id="输出表">输出表</h3>
+<p>创建一个DLL时，实际上创建了一组能让exe或其他DLL调用的函数，而PE装载器将根据DLL文件中的输出信息修正正被执行文件中的IAT。通常exe文件中不存在输出表（并不绝对），而大部分DLL文件中则存在输出表</p>
+<h4 id="输出表的结构">输出表的结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_EXPORT_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;            <span class="comment">// 旗标，未使用，总是为0</span></span><br><span class="line">    DWORD   TimeDateStamp;</span><br><span class="line">    WORD    MajorVersion;               <span class="comment">// 主版本号，一般为0</span></span><br><span class="line">    WORD    MinorVersion;               <span class="comment">// 次版本号，一般为0</span></span><br><span class="line">    DWORD   Name;</span><br><span class="line">    DWORD   Base;</span><br><span class="line">    DWORD   NumberOfFunctions;</span><br><span class="line">    DWORD   NumberOfNames;</span><br><span class="line">    DWORD   AddressOfFunctions;     </span><br><span class="line">    DWORD   AddressOfNames;         </span><br><span class="line">    DWORD   AddressOfNameOrdinals;  </span><br><span class="line">&#125; IMAGE_EXPORT_DIRECTORY</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>现在对一些重要属性做出解释</p>
+<ul>
+<li>TimeDateStamp：输出表的创建时间（GMT时间）</li>
+<li>Name：指向一个ASCII字符串的RVA，即DLL的名字</li>
+<li>Base：一个初始序号值，当通过序号查询输出的函数时，实际数值 = 查询数值 - Base，实际数值即为输出函数地址表（EAT）的索引</li>
+<li>NumberOfFunctions：输出函数地址表中条目的数量</li>
+<li>NumberOfNames：输出函数名称表（ENT）和输出函数序号表中条目的数量</li>
+<li>AddressOfFunctions：输出函数地址表的RVA，是一个RVA数组</li>
+<li>AddressOfNames：输出函数名称表的RVA，也是一个RVA数组，<strong>该表会排序</strong></li>
+<li>AddressOfNameOrdinals：输出序号表的RVA，指向输出序号的数组，即一个WORD大小的数组</li>
+</ul>
+<p>我们看到结构中提到了3张表，分别是输出函数地址表EAT、输出函数名称表ENT、输出函数序号表，那么他们之间有什么联系呢？且DLL中的函数既可以通过名称导出，也可以通过序号导出，那么两种不同的导出方式，又要如何定位函数的地址呢？</p>
+<ul>
+<li>函数通过名称导出时，如何建立名称到地址的映射关系就成了关键，而输出函数序号表就是承担中转工作的，我们之前提到这三张表都是数组，假设我们有一个名称A的函数，通过查询ENT表得到其索引为3，那么函数A的序号在函数序号表的索引也是3，我们从序号表中取出该函数的序号，这个序号就是函数A在EAT表中的索引</li>
+<li>函数通过序号导出时，导出序号 - base = EAT表索引</li>
+</ul>
+<h4 id="实例">实例</h4>
+<p>为了便于理解，假设我们有DLLTest.dll文件，其中定义了4个函数Plus、Sub、Mul和Div，其中Plus、Sub、和Div以函数名导出，并将其导出序号分别设置为1、5、9，而Mul以序号导出，其序号为为7，具体如下</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-def.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-Petools.png" /></p>
+<p>此时我们画一张导出表的示意图来进行细致的解释</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-图解.png" /></p>
+<ul>
+<li>对于名称导出方式，以Sub函数为例，我们可以看到它在ENT表中的索引为2，那么我们到序号表中查询索引为2的序号值，其结果为4，这意味着Sub函数的RVA地址存放在EAT表中的索引为4的地方，此时我们再查看EAT表就可以得到Sub函数的RVA为0x1060</li>
+<li>对于序号导出方式，我们将Mul以序号7将其导出，此时Base = 1，那么Mul的RVA地址在EAT表中的索引就是7 - 1 = 6，通过查EAT表我们得到了Mul的RVA为0x1070</li>
+</ul>
+<h3 id="重定位表">重定位表</h3>
+<p>首先，为什么会有重定位表，我们都知道在可选映像头中有一个ImageBase属性，这个属性标识了PE文件默认的载入基地址，但是一个exe文件可能同时包含了多个DLL，而这些DLL的ImageBase又都是0x10000000，为了避免冲突现象，我们只能将没抢占到0x10000000这个位置的DLL放入内存中的其他位置，此时就产生了一个问题，DLL中某些数据的地址写的是直接地址（ImageBase + RVA），此时换了一个新的基地址，我们要如何取到正确的取得这些数据呢，这就是重定位表的作用，标识出那些需要修正的位置</p>
+<h4 id="重定位表的结构">重定位表的结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_BASE_RELOCATION</span> &#123;</span></span><br><span class="line">    DWORD   VirtualAddress;</span><br><span class="line">    DWORD   SizeOfBlock;</span><br><span class="line"><span class="comment">//  WORD    TypeOffset[1];</span></span><br><span class="line">&#125; IMAGE_BASE_RELOCATION;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>VirtualAddress：重定位数据开始的RVA地址</li>
+<li>SizeOfBlock：重定位块的大小</li>
+</ul>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表图.png" /></p>
+<ul>
+<li>首先需要注意的是IMAGE_BASE_RELOCATION并不是孤立的一张表，在结构体后紧跟是一个WORD类型（2字节）的数组，数组长度为（SizeOfBlock - 8）/ 2</li>
+<li>其次，这些数据是高4位+低12位的结构，其中高4位为修改标记，若其为0011（即十进制的3），则表示该数据需要修改，低12位是一个Offset，需要用重定位表中的VirtualAddress + Offset才是需要修改的数据的RVA；若高4位为0，则不需要修改，作为对齐用</li>
+<li>每一张重定位表，都会记录一个4KB大小的数据块中需要修改的数据</li>
+<li>最后，重定位表最终以一个8字节大小的全0结构作为结束的标志</li>
+</ul>
+<p>最后，可能有人会有疑问，对于一个寻址能力为32位的操作系统，为什么Offset是一个2个字节大小的结构，内存地址不是需要4字节才能完整表示吗？</p>
+<p>这是因为重定位表采用VirtualAddress + Offset表示RVA造成的，我们先来看看这么做的好处，假设我们有一个16KB大小的数据块，其中有1000个需要重定位的数据</p>
+<ul>
+<li>如果我们采用直接记录RVA的方式，那么只需要一张重定位表，其大小为1000 * 4 = 4000字节（如果需要SizeOfBlock记录大小，则至少为4004字节）</li>
+<li>如果我们采用VirtualAddress + Offset的方式，那么按实际的重定位表结构，我们将会有4张重定位表（每个重定位表只记录4KB大小的数据块），假设这1000个数据均匀分布在这4张表中，那么每张重定位表的大小为 8 + 250 * 2 = 508字节，那么4张重定位表总共2032字节，我们可以发现这样的设计大大缩小了重定位表的大小</li>
+</ul>
+<p>在理解了这样设计的好处之后，现在我们来回答，为什么Offset只需要两字节</p>
+<p>从原理的角度：一张重定位表记录一个4BK大小的数据块（即0x0000 ~ 0x0FFF），也就是说，我们的Offset只要能表示这个范围内的地址即可，因此Offset只需要12位即可表示（即重定位表中数据的低12位），处于对齐和功能性，我们将其设计为16位，即2字节，那么高4位就用来记录是否需要修改这一信息，所以VirtualAddress大小为4字节，可以记录任意数据块的在内存中的起始地址RVA，而Offset只需要2字节就可表示块内的任意Offset</p>
+<h4 id="实例-1">实例</h4>
+<p>还是以之前DLLTest.dll为例，我们在PE Tools中可以看到，该文件共有两张重定位表，标识了不同区块中需要修正的数据，其中.text中共有140个可能需要重定位的数据，而.data中有16个</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表.png" /></p>
+<p>我们以.text中的第一个、第三个需要修改的数据为例，首先分析下他们的RVA 0x1012和0x101E是怎么得到的，我们在16进制编辑器中找到重定位表，红框圈中的即为第一项数据0x3012和第三项数据0x301E，我们将其转换为二进制分别为0011 0000 0001 0010和0011 0000 0001 1110，可以发现他们的高4位都为0011，即需要修改，那么他们的低12位为Offset，分别是0x12和0x1E，那么需要修改的数据的RVA分别为VirtualAddress + Offset，即0x1012和0x101E</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-16进制重定位.png" /></p>
+<p>此时DLLTest.dll的ImageBase为0x10000000，我们用另一个程序调用DLLTest.dll，并用x64Dbg打开该程序，找到0x10001012处，可以发现其中一个是Push指令，而另一个是call指令（因为Push指令的操作码为0x68，需要占用一个字节，所以指令开始的地址是0x0x10001011，而0x10001012才是实际需要修改的数据的起始地址，call指令同理），那么当DLLTest.dll发生重定位时，这两个部分的数据就需要修改，此时记下他们：①0x100020A4；②0x10002030</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位汇编.png" /></p>
+<p>现在我们让DLL不从ImageBase载入，但不修改ImageBase中的值，我们在VS中将随机基址的打开，然后重新编译我们的DLL和调用该DLL的程序，现在虽然DLL的ImageBase还是0x10000000，但实际载入内存时DLL并不会从ImageBase载入 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-修改基址.png" /></p>
+<p>我们在x64Dbg中重新定位，可以发现此时我们的DLL已经被放到了内存中的其他位置，且载入的基地址为0x78590000，此时我们看到RVA为0x1012处的数据被改成了0x785920A4，而RVA为0x101E处的数据被改为了0x78592030</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-新地址.png" /></p>
+<p>我们不难看出这两个值是如何计算得到的</p>
+<ul>
+<li>0x785920A4 = 0x100020A4 - 默认基地址0x10000000 + 新基地址0x78590000</li>
+<li>0x78592030 = 0x10002030 - 默认基地址0x10000000 + 新基地址0x78590000</li>
+</ul>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
     <title>PE文件解析（二）</title>
     <url>/2022/03/09/2022-03-09-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
     <content><![CDATA[<p>之前已经对PE文件的总体结构进行了解析，但PE文件中的很多重要的数据还存放在各类数据表中，因此我们还需要对这些表信息进行解析，这里主要包块输入表与输入地址表、输出表、重定位表、资源表五个部分</p>
@@ -50,6 +128,170 @@
 <p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus.png" /></p>
 <p>需要注意的是，我们的程序使用了多少个DLL，就会有多少个输入表，且输入表也是以一个全0的结构作为判空标识的，最后，我们用一个简单的图来回顾整个过程</p>
 <p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-总结.png" /></p>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>PE文件解析（四）</title>
+    <url>/2022/03/21/2022-03-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="资源表">资源表</h3>
+<p>资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页</p>
+<p>为了便于理解，先给出一张资源表的树形结构图</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源表树形.png" /></p>
+<span id="more"></span>
+<h4 id="资源目录结构">资源目录结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;        <span class="comment">//资源属性，但通常为0</span></span><br><span class="line">    DWORD   TimeDateStamp;          <span class="comment">// 资源建立时间</span></span><br><span class="line">    WORD    MajorVersion;           <span class="comment">// 资源的版本，但通常为0</span></span><br><span class="line">    WORD    MinorVersion;           </span><br><span class="line">    WORD    NumberOfNamedEntries;   <span class="comment">// 使用名字的资源条目的个数</span></span><br><span class="line">    WORD    NumberOfIdEntries;      <span class="comment">// 使用ID的资源条目个数</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY</span><br></pre></td></tr></table></figure>
+<p>其中最关键的属性是NumberOfNamedEntries和NumberOfIdEntries，他们指出了本目录种目录项的总和（即资源类型的总个数）</p>
+<h4 id="资源目录入口结构">资源目录入口结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY_ENTRY</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD NameOffset:<span class="number">31</span>;</span><br><span class="line">            DWORD NameIsString:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME;</span><br><span class="line">        DWORD   Name;</span><br><span class="line">        WORD    Id;</span><br><span class="line">    &#125; DUMMYUNIONNAME;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   OffsetToData;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD   OffsetToDirectory:<span class="number">31</span>;</span><br><span class="line">            DWORD   DataIsDirectory:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME2;</span><br><span class="line">    &#125; DUMMYUNIONNAME2;</span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY_ENTRY</span><br></pre></td></tr></table></figure>
+<p>可以看到其中有两个union结构，我们可以简单的理解为，资源目录入口结构包含两个属性Name（ID）、OffsetToData，根据情况的不同，他们有不同的含义</p>
+<ul>
+<li>Name（ID）属性：定义了目录项的名称或ID，当最高位（NameIsString）为0时，表示该属性通过ID使用；为1时，表示该属性通过Name使用，且资源名称使用Unicode编码，低31位为Name的Offset，但NameOffset并不直接指向字符串，而是指向一个IMAGE_RESOURCE_DIR_STRING_U结构，该结构如下所示
+<ul>
+<li>当用于第一层目录时，定义的是资源的类型</li>
+<li>当用于第二层目录时，定义的是资源的名称</li>
+<li>当用于第三层目录时，定义的时代码页的编号</li>
+</ul></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIR_STRING_U</span> &#123;</span></span><br><span class="line">    WORD    Length;             <span class="comment">// 字符串的长度（不一定以0结尾，所以该属性很重要）</span></span><br><span class="line">    WCHAR   NameString[ <span class="number">1</span> ];    <span class="comment">// 具体的Unicode字符串</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIR_STRING_U</span><br></pre></td></tr></table></figure>
+<ul>
+<li>OffsetToData属性：一个指针，当最高位为1时，低31位指向下一层IMAGE_RESOURCE_DIRECTORY的起始地址；当最高位为0时，指向IMAGE_RESOURCE_DATA_ENTRY结构</li>
+</ul>
+<p><strong>当NameOffset和OffsetToData作为Offset使用时，该指针从资源区块的开始处计算偏移，即它们并不是RVA</strong></p>
+<p><strong>当IMAGE_RESOURCE_DIRECTORY_ENTRY用在第一层的目录时，其Name（ID）属性用于标记资源类型，而Windows有14种预定义的类型，且用ID标识，ID的数值在1到16之间</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">ID值</th>
+<th style="text-align: center;">资源类型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">01h</td>
+<td style="text-align: center;">光标（Cursor）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">02h</td>
+<td style="text-align: center;">位图（Bitmap）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">03h</td>
+<td style="text-align: center;">图标（Icon）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">04h</td>
+<td style="text-align: center;">菜单（Menu）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">05h</td>
+<td style="text-align: center;">对话框（Dialog）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">06h</td>
+<td style="text-align: center;">字符串（String）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">07h</td>
+<td style="text-align: center;">字体目录（Front Directory）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">08h</td>
+<td style="text-align: center;">字体（Front）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">09h</td>
+<td style="text-align: center;">快捷键（Accelerators）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0Ah</td>
+<td style="text-align: center;">未格式化资源（Unformatted）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0Bh</td>
+<td style="text-align: center;">消息表（Message Table）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0Ch</td>
+<td style="text-align: center;">光标组（Group Cursor）</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0Eh</td>
+<td style="text-align: center;">图标组（Group Icon）</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">10h</td>
+<td style="text-align: center;">版本信息（Version Information）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="资源数据入口结构">资源数据入口结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DATA_ENTRY</span> &#123;</span></span><br><span class="line">    DWORD   OffsetToData;       <span class="comment">// 资源数据的RVA</span></span><br><span class="line">    DWORD   Size;               <span class="comment">// 资源数据的长度</span></span><br><span class="line">    DWORD   CodePage;           <span class="comment">// 代码页，一般为0</span></span><br><span class="line">    DWORD   Reserved;           <span class="comment">// 保留字段</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DATA_ENTRY</span><br></pre></td></tr></table></figure>
+<p>该结构就是真正的资源数据的结构了，其中OffsetToData是RVA，而不是相对于资源块起始位置的Offset</p>
+<h3 id="实例">实例</h3>
+<p>我这里用一个Win32程序为实例，先用PE Tools查看其资源表内容</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-示例资源表.png" /></p>
+<h4 id="根目录">根目录</h4>
+<p>可以看到其中共有7种不同的资源类（24好像是清单类型，暂时每找到相关文档信息），首先在16进制编辑器中观察其根目录</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-根目录.png" /></p>
+<ul>
+<li>4字节Characteristics，此时为0</li>
+<li>4字节TimeDateStamp，为0</li>
+<li>2字节MajorVersion，为0</li>
+<li>2字节MinorVersion，为0</li>
+<li>2字节NumberOfNamedEntries，为0</li>
+<li>2字节NumberOfIdEntries，为7</li>
+</ul>
+<h4 id="根目录下的image_resource_directory_entry">根目录下的IMAGE_RESOURCE_DIRECTORY_ENTRY</h4>
+<p>我们以Menu作为分析对象，它是第二个IMAGE_RESOURCE_DIRECTORY_ENTRY结构，因为该结构大小位8字节，所以它的位置应该是2400h + 8 = 2408h，我们在16进制编辑器中可以看到如下内容</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第一层Entry.png" /></p>
+<p>可以看到其Name（ID）属性值为：0x00000004，其OffsetToData属性值为0x800000E8，我们进一步解析</p>
+<ul>
+<li>Name（ID）属性的最高位为0，表示它通过ID标识，由于是第一层目录中，它代表一个预定义的资源，查表我们发现04h是Menu</li>
+<li>OffsetToData属性的最高位为1，表示它指向下一层目录，其Offset是E8h，那么下一层目录的地址为2400h + E8h = 24E8h</li>
+</ul>
+<h4 id="第二层目录的image_resource_directory">第二层目录的IMAGE_RESOURCE_DIRECTORY</h4>
+<p>第二层目录如下所示</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第二层目录.png" /></p>
+<p>可以知道其NumberOfIdEntries为1，表示Menu资源下只有一个该类资源</p>
+<p>紧跟其后的8字节就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构，可以看到其Name（ID）属性值为：0x0000006D，其OffsetToData属性值为0x80003030</p>
+<ul>
+<li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为6Dh，即十进制的109</li>
+<li>OffsetToData属性的最高位为1，表示它指向下一层目录，其Offset是330h，那么下一层目录的地址为2400h + 330h = 2730h</li>
+</ul>
+<h4 id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE_DIRECTORY</h4>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层目录.png" /></p>
+<p>可以知道其NumberOfIdEntries为1，表示该资源代码页只有一项</p>
+<p>紧跟其后就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层Entry.png" /></p>
+<p>可以看到其Name（ID）属性值为：0x00000804，其OffsetToData属性值为0x000004F8</p>
+<ul>
+<li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为804h</li>
+<li>OffsetToData属性的最高位为0，表示它指向IMAGE_RESOURCE_DATA_ENTRY结构，其Offset是4F8h，那么该结构的地址为2400h + 4F8h = 28F8h</li>
+</ul>
+<h4 id="image_resource_data_entry">IMAGE_RESOURCE_DATA_ENTRY</h4>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源data.png" /></p>
+<ul>
+<li>OffsetToData为01AE90h</li>
+<li>Size为50h</li>
+<li>CodePage为0<br />
+</li>
+<li>Reserved为0</li>
+</ul>
+<h4 id="image_resource_dir_string_u">IMAGE_RESOURCE_DIR_STRING_U</h4>
+<p>因为示例程序比较简单，没有用到这个结构，所以这里单独找一个比较复杂的程序用来展示</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂程序.png" /></p>
+<p>可以看到根目录下第一类资源是用Name标识的，其名字为"AFX_DIALOG_LAYOUT"，我们在16进制中观察其IMAGE_RESOURCE_DIRECTORY_ENTRY</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂entry.png" /></p>
+<p>可以看到其Name（ID）属性值为：0x8000CB2E，其OffsetToData属性值为0x800000B0</p>
+<ul>
+<li>Name（ID）属性的最高位为1，表示它通过Name标识，且Name的Offset为CB2Eh，那么IMAGE_RESOURCE_DIR_STRING_U结构的地址为630000h + CB2Eh = 63CB2Eh</li>
+<li>OffsetToData属性的最高位为1，表示它指向下一层目录</li>
+</ul>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-名字结构.png" /></p>
+<p>可以看到IMAGE_RESOURCE_DIR_STRING_U结构中Length为11h，而NameString为Unicode表示的"AFX_DIALOG_LAYOUT"（可以注意到字符串并没有以0结尾，所以Length属性很重要）</p>
 ]]></content>
       <categories>
         <category>逆向</category>
@@ -172,260 +414,6 @@
 ]]></content>
       <categories>
         <category>算法</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>2022-03-15-PE文件解析（三）</title>
-    <url>/2022/03/20/2022-03-15-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89/</url>
-    <content><![CDATA[<p>之前讲解了输入表与输入地址表以及他们的工作原理，现在我们开始分析输出表与重定位表</p>
-<h3 id="输出表">输出表</h3>
-<p>创建一个DLL时，实际上创建了一组能让exe或其他DLL调用的函数，而PE装载器将根据DLL文件中的输出信息修正正被执行文件中的IAT。通常exe文件中不存在输出表（并不绝对），而大部分DLL文件中则存在输出表</p>
-<h4 id="输出表的结构">输出表的结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_EXPORT_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;            <span class="comment">// 旗标，未使用，总是为0</span></span><br><span class="line">    DWORD   TimeDateStamp;</span><br><span class="line">    WORD    MajorVersion;               <span class="comment">// 主版本号，一般为0</span></span><br><span class="line">    WORD    MinorVersion;               <span class="comment">// 次版本号，一般为0</span></span><br><span class="line">    DWORD   Name;</span><br><span class="line">    DWORD   Base;</span><br><span class="line">    DWORD   NumberOfFunctions;</span><br><span class="line">    DWORD   NumberOfNames;</span><br><span class="line">    DWORD   AddressOfFunctions;     </span><br><span class="line">    DWORD   AddressOfNames;         </span><br><span class="line">    DWORD   AddressOfNameOrdinals;  </span><br><span class="line">&#125; IMAGE_EXPORT_DIRECTORY</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>现在对一些重要属性做出解释</p>
-<ul>
-<li>TimeDateStamp：输出表的创建时间（GMT时间）</li>
-<li>Name：指向一个ASCII字符串的RVA，即DLL的名字</li>
-<li>Base：一个初始序号值，当通过序号查询输出的函数时，实际数值 = 查询数值 - Base，实际数值即为输出函数地址表（EAT）的索引</li>
-<li>NumberOfFunctions：输出函数地址表中条目的数量</li>
-<li>NumberOfNames：输出函数名称表（ENT）和输出函数序号表中条目的数量</li>
-<li>AddressOfFunctions：输出函数地址表的RVA，是一个RVA数组</li>
-<li>AddressOfNames：输出函数名称表的RVA，也是一个RVA数组，<strong>该表会排序</strong></li>
-<li>AddressOfNameOrdinals：输出序号表的RVA，指向输出序号的数组，即一个WORD大小的数组</li>
-</ul>
-<p>我们看到结构中提到了3张表，分别是输出函数地址表EAT、输出函数名称表ENT、输出函数序号表，那么他们之间有什么联系呢？且DLL中的函数既可以通过名称导出，也可以通过序号导出，那么两种不同的导出方式，又要如何定位函数的地址呢？</p>
-<ul>
-<li>函数通过名称导出时，如何建立名称到地址的映射关系就成了关键，而输出函数序号表就是承担中转工作的，我们之前提到这三张表都是数组，假设我们有一个名称A的函数，通过查询ENT表得到其索引为3，那么函数A的序号在函数序号表的索引也是3，我们从序号表中取出该函数的序号，这个序号就是函数A在EAT表中的索引</li>
-<li>函数通过序号导出时，导出序号 - base = EAT表索引</li>
-</ul>
-<h4 id="实例">实例</h4>
-<p>为了便于理解，假设我们有DLLTest.dll文件，其中定义了4个函数Plus、Sub、Mul和Div，其中Plus、Sub、和Div以函数名导出，并将其导出序号分别设置为1、5、9，而Mul以序号导出，其序号为为7，具体如下</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-def.png" /></p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-Petools.png" /></p>
-<p>此时我们画一张导出表的示意图来进行细致的解释</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-图解.png" /></p>
-<ul>
-<li>对于名称导出方式，以Sub函数为例，我们可以看到它在ENT表中的索引为2，那么我们到序号表中查询索引为2的序号值，其结果为4，这意味着Sub函数的RVA地址存放在EAT表中的索引为4的地方，此时我们再查看EAT表就可以得到Sub函数的RVA为0x1060</li>
-<li>对于序号导出方式，我们将Mul以序号7将其导出，此时Base = 1，那么Mul的RVA地址在EAT表中的索引就是7 - 1 = 6，通过查EAT表我们得到了Mul的RVA为0x1070</li>
-</ul>
-<h3 id="重定位表">重定位表</h3>
-<p>首先，为什么会有重定位表，我们都知道在可选映像头中有一个ImageBase属性，这个属性标识了PE文件默认的载入基地址，但是一个exe文件可能同时包含了多个DLL，而这些DLL的ImageBase又都是0x10000000，为了避免冲突现象，我们只能将没抢占到0x10000000这个位置的DLL放入内存中的其他位置，此时就产生了一个问题，DLL中某些数据的地址写的是直接地址（ImageBase + RVA），此时换了一个新的基地址，我们要如何取到正确的取得这些数据呢，这就是重定位表的作用，标识出那些需要修正的位置</p>
-<h4 id="重定位表的结构">重定位表的结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_BASE_RELOCATION</span> &#123;</span></span><br><span class="line">    DWORD   VirtualAddress;</span><br><span class="line">    DWORD   SizeOfBlock;</span><br><span class="line"><span class="comment">//  WORD    TypeOffset[1];</span></span><br><span class="line">&#125; IMAGE_BASE_RELOCATION;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>VirtualAddress：重定位数据开始的RVA地址</li>
-<li>SizeOfBlock：重定位块的大小</li>
-</ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表图.png" /></p>
-<ul>
-<li>首先需要注意的是IMAGE_BASE_RELOCATION并不是孤立的一张表，在结构体后紧跟是一个WORD类型（2字节）的数组，数组长度为（SizeOfBlock - 8）/ 2</li>
-<li>其次，这些数据是高4位+低12位的结构，其中高4位为修改标记，若其为0011（即十进制的3），则表示该数据需要修改，低12位是一个Offset，需要用重定位表中的VirtualAddress + Offset才是需要修改的数据的RVA；若高4位为0，则不需要修改，作为对齐用</li>
-<li>每一张重定位表，都会记录一个4KB大小的数据块中需要修改的数据</li>
-<li>最后，重定位表最终以一个8字节大小的全0结构作为结束的标志</li>
-</ul>
-<p>最后，可能有人会有疑问，对于一个寻址能力为32位的操作系统，为什么Offset是一个2个字节大小的结构，内存地址不是需要4字节才能完整表示吗？</p>
-<p>这是因为重定位表采用VirtualAddress + Offset表示RVA造成的，我们先来看看这么做的好处，假设我们有一个16KB大小的数据块，其中有1000个需要重定位的数据</p>
-<ul>
-<li>如果我们采用直接记录RVA的方式，那么只需要一张重定位表，其大小为1000 * 4 = 4000字节（如果需要SizeOfBlock记录大小，则至少为4004字节）</li>
-<li>如果我们采用VirtualAddress + Offset的方式，那么按实际的重定位表结构，我们将会有4张重定位表（每个重定位表只记录4KB大小的数据块），假设这1000个数据均匀分布在这4张表中，那么每张重定位表的大小为 8 + 250 * 2 = 508字节，那么4张重定位表总共2032字节，我们可以发现这样的设计大大缩小了重定位表的大小</li>
-</ul>
-<p>在理解了这样设计的好处之后，现在我们来回答，为什么Offset只需要两字节</p>
-<p>从原理的角度：一张重定位表记录一个4BK大小的数据块（即0x0000 ~ 0x0FFF），也就是说，我们的Offset只要能表示这个范围内的地址即可，因此Offset只需要12位即可表示（即重定位表中数据的低12位），处于对齐和功能性，我们将其设计为16位，即2字节，那么高4位就用来记录是否需要修改这一信息，所以VirtualAddress大小为4字节，可以记录任意数据块的在内存中的起始地址RVA，而Offset只需要2字节就可表示块内的任意Offset</p>
-<h4 id="实例-1">实例</h4>
-<p>还是以之前DLLTest.dll为例，我们在PE Tools中可以看到，该文件共有两张重定位表，标识了不同区块中需要修正的数据，其中.text中共有140个可能需要重定位的数据，而.data中有16个</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表.png" /></p>
-<p>我们以.text中的第一个、第三个需要修改的数据为例，首先分析下他们的RVA 0x1012和0x101E是怎么得到的，我们在16进制编辑器中找到重定位表，红框圈中的即为第一项数据0x3012和第三项数据0x301E，我们将其转换为二进制分别为0011 0000 0001 0010和0011 0000 0001 1110，可以发现他们的高4位都为0011，即需要修改，那么他们的低12位为Offset，分别是0x12和0x1E，那么需要修改的数据的RVA分别为VirtualAddress + Offset，即0x1012和0x101E</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-16进制重定位.png" /></p>
-<p>此时DLLTest.dll的ImageBase为0x10000000，我们用另一个程序调用DLLTest.dll，并用x64Dbg打开该程序，找到0x10001012处，可以发现其中一个是Push指令，而另一个是call指令（因为Push指令的操作码为0x68，需要占用一个字节，所以指令开始的地址是0x0x10001011，而0x10001012才是实际需要修改的数据的起始地址，call指令同理），那么当DLLTest.dll发生重定位时，这两个部分的数据就需要修改，此时记下他们：①0x100020A4；②0x10002030</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位汇编.png" /></p>
-<p>现在我们让DLL不从ImageBase载入，但不修改ImageBase中的值，我们在VS中将随机基址的打开，然后重新编译我们的DLL和调用该DLL的程序，现在虽然DLL的ImageBase还是0x10000000，但实际载入内存时DLL并不会从ImageBase载入 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-修改基址.png" /></p>
-<p>我们在x64Dbg中重新定位，可以发现此时我们的DLL已经被放到了内存中的其他位置，且载入的基地址为0x78590000，此时我们看到RVA为0x1012处的数据被改成了0x785920A4，而RVA为0x101E处的数据被改为了0x78592030</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-新地址.png" /></p>
-<p>我们不难看出这两个值是如何计算得到的</p>
-<ul>
-<li>0x785920A4 = 0x100020A4 - 默认基地址0x10000000 + 新基地址0x78590000</li>
-<li>0x78592030 = 0x10002030 - 默认基地址0x10000000 + 新基地址0x78590000</li>
-</ul>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>PE文件解析（四）</title>
-    <url>/2022/03/21/2022-03-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="资源表">资源表</h3>
-<p>资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页</p>
-<p>为了便于理解，先给出一张资源表的树形结构图</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源表树形.png" /></p>
-<span id="more"></span>
-<h4 id="资源目录结构">资源目录结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;        <span class="comment">//资源属性，但通常为0</span></span><br><span class="line">    DWORD   TimeDateStamp;          <span class="comment">// 资源建立时间</span></span><br><span class="line">    WORD    MajorVersion;           <span class="comment">// 资源的版本，但通常为0</span></span><br><span class="line">    WORD    MinorVersion;           </span><br><span class="line">    WORD    NumberOfNamedEntries;   <span class="comment">// 使用名字的资源条目的个数</span></span><br><span class="line">    WORD    NumberOfIdEntries;      <span class="comment">// 使用ID的资源条目个数</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY</span><br></pre></td></tr></table></figure>
-<p>其中最关键的属性是NumberOfNamedEntries和NumberOfIdEntries，他们指出了本目录种目录项的总和（即资源类型的总个数）</p>
-<h4 id="资源目录入口结构">资源目录入口结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY_ENTRY</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD NameOffset:<span class="number">31</span>;</span><br><span class="line">            DWORD NameIsString:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME;</span><br><span class="line">        DWORD   Name;</span><br><span class="line">        WORD    Id;</span><br><span class="line">    &#125; DUMMYUNIONNAME;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   OffsetToData;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD   OffsetToDirectory:<span class="number">31</span>;</span><br><span class="line">            DWORD   DataIsDirectory:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME2;</span><br><span class="line">    &#125; DUMMYUNIONNAME2;</span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY_ENTRY</span><br></pre></td></tr></table></figure>
-<p>可以看到其中有两个union结构，我们可以简单的理解为，资源目录入口结构包含两个属性Name（ID）、OffsetToData，根据情况的不同，他们有不同的含义</p>
-<ul>
-<li>Name（ID）属性：定义了目录项的名称或ID，当最高位（NameIsString）为0时，表示该属性通过ID使用；为1时，表示该属性通过Name使用，且资源名称使用Unicode编码，低31位为Name的Offset，但NameOffset并不直接指向字符串，而是指向一个IMAGE_RESOURCE_DIR_STRING_U结构，该结构如下所示
-<ul>
-<li>当用于第一层目录时，定义的是资源的类型</li>
-<li>当用于第二层目录时，定义的是资源的名称</li>
-<li>当用于第三层目录时，定义的时代码页的编号</li>
-</ul></li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIR_STRING_U</span> &#123;</span></span><br><span class="line">    WORD    Length;             <span class="comment">// 字符串的长度（不一定以0结尾，所以该属性很重要）</span></span><br><span class="line">    WCHAR   NameString[ <span class="number">1</span> ];    <span class="comment">// 具体的Unicode字符串</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIR_STRING_U</span><br></pre></td></tr></table></figure>
-<ul>
-<li>OffsetToData属性：一个指针，当最高位为1时，低31位指向下一层IMAGE_RESOURCE_DIRECTORY的起始地址；当最高位为0时，指向IMAGE_RESOURCE_DATA_ENTRY结构</li>
-</ul>
-<p><strong>当NameOffset和OffsetToData作为Offset使用时，该指针从资源区块的开始处计算偏移，即它们并不是RVA</strong></p>
-<p><strong>当IMAGE_RESOURCE_DIRECTORY_ENTRY用在第一层的目录时，其Name（ID）属性用于标记资源类型，而Windows有14种预定义的类型，且用ID标识，ID的数值在1到16之间</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">ID值</th>
-<th style="text-align: center;">资源类型</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">01h</td>
-<td style="text-align: center;">光标（Cursor）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">02h</td>
-<td style="text-align: center;">位图（Bitmap）</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">03h</td>
-<td style="text-align: center;">图标（Icon）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">04h</td>
-<td style="text-align: center;">菜单（Menu）</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">05h</td>
-<td style="text-align: center;">对话框（Dialog）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">06h</td>
-<td style="text-align: center;">字符串（String）</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">07h</td>
-<td style="text-align: center;">字体目录（Front Directory）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">08h</td>
-<td style="text-align: center;">字体（Front）</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">09h</td>
-<td style="text-align: center;">快捷键（Accelerators）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">0Ah</td>
-<td style="text-align: center;">未格式化资源（Unformatted）</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">0Bh</td>
-<td style="text-align: center;">消息表（Message Table）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">0Ch</td>
-<td style="text-align: center;">光标组（Group Cursor）</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">0Eh</td>
-<td style="text-align: center;">图标组（Group Icon）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">10h</td>
-<td style="text-align: center;">版本信息（Version Information）</td>
-</tr>
-</tbody>
-</table>
-<h4 id="资源数据入口结构">资源数据入口结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DATA_ENTRY</span> &#123;</span></span><br><span class="line">    DWORD   OffsetToData;       <span class="comment">// 资源数据的RVA</span></span><br><span class="line">    DWORD   Size;               <span class="comment">// 资源数据的长度</span></span><br><span class="line">    DWORD   CodePage;           <span class="comment">// 代码页，一般为0</span></span><br><span class="line">    DWORD   Reserved;           <span class="comment">// 保留字段</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DATA_ENTRY</span><br></pre></td></tr></table></figure>
-<p>该结构就是真正的资源数据的结构了，其中OffsetToData是RVA，而不是相对于资源块起始位置的Offset</p>
-<h3 id="实例">实例</h3>
-<p>我这里用一个Win32程序为实例，先用PE Tools查看其资源表内容</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-示例资源表.png" /></p>
-<ol type="1">
-<li>根目录</li>
-</ol>
-<p>可以看到其中共有7种不同的资源类（24好像是清单类型，暂时每找到相关文档信息），首先在16进制编辑器中观察其根目录</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-根目录.png" /></p>
-<ul>
-<li>4字节Characteristics，此时为0</li>
-<li>4字节TimeDateStamp，为0</li>
-<li>2字节MajorVersion，为0</li>
-<li>2字节MinorVersion，为0</li>
-<li>2字节NumberOfNamedEntries，为0</li>
-<li>2字节NumberOfIdEntries，为7</li>
-</ul>
-<ol start="2" type="1">
-<li>根目录下的IMAGE_RESOURCE_DIRECTORY_ENTRY</li>
-</ol>
-<p>我们以Menu作为分析对象，它是第二个IMAGE_RESOURCE_DIRECTORY_ENTRY结构，因为该结构大小位8字节，所以它的位置应该是2400h + 8 = 2408h，我们在16进制编辑器中可以看到如下内容</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第一层Entry.png" /></p>
-<p>可以看到其Name（ID）属性值为：0x00000004，其OffsetToData属性值为0x800000E8，我们进一步解析</p>
-<ul>
-<li>Name（ID）属性的最高位为0，表示它通过ID标识，由于是第一层目录中，它代表一个预定义的资源，查表我们发现04h是Menu</li>
-<li>OffsetToData属性的最高位为1，表示它指向下一层目录，其Offset是E8h，那么下一层目录的地址为2400h + E8h = 24E8h</li>
-</ul>
-<ol start="3" type="1">
-<li>第二层目录的IMAGE_RESOURCE_DIRECTORY</li>
-</ol>
-<p>第二层目录如下所示</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第二层目录.png" /></p>
-<p>可以知道其NumberOfIdEntries为1，表示Menu资源下只有一个该类资源</p>
-<p>紧跟其后的8字节就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构，可以看到其Name（ID）属性值为：0x0000006D，其OffsetToData属性值为0x80003030</p>
-<ul>
-<li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为6Dh，即十进制的109</li>
-<li>OffsetToData属性的最高位为1，表示它指向下一层目录，其Offset是330h，那么下一层目录的地址为2400h + 330h = 2730h</li>
-</ul>
-<ol start="4" type="1">
-<li>第三层目录的IMAGE_RESOURCE_DIRECTORY</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层目录.png" /></p>
-<p>可以知道其NumberOfIdEntries为1，表示该资源代码页只有一项</p>
-<p>紧跟其后就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层Entry.png" /></p>
-<p>可以看到其Name（ID）属性值为：0x00000804，其OffsetToData属性值为0x000004F8</p>
-<ul>
-<li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为804h</li>
-<li>OffsetToData属性的最高位为0，表示它指向IMAGE_RESOURCE_DATA_ENTRY结构，其Offset是4F8h，那么该结构的地址为2400h + 4F8h = 28F8h</li>
-</ul>
-<ol start="5" type="1">
-<li>IMAGE_RESOURCE_DATA_ENTRY</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源data.png" /></p>
-<ul>
-<li>OffsetToData为01AE90h</li>
-<li>Size为50h</li>
-<li>CodePage为0<br />
-</li>
-<li>Reserved为0</li>
-</ul>
-<ol start="6" type="1">
-<li>IMAGE_RESOURCE_DIR_STRING_U</li>
-</ol>
-<p>因为示例程序比较简单，没有用到这个结构，所以这里单独找一个比较复杂的程序用来展示</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂程序.png" /></p>
-<p>可以看到根目录下第一类资源是用Name标识的，其名字为"AFX_DIALOG_LAYOUT"，我们在16进制中观察其IMAGE_RESOURCE_DIRECTORY_ENTRY</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂entry.png" /></p>
-<p>可以看到其Name（ID）属性值为：0x8000CB2E，其OffsetToData属性值为0x800000B0</p>
-<ul>
-<li>Name（ID）属性的最高位为1，表示它通过Name标识，且Name的Offset为CB2Eh，那么IMAGE_RESOURCE_DIR_STRING_U结构的地址为630000h + CB2Eh = 63CB2Eh</li>
-<li>OffsetToData属性的最高位为1，表示它指向下一层目录</li>
-</ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-名字结构.png" /></p>
-<p>可以看到IMAGE_RESOURCE_DIR_STRING_U结构中Length为11h，而NameString为Unicode表示的"AFX_DIALOG_LAYOUT"（可以注意到字符串并没有以0结尾，所以Length属性很重要）</p>
-]]></content>
-      <categories>
-        <category>逆向</category>
       </categories>
   </entry>
   <entry>
