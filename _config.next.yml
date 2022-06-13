@@ -50,10 +50,10 @@ darkmode: false
 # ---------------------------------------------------------------
 
 favicon:
-  small: /images/favicon-16x16-next.png
-  medium: /images/favicon-32x32-next.png
-  apple_touch_icon: /images/apple-touch-icon-next.png
-  safari_pinned_tab: /images/logo.svg
+  small: /uploads/favicon-16x16-next.png
+  medium: /uploads/favicon-32x32-next.png
+  apple_touch_icon: /uploads/apple-touch-icon-next.png
+  safari_pinned_tab: /uploads/logo.svg
   #android_manifest: /manifest.json
 
 # Custom Logo (Warning: Do not support scheme Mist)
@@ -86,7 +86,6 @@ menu:
   algorithm: /categories/algorithm/ || fa fa-code
   reverse: /categories/reverse/ || fa fa-user-secret
   essay: /categories/essay/ || fa fa-pencil-ruler
-  exam: /categories/exam/ || fa fa-book
   about: /about/ || fa fa-user
   archives: /archives/ || fa fa-archive
   #tags: /tags/ || fa fa-tags
@@ -131,7 +130,7 @@ sidebar:
 # Sidebar Avatar
 avatar:
   # Replace the default image and set the url here.
-  url: images/avatar.png
+  url: /uploads/avatar.png
   # If true, the avatar will be dispalyed in circle.
   rounded: true
   # If true, the avatar will be rotated with the cursor.
@@ -344,7 +343,7 @@ calendar:
 
 # Preconnect CDN for fonts and plugins.
 # For more information: https://www.w3.org/TR/resource-hints/#preconnect
-preconnect: false
+preconnect: true
 
 # Set the text alignment in posts / pages.
 text_align:
@@ -530,7 +529,7 @@ pjax: false
 
 # FancyBox is a tool that offers a nice and elegant way to add zooming functionality for images.
 # For more information: https://fancyapps.com/fancybox/
-fancybox: false
+fancybox: true
 
 # A JavaScript library for zooming images like Medium.
 # Warning: Do not enable both `fancybox` and `mediumzoom`.
@@ -539,12 +538,12 @@ mediumzoom: false
 
 # Vanilla JavaScript plugin for lazyloading images.
 # For more information: https://apoorv.pro/lozad.js/demo/
-lazyload: false
+lazyload: true
 
 # Pangu Support
 # For more information: https://github.com/vinta/pangu.js
 # Server-side plugin: https://github.com/next-theme/hexo-pangu
-pangu: false
+pangu: true
 
 # Quicklink Support
 # For more information: https://getquick.link
@@ -739,35 +738,35 @@ busuanzi_count:
 
 # Algolia Search
 # For more information: https://www.algolia.com
-algolia_search:
-  enable: false
-  hits:
-    per_page: 10
-  labels:
-    input_placeholder: 搜索文章
-    hits_empty: '啊，找不到 ${query}'
-    hits_stats: '${hits} results found in ${time} ms'
+#algolia_search:
+#  enable: false
+#  hits:
+#    per_page: 10
+#  labels:
+#    input_placeholder: 搜索文章
+#    hits_empty: '啊，找不到 ${query}'
+#    hits_stats: '${hits} results found in ${time} ms'
 
-algolia:
-  appId: FIGNR9RRRE
-  apiKey: 3f3b96484830271534a24bd2bc9fc9b7
-  adminApiKey: 2c0637163b71cfe627025ae3064fb257
-  indexName: blog
-  chunkSize: 5000
-  fields:
-    - content:strip:truncate,0,500
-    - excerpt:strip
-    - gallery
-    - permalink
-    - photos
-    - slug
-    - tags
-    - title
+#algolia:
+#  appId: FIGNR9RRRE
+#  apiKey: 3f3b96484830271534a24bd2bc9fc9b7
+#  adminApiKey: 2c0637163b71cfe627025ae3064fb257
+#  indexName: blog
+#  chunkSize: 5000
+#  fields:
+#    - content:strip:truncate,0,500
+#    - excerpt:strip
+#    - gallery
+#    - permalink
+#    - photos
+#    - slug
+#    - tags
+#    - title
 
 # Local Search
 # Dependencies: https://github.com/next-theme/hexo-generator-searchdb
 local_search:
-  enable: false
+  enable: true
   # If auto, trigger search by changing input.
   # If manual, trigger search by pressing enter key or search button.
   trigger: auto
@@ -777,6 +776,12 @@ local_search:
   unescape: false
   # Preload the search data when the page loads.
   preload: false
+
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html
 
 
 # ---------------------------------------------------------------
