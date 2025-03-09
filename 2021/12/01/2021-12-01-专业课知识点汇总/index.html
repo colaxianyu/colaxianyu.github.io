@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
-
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32-next.png">
@@ -15,11 +14,11 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="数据结构 循环队列 队空条件：Q.rear &#x3D;&#x3D; Q.front 队满条件：(Q.rear + 1) % MaxSize &#x3D;&#x3D; Q.front 入队：Q.rear &#x3D; (Q.rear + 1) % MaxSize 出队：Q.front &#x3D; (Q.front + 1) % MaxSize 长度：(Q.rear - Q.front + MaxSize) % MaxSize 栈 \(\d">
 <meta property="og:type" content="article">
@@ -35,11 +34,9 @@
 <meta property="og:image" content="https://s2.loli.net/2021/12/18/JCcBRHwOy7I5Dvb.png">
 <meta property="og:image" content="https://s2.loli.net/2021/12/18/zDhPUL1T9EmeZl3.png">
 <meta property="og:image" content="https://s2.loli.net/2021/12/18/Lx354AKV7Syuvoc.png">
-<meta property="og:image" content="https://s2.loli.net/2021/12/18/8oUnyh3scrxRI7P.png">
-<meta property="og:image" content="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png">
 <meta property="og:image" content="https://s2.loli.net/2021/12/18/DS7BU32gnlqeQuv.png">
 <meta property="article:published_time" content="2021-12-01T14:45:47.000Z">
-<meta property="article:modified_time" content="2022-03-12T13:39:57.148Z">
+<meta property="article:modified_time" content="2025-03-07T14:47:52.213Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
@@ -56,8 +53,11 @@
 <title>专业课知识点汇总 | Colaxy's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-189780915-2","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-189780915-2","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
 
 
 
@@ -72,8 +72,8 @@
   <div class="headband"></div>
 
   <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -93,7 +93,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -102,13 +102,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
-        <li class="menu-item menu-item-algorithm"><a href="/categories/algorithm/" rel="section"><i class="fa fa-code fa-fw"></i>算法</a></li>
-        <li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-user-secret fa-fw"></i>逆向</a></li>
-        <li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-algorithm"><a href="/categories/algorithm/" rel="section"><i class="fa fa-code fa-fw"></i>算法</a></li><li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-user-secret fa-fw"></i>逆向</a></li><li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -141,15 +135,9 @@
     </div>
   </div>
 
-</div>
+</header>
         
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
   <aside class="sidebar">
 
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
@@ -170,17 +158,17 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="Colaxy"
       src="/uploads/avatar.png">
   <p class="site-author-name" itemprop="name">Colaxy</p>
   <div class="site-description" itemprop="description">知行合一</div>
 </div>
-<div class="site-state-wrap site-overview-item animated">
+<div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -191,33 +179,21 @@
       </div>
   </nav>
 </div>
-  <div class="links-of-author site-overview-item animated">
+  <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/colaxianyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;colaxianyu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/colaxianyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;colaxianyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
   </div>
-
-
 
         </div>
       </div>
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
 
     
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  </aside>
 
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
 
+    </div>
 
     <div class="main-inner post posts-expand">
 
@@ -241,7 +217,7 @@
       <meta itemprop="name" content="Colaxy's Blog">
       <meta itemprop="description" content="知行合一">
     </span>
-    
+
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="专业课知识点汇总 | Colaxy's Blog">
       <meta itemprop="description" content="">
@@ -266,7 +242,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-03-12 21:39:57" itemprop="dateModified" datetime="2022-03-12T21:39:57+08:00">2022-03-12</time>
+      <time title="修改时间：2025-03-07 22:47:52" itemprop="dateModified" datetime="2025-03-07T22:47:52+08:00">2025-03-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -287,8 +263,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h2 id="数据结构">数据结构</h2>
+    <div class="post-body" itemprop="articleBody"><h2 id="数据结构">数据结构</h2>
 <h3 id="循环队列">循环队列</h3>
 <p>队空条件：Q.rear == Q.front<br />
 队满条件：(Q.rear + 1) % MaxSize == Q.front<br />
@@ -296,15 +271,32 @@
 出队：Q.front = (Q.front + 1) % MaxSize<br />
 长度：(Q.rear - Q.front + MaxSize) % MaxSize</p>
 <h3 id="栈">栈</h3>
-<p><span class="math inline">\(\displaystyle \begin{aligned}  出栈序列个数 \frac{1}{n+1} C_{2n} ^{n} \end{aligned}\)</span></p>
+<p><span class="math inline">\(\displaystyle
+\begin{aligned}
+    出栈序列个数 \frac{1}{n+1} C_{2n} ^{n}
+\end{aligned}\)</span></p>
 <span id="more"></span>
 <h3 id="树与二叉树">树与二叉树</h3>
 <h4 id="部分结论">部分结论</h4>
 <ol type="1">
 <li><p>树<br />
-<span class="math inline">\(\displaystyle \begin{aligned}  &amp;①.度为m的树，第i层至多有m^{i - 1}个节点\\  &amp;②.高度为h的m叉树至多有\frac{m^h-1}{m-1}个结点\\  &amp;③.具有n个结点的m叉树的最小高度为\lceil log_m(n(m-1)+1) \rceil \\  &amp;④.结点数 = 分支数 + 1 \end{aligned}\)</span></p></li>
+<span class="math inline">\(\displaystyle
+\begin{aligned}
+    &amp;①.度为m的树，第i层至多有m^{i - 1}个节点\\
+    &amp;②.高度为h的m叉树至多有\frac{m^h-1}{m-1}个结点\\
+    &amp;③.具有n个结点的m叉树的最小高度为\lceil log_m(n(m-1)+1) \rceil
+\\
+    &amp;④.结点数 = 分支数 + 1
+\end{aligned}\)</span></p></li>
 <li><p>二叉树<br />
-<span class="math inline">\(\displaystyle \begin{aligned}  &amp;①.非空二叉树上第i层至多有2^{i-1}个结点\\  &amp;②.高度为h的二叉树至多有2^h-1个结点\\  &amp;③.对于完全二叉树，n个结点的完全二叉树高度为\lceil log_2(n+1) \rceil\\  &amp;④.非空二叉树上的叶子节点数等于度为2的结点数加1，即n_0=n_2+1 \end{aligned}\)</span></p></li>
+<span class="math inline">\(\displaystyle
+\begin{aligned}
+    &amp;①.非空二叉树上第i层至多有2^{i-1}个结点\\
+    &amp;②.高度为h的二叉树至多有2^h-1个结点\\
+    &amp;③.对于完全二叉树，n个结点的完全二叉树高度为\lceil log_2(n+1)
+\rceil\\
+    &amp;④.非空二叉树上的叶子节点数等于度为2的结点数加1，即n_0=n_2+1
+\end{aligned}\)</span></p></li>
 </ol>
 <h4 id="红黑树">红黑树</h4>
 <ol type="1">
@@ -319,12 +311,17 @@
 <li>性质
 <ul>
 <li>从根节点到叶节点的最长路径不大于最短路径的两倍</li>
-<li><span class="math inline">\(\displaystyle有n个内部结点的红黑树高度 h \le 2log_2(n+1)\)</span></li>
-<li><span class="math inline">\(\displaystyle 查找时间复杂度=log_2n\)</span></li>
-<li>若黑高为h，内部节点最少有<span class="math inline">\(\displaystyle 2^h-1个\)</span>，最多有<span class="math inline">\(\displaystyle 2^{2h}-1个\)</span></li>
+<li><span class="math inline">\(\displaystyle有n个内部结点的红黑树高度 h
+\le 2log_2(n+1)\)</span></li>
+<li><span class="math inline">\(\displaystyle
+查找时间复杂度=log_2n\)</span></li>
+<li>若黑高为h，内部节点最少有<span class="math inline">\(\displaystyle
+2^h-1个\)</span>，最多有<span class="math inline">\(\displaystyle
+2^{2h}-1个\)</span></li>
 </ul></li>
 </ol>
-<p><strong>AVL树的对平衡的要求更高（树的高度更低），因此查找效率通常比红黑树更好，但插入删除的效率更差（频繁调整），AVL和红黑树的查找/插入/删除的最坏时间复杂度都是<span class="math inline">\(\displaystyle log_2n\)</span></strong></p>
+<p><strong>AVL树的对平衡的要求更高（树的高度更低），因此查找效率通常比红黑树更好，但插入删除的效率更差（频繁调整），AVL和红黑树的查找/插入/删除的最坏时间复杂度都是<span
+class="math inline">\(\displaystyle log_2n\)</span></strong></p>
 <ol type="1">
 <li>插入操作
 <ul>
@@ -366,29 +363,64 @@
 无向图中所有顶点的<strong>度数之和</strong>等于<strong>边数的两倍</strong><br />
 有向图中全部定点的<strong>入度之和</strong>等于<strong>出度之和</strong>等于<strong>边数</strong><br />
 邻接矩阵表示中：行表示该结点的<strong>出度</strong>，列表示该结点的<strong>入度</strong><br />
-边少的图称为稀疏图，反之称为稠密图，当$E &lt; Vlog_2V $时，可将图视为稀疏图</p>
+边少的图称为稀疏图，反之称为稠密图，当$E &lt; Vlog_2V
+$时，可将图视为稀疏图</p>
 <h3 id="查找">查找</h3>
 <h4 id="顺序查找">顺序查找</h4>
-<p><span class="math inline">\(\displaystyle \begin{aligned}  &amp;ASL_{成功} = \frac{n+1}{2} \\\\  &amp;ASL_{失败} =  \begin{cases}  n+1， \quad 一般线性表 \\\\  \frac{n}{2}+\frac{n}{n+1}, \quad 有序线性表  \end{cases} \end{aligned}\)</span></p>
-<h4 id="折半查找只适用于有序的顺序表">折半查找（只适用于<strong>有序</strong>的<strong>顺序表</strong>）</h4>
-<p><span class="math inline">\(\displaystyle \begin{aligned}  &amp;关键字比较次数：失败=成功=\lfloor log_2(n)+1 \rfloor \\  &amp;ASL_{成功} = \frac{n+1}{n}log_2(n+1)-1 \approx log_2(n+1)-1 \\\\ \end{aligned}\)</span></p>
+<p><span class="math inline">\(\displaystyle
+\begin{aligned}
+    &amp;ASL_{成功} = \frac{n+1}{2} \\\\
+    &amp;ASL_{失败} =
+    \begin{cases}
+        n+1， \quad 一般线性表 \\\\
+        \frac{n}{2}+\frac{n}{n+1}, \quad 有序线性表
+    \end{cases}
+\end{aligned}\)</span></p>
+<h4
+id="折半查找只适用于有序的顺序表">折半查找（只适用于<strong>有序</strong>的<strong>顺序表</strong>）</h4>
+<p><span class="math inline">\(\displaystyle
+\begin{aligned}
+    &amp;关键字比较次数：失败=成功=\lfloor log_2(n)+1 \rfloor \\
+    &amp;ASL_{成功} = \frac{n+1}{n}log_2(n+1)-1 \approx log_2(n+1)-1
+\\\\
+\end{aligned}\)</span></p>
 <h4 id="b树m阶">B树（m阶）</h4>
 <ul>
-<li>根节点关键字个数：<span class="math inline">\(\displaystyle 1 \le n \le m-1\)</span></li>
-<li>非根结点关键字个数：<span class="math inline">\(\displaystyle \lceil \frac{m}{2} \rceil - 1 \le n \le m-1\)</span></li>
+<li>根节点关键字个数：<span class="math inline">\(\displaystyle 1 \le n
+\le m-1\)</span></li>
+<li>非根结点关键字个数：<span class="math inline">\(\displaystyle \lceil
+\frac{m}{2} \rceil - 1 \le n \le m-1\)</span></li>
 <li>若根节点不是叶节点，则至少要有2棵子树，至多m颗</li>
-<li>除根节点外，所有非叶节点至少有<span class="math inline">\(\displaystyle \lceil \frac{m}{2} \rceil\)</span>棵子树，至多m颗</li>
+<li>除根节点外，所有非叶节点至少有<span
+class="math inline">\(\displaystyle \lceil \frac{m}{2}
+\rceil\)</span>棵子树，至多m颗</li>
 </ul>
 <h4 id="b树m阶-1">B+树（m阶）</h4>
 <ul>
-<li>根节点关键字个数：<span class="math inline">\(\displaystyle 1 \le n \le m\)</span></li>
-<li>非根结点关键字个数：<span class="math inline">\(\displaystyle \lceil \frac{m}{2} \rceil \le n \le m\)</span></li>
+<li>根节点关键字个数：<span class="math inline">\(\displaystyle 1 \le n
+\le m\)</span></li>
+<li>非根结点关键字个数：<span class="math inline">\(\displaystyle \lceil
+\frac{m}{2} \rceil \le n \le m\)</span></li>
 <li>若根节点不是叶节点，则至少要有2棵子树，至多m颗</li>
-<li>除根节点外，所有非叶节点至少有<span class="math inline">\(\displaystyle \lceil \frac{m}{2} \rceil\)</span>棵子树，至多m颗</li>
+<li>除根节点外，所有非叶节点至少有<span
+class="math inline">\(\displaystyle \lceil \frac{m}{2}
+\rceil\)</span>棵子树，至多m颗</li>
 <li>结点的关键字个数等于该节点子树的个数</li>
 </ul>
 <h4 id="hash表">hash表</h4>
-<p><span class="math inline">\(\displaystyle \begin{aligned}  &amp;①hash函数通常采用除留余数法：H(key) = key \% p \\  &amp;②开放地址法处理冲突， 在产生冲突后，第i次探测的地址为：H_i=(H(key)+d_i) \% m\\  &amp;③线性探测法中d_i = 1，2，3，...，m-1 \\  &amp;④平方探测法（二次探测法）中d_i = 1^2，-1^2，2^2，-2^2，...，k^2，-k^2，但表长m必须是一个可表示成4k+3的质数 \\  &amp;⑤填装因子\alpha = \frac{记录数n}{hash表长度m}\\  &amp;⑥填装因子\alpha 越大，冲突的可能性越大\\  &amp;⑦hash表的查找效率取决于：散列函数、处理冲突的方法/填装因子 \end{aligned}\)</span></p>
+<p><span class="math inline">\(\displaystyle
+\begin{aligned}
+    &amp;①hash函数通常采用除留余数法：H(key) = key \% p \\
+    &amp;②开放地址法处理冲突，
+在产生冲突后，第i次探测的地址为：H_i=(H(key)+d_i) \%  m\\
+    &amp;③线性探测法中d_i = 1，2，3，...，m-1 \\
+    &amp;④平方探测法（二次探测法）中d_i =
+1^2，-1^2，2^2，-2^2，...，k^2，-k^2，但表长m必须是一个可表示成4k+3的质数
+\\
+    &amp;⑤填装因子\alpha = \frac{记录数n}{hash表长度m}\\
+    &amp;⑥填装因子\alpha 越大，冲突的可能性越大\\
+    &amp;⑦hash表的查找效率取决于：散列函数、处理冲突的方法/填装因子
+\end{aligned}\)</span></p>
 <h3 id="排序">排序</h3>
 <ol type="1">
 <li>每趟排序都能确定一个<strong>元素的最终位置</strong>：冒泡排序、选择排序、堆排序、快速排序（枢轴元素）</li>
@@ -399,8 +431,14 @@
 </ol>
 <p><strong>排序算法小结</strong></p>
 <table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 39%" />
+<col style="width: 23%" />
+<col style="width: 17%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">算法种类</th>
 <th style="text-align: center;">时间复杂度(平均)</th>
 <th style="text-align: center;">空间复杂度</th>
@@ -408,57 +446,74 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">插入排序</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(n^2)\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(n^2)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(1)\)</span></td>
 <td style="text-align: center;">是</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">冒泡排序</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(n^2)\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(n^2)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(1)\)</span></td>
 <td style="text-align: center;">是</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">选择排序</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(n^2)\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(n^2)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(1)\)</span></td>
 <td style="text-align: center;">否</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">希尔排序</td>
 <td style="text-align: center;">-</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(1)\)</span></td>
 <td style="text-align: center;">否</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">快速排序</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(log_2n)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(log_2n)\)</span></td>
 <td style="text-align: center;">否</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">堆排序</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(1)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(1)\)</span></td>
 <td style="text-align: center;">否</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">2路归并排序</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(n)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(n)\)</span></td>
 <td style="text-align: center;">是</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">基数排序</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(d(n+r))\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle O(r)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(d(n+r))\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle O(r)\)</span></td>
 <td style="text-align: center;">是</td>
 </tr>
 </tbody>
 </table>
-<p><strong>外部排序中，对M个归并段进行N路归并排序，需要补充的虚段数为：<span class="math inline">\(\displaystyle (N-1)-(M-1)\% (N-1)\)</span></strong></p>
+<p><strong>外部排序中，对M个归并段进行N路归并排序，需要补充的虚段数为：<span
+class="math inline">\(\displaystyle (N-1)-(M-1)\%
+(N-1)\)</span></strong></p>
 <hr />
 <h2 id="计算机组成原理">计算机组成原理</h2>
 <h3 id="基础知识">基础知识</h3>
@@ -476,56 +531,67 @@
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">编码方式</th>
 <th style="text-align: center;">数值范围</th>
 <th style="text-align: center;">0的个数</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">无符号定点整数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle 0 \le x \le 2^{n+1}-1\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle 0 \le x \le 2^{n+1}-1\)</span></td>
 <td style="text-align: center;">-</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">原码定点整数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle -2^n+1 \le x \le 2^n-1\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle -2^n+1 \le x \le 2^n-1\)</span></td>
 <td style="text-align: center;">2</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">反码定点整数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle -2^n+1 \le x \le 2^n-1\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle -2^n+1 \le x \le 2^n-1\)</span></td>
 <td style="text-align: center;">2</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">补码码定点整数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle -2^n \le x \le 2^n-1\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle -2^n \le x \le 2^n-1\)</span></td>
 <td style="text-align: center;">1</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">移码码定点整数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle -2^n \le x \le 2^n-1\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle -2^n \le x \le 2^n-1\)</span></td>
 <td style="text-align: center;">1</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">无符号定点小数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle 0 \le x \le 1-2^{-n}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle 0 \le x \le 1-2^{-n}\)</span></td>
 <td style="text-align: center;">-</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">原码定点小数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle -1+2^{-n} \le x \le 1-2^{-n}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle -1+2^{-n} \le x \le
+1-2^{-n}\)</span></td>
 <td style="text-align: center;">2</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">反码定点小数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle -1+2^{-n} \le x \le 1-2^{-n}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle -1+2^{-n} \le x \le
+1-2^{-n}\)</span></td>
 <td style="text-align: center;">2</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">补码定点小数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle -1 \le x \le 1-2^{-n}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle -1 \le x \le 1-2^{-n}\)</span></td>
 <td style="text-align: center;">1</td>
 </tr>
 </tbody>
@@ -541,7 +607,7 @@
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">符号位</th>
 <th style="text-align: center;">生成方式</th>
 <th style="text-align: center;"></th>
@@ -549,39 +615,59 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">溢出标志OF</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle OF=C_n \bigoplus C_{n-1}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle OF=1有符号数运算结果溢出\\OF=0有符号数运算结果未溢出\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle OF=C_n \bigoplus
+C_{n-1}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle
+OF=1有符号数运算结果溢出\\OF=0有符号数运算结果未溢出\)</span></td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">符号标志SF</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle SF=F_{n-1}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle SF=1表示运算结果为负\\OF=0表示运算结果为正\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle SF=F_{n-1}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle
+SF=1表示运算结果为负\\OF=0表示运算结果为正\)</span></td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">零标志位ZF</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle ZF=(F==0?1:0)\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle OF=1表示运算结果为0\\OF=0表示运算结果不为0\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle ZF=(F==0?1:0)\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle
+OF=1表示运算结果为0\\OF=0表示运算结果不为0\)</span></td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">进位/借位标志CF</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle CF=C_{in}(SUB)\bigoplus C_{out}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle CF=1表示无符号数运算结果溢出\\ CF=0表示无符号数运算结果没溢出\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle CF=C_{in}(SUB)\bigoplus
+C_{out}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle CF=1表示无符号数运算结果溢出\\
+CF=0表示无符号数运算结果没溢出\)</span></td>
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li><span class="math inline">\(\displaystyle C_n表示最高位进位\)</span></li>
-<li><span class="math inline">\(\displaystyle C_{n-1}表示次高位进位\)</span></li>
-<li><span class="math inline">\(\displaystyle F_{n-1}表示最高位本位和+低位的进位\)</span></li>
-<li><span class="math inline">\(\displaystyle F表示最终运算的结果\)</span></li>
-<li><span class="math inline">\(\displaystyle C_{in}(SUB)表示输入信号，1表示进行减法操作，0表示进行加法操作\)</span></li>
-<li><span class="math inline">\(\displaystyle C_{out}表示最高位进位\)</span></li>
+<li><span class="math inline">\(\displaystyle
+C_n表示最高位进位\)</span></li>
+<li><span class="math inline">\(\displaystyle
+C_{n-1}表示次高位进位\)</span></li>
+<li><span class="math inline">\(\displaystyle
+F_{n-1}表示最高位本位和+低位的进位\)</span></li>
+<li><span class="math inline">\(\displaystyle
+F表示最终运算的结果\)</span></li>
+<li><span class="math inline">\(\displaystyle
+C_{in}(SUB)表示输入信号，1表示进行减法操作，0表示进行加法操作\)</span></li>
+<li><span class="math inline">\(\displaystyle
+C_{out}表示最高位进位\)</span></li>
 </ul>
 <p><strong>对于无符号数，只有CF与ZF标志位有意义，其中CF判断结果是否溢出，ZF判断结果是否为0</strong><br />
 <strong>对于有符号数，OF、SF、ZF有意义，其中OF判断结果是否溢出，SF判断结果正负性，ZF判断结果是否为0</strong></p>
@@ -602,24 +688,31 @@
 <li>溢出的具体判断方法</li>
 </ol>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">方法</th>
 <th style="text-align: center;">条件</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">单符号位</td>
-<td style="text-align: center;">运算结果的符号与参加操作的两个数的符号相同，则不溢出，否则溢出</td>
+<td
+style="text-align: center;">运算结果的符号与参加操作的两个数的符号相同，则不溢出，否则溢出</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">双符号位</td>
-<td style="text-align: center;">运算结果的两个符号位相同则未溢出<br>运算结果的两个符号位不同则溢出，且最高位的符号位表示真正的符号（01表示上溢，10表示下溢）</td>
+<td
+style="text-align: center;">运算结果的两个符号位相同则未溢出<br>运算结果的两个符号位不同则溢出，且最高位的符号位表示真正的符号（01表示上溢，10表示下溢）</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">单符号位和进位法</td>
-<td style="text-align: center;">符号位的进位与最高数位的进位相同，则不溢出，否则溢出（实际就是OF标志位的生成方法，最高位进位与次高位进位做异或运算）</td>
+<td
+style="text-align: center;">符号位的进位与最高数位的进位相同，则不溢出，否则溢出（实际就是OF标志位的生成方法，最高位进位与次高位进位做异或运算）</td>
 </tr>
 </tbody>
 </table>
@@ -633,9 +726,18 @@
 <ol type="1">
 <li>浮点数格式</li>
 </ol>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">类型</th>
 <th style="text-align: center;">数符(S)</th>
 <th style="text-align: center;">阶码(E，移码表示)</th>
@@ -646,25 +748,29 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">单精度浮点数float</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">8</td>
 <td style="text-align: center;">23</td>
 <td style="text-align: center;">32</td>
 <td style="text-align: center;">127</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle (-1)^S\times1.m\times2^{E-127}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle
+(-1)^S\times1.m\times2^{E-127}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">双精度浮点数double</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">11</td>
 <td style="text-align: center;">52</td>
 <td style="text-align: center;">64</td>
 <td style="text-align: center;">1023</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle (-1)^S\times1.m\times2^{E-1023}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle
+(-1)^S\times1.m\times2^{E-1023}\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">临时浮点数</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">15</td>
@@ -688,22 +794,28 @@
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">格式</th>
 <th style="text-align: center;">最小值</th>
 <th style="text-align: center;">最大值</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">单精度浮点数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle E=1,m=0，\\2^{-126}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle E=254,m=.111...1，\\2^{127}\times(2-2^{-23})\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle E=1,m=0，\\2^{-126}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle
+E=254,m=.111...1，\\2^{127}\times(2-2^{-23})\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">双精度浮点数</td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle E=1,m=0，\\2^{-1022}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\displaystyle E=254,m=.111...1，\\2^{1023}\times(2-2^{-52})\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle E=1,m=0，\\2^{-1022}\)</span></td>
+<td style="text-align: center;"><span
+class="math inline">\(\displaystyle
+E=254,m=.111...1，\\2^{1023}\times(2-2^{-52})\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -732,44 +844,44 @@
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">SRAM</th>
 <th style="text-align: center;">DRAM</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">存储信息</td>
 <td style="text-align: center;">触发器（晶体管）</td>
 <td style="text-align: center;">电容</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">破坏性读出</td>
 <td style="text-align: center;">否</td>
 <td style="text-align: center;">是</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">需要刷新</td>
 <td style="text-align: center;">否</td>
 <td style="text-align: center;">是（通常按行刷新）</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">集成度</td>
 <td style="text-align: center;">低</td>
 <td style="text-align: center;">高</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">速度</td>
 <td style="text-align: center;">快</td>
 <td style="text-align: center;">慢</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">功耗</td>
 <td style="text-align: center;">大</td>
 <td style="text-align: center;">小</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">用途</td>
 <td style="text-align: center;">Cache</td>
 <td style="text-align: center;">主存</td>
@@ -784,7 +896,8 @@
 <li>可擦除可编程只读存储器EPROM：可多次改写，擦除方式可分为两种
 <ul>
 <li>紫外线擦除UVEPROM</li>
-<li>电擦除<span class="math inline">\(\displaystyle E^2PROM\)</span></li>
+<li>电擦除<span class="math inline">\(\displaystyle
+E^2PROM\)</span></li>
 </ul></li>
 <li>闪速存储器Flash Memory</li>
 <li>固态硬盘SSD</li>
@@ -792,18 +905,21 @@
 </ol>
 <h4 id="flash-memory的特点">Flash Memory的特点</h4>
 <ul>
-<li>基于<span class="math inline">\(\displaystyle E^2PROM\)</span>技术</li>
+<li>基于<span class="math inline">\(\displaystyle
+E^2PROM\)</span>技术</li>
 <li>价格便宜，集成度高</li>
 <li>是非易失性存储器，可以长期保存信息</li>
 <li>能快速擦写，写入前必须先擦除，<strong>写比读慢</strong></li>
 </ul>
 <h4 id="ssd相关">SSD相关</h4>
 <ol type="1">
-<li>原理：基于flash技术，内部包含多个flash芯片，故也是<span class="math inline">\(\displaystyle E^2PROM\)</span></li>
+<li>原理：基于flash技术，内部包含多个flash芯片，故也是<span
+class="math inline">\(\displaystyle E^2PROM\)</span></li>
 <li>组成：
 <ol type="1">
 <li>闪存翻译层：负责翻译逻辑块号，找到对应页</li>
-<li>存储介质：多个flash芯片（flash chip），每个芯片包含多个块（block），每个块包含多个页（page）</li>
+<li>存储介质：多个flash芯片（flash
+chip），每个芯片包含多个块（block），每个块包含多个页（page）</li>
 </ol></li>
 <li>读写特性：
 <ol type="1">
@@ -836,20 +952,23 @@
 <ul>
 <li>低位地址为体号，高位为体内地址</li>
 <li>程序连续存放在相邻体中</li>
-<li>若要实现流水线方式存取，存储器交叉模块数<span class="math inline">\(\displaystyle m\ge\frac{存取一个字的存取周期T}{总线传送周期为r}\)</span></li>
+<li>若要实现流水线方式存取，存储器交叉模块数<span
+class="math inline">\(\displaystyle
+m\ge\frac{存取一个字的存取周期T}{总线传送周期为r}\)</span></li>
 </ul></li>
-<li>若存取一个字的存取周期为T，总线传送周期为r，对于m位交叉存储器，连续存取m个字的时间为（即r = T/m）</li>
+<li>若存取一个字的存取周期为T，总线传送周期为r，对于m位交叉存储器，连续存取m个字的时间为（即r
+= T/m）</li>
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">低位交叉存储器</th>
 <th style="text-align: center;">高位交叉存储器</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">时间</td>
 <td style="text-align: center;">T+(m-1)r</td>
 <td style="text-align: center;">mT</td>
@@ -873,7 +992,7 @@
 <h4 id="寻址方式">寻址方式</h4>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">寻址方式</th>
 <th style="text-align: center;">有效地址</th>
 <th style="text-align: center;">访存次数</th>
@@ -881,43 +1000,43 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">立即寻址</td>
 <td style="text-align: center;">A是操作数</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">直接寻址</td>
 <td style="text-align: center;">EA=A</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">一次间址寻址</td>
 <td style="text-align: center;">EA = (A)</td>
 <td style="text-align: center;">2</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">寄存器寻址</td>
 <td style="text-align: center;">EA = Ri</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">相对寻址</td>
 <td style="text-align: center;">EA = (PC) + A</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">基址寻址(多道程序设计)</td>
 <td style="text-align: center;">EA = (BR) + A</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">变址寻址(数组)</td>
 <td style="text-align: center;">EA = (IX) + A</td>
 <td style="text-align: center;">1</td>
@@ -927,55 +1046,61 @@
 </table>
 <h4 id="cisc与risc">CISC与RISC</h4>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">CISC</th>
 <th style="text-align: center;">RISC</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">指令系统</td>
 <td style="text-align: center;">复杂，庞大</td>
 <td style="text-align: center;">简单，精简</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">指令数目</td>
 <td style="text-align: center;">一般大于200条</td>
 <td style="text-align: center;">一般小于200条</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">指令字长</td>
 <td style="text-align: center;">不固定</td>
 <td style="text-align: center;">定长</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">可访存指令</td>
 <td style="text-align: center;">无限制</td>
 <td style="text-align: center;">只有Load/Store指令</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">各指令执行时间</td>
 <td style="text-align: center;">相差较大</td>
 <td style="text-align: center;">多在一个时钟周期内完成</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">各指令使用频度</td>
 <td style="text-align: center;">相差较大</td>
 <td style="text-align: center;">都很常用</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">通用寄存器数量</td>
 <td style="text-align: center;">较少</td>
 <td style="text-align: center;">多</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">目标代码</td>
 <td style="text-align: center;">难以用优化编译生成高效的目标代码</td>
-<td style="text-align: center;">采用优化的编译程序，生成代码较为高效</td>
+<td
+style="text-align: center;">采用优化的编译程序，生成代码较为高效</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">控制方式</td>
 <td style="text-align: center;">多为微程序控制</td>
 <td style="text-align: center;">多为组合逻辑控制</td>
@@ -987,90 +1112,98 @@
 <h4 id="cpu基本结构">CPU基本结构</h4>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">运算器</th>
 <th style="text-align: center;">控制器</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">算数逻辑单元ALU</td>
 <td style="text-align: center;">程序计数器PC</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">累加寄存器ACC</td>
 <td style="text-align: center;">指令寄存器IR</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">暂存寄存器DR</td>
 <td style="text-align: center;">指令译码器</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">通用寄存器组</td>
 <td style="text-align: center;">存储器地址寄存器MAR</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">程序状态字寄存器PSWR</td>
 <td style="text-align: center;">存储器数据寄存器MDR</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">移位器</td>
 <td style="text-align: center;">时序系统</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">计数器</td>
 <td style="text-align: center;">微操作信号发生器</td>
 </tr>
 </tbody>
 </table>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">寄存器</th>
 <th style="text-align: center;">用户是否可见</th>
 <th style="text-align: center;">功能</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">通用寄存器组</td>
 <td style="text-align: center;">是</td>
 <td style="text-align: center;">存放操作数和地址信息</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">程序状态字寄存器PSWR</td>
 <td style="text-align: center;">是</td>
-<td style="text-align: center;">保留由逻辑运算指令或测试指令的结果建立的各种状态信息</td>
+<td
+style="text-align: center;">保留由逻辑运算指令或测试指令的结果建立的各种状态信息</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">程序计数器PC</td>
 <td style="text-align: center;">是</td>
 <td style="text-align: center;">指出下一条指令在主存中的地址</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">累加寄存器</td>
 <td style="text-align: center;">是</td>
-<td style="text-align: center;">暂时存放ALU运算的结果信息，用于实现加法运算</td>
+<td
+style="text-align: center;">暂时存放ALU运算的结果信息，用于实现加法运算</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">指令寄存器</td>
 <td style="text-align: center;">否</td>
 <td style="text-align: center;">保存当前正在执行的指令</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">暂存寄存器</td>
 <td style="text-align: center;">否</td>
 <td style="text-align: center;">暂存从主存读的数据</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">存储器地址寄存器MAR</td>
 <td style="text-align: center;">否</td>
 <td style="text-align: center;">存放所要访问的主存单元的地址</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">存储器数据寄存器MDR</td>
 <td style="text-align: center;">否</td>
-<td style="text-align: center;">存放向主存写入的信息或从主存中读入的信息</td>
+<td
+style="text-align: center;">存放向主存写入的信息或从主存中读入的信息</td>
 </tr>
 </tbody>
 </table>
@@ -1083,23 +1216,32 @@
 </ol>
 <h4 id="控制器">控制器</h4>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">控制方式</th>
 <th style="text-align: center;">设计思想</th>
 <th style="text-align: center;">特点</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">硬布线控制器</td>
-<td style="text-align: center;">微操作控制信号由组合逻辑电路根据当前的指令码、状态和时序产生</td>
-<td style="text-align: center;">速度快， 结构复杂，难扩展，常用于RISC</td>
+<td
+style="text-align: center;">微操作控制信号由组合逻辑电路根据当前的指令码、状态和时序产生</td>
+<td style="text-align: center;">速度快，
+结构复杂，难扩展，常用于RISC</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">微程序控制器</td>
-<td style="text-align: center;">一条机器指令对应一个微程序，一个微程序包含若干微指令</td>
-<td style="text-align: center;">速度慢，结构简单，易扩展，常用于CISC</td>
+<td
+style="text-align: center;">一条机器指令对应一个微程序，一个微程序包含若干微指令</td>
+<td
+style="text-align: center;">速度慢，结构简单，易扩展，常用于CISC</td>
 </tr>
 </tbody>
 </table>
@@ -1111,22 +1253,26 @@
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">编码方式</th>
 <th style="text-align: center;">直接编码</th>
 <th style="text-align: center;">字段直接编码</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">实现方法</td>
-<td style="text-align: center;">微指令的控制字段中的每一位都代表一个微命令，选用某个微命令只要将该微命令对应的位设位1即可</td>
-<td style="text-align: center;">将微指令的微命令字段分成若干小字段，把互斥性微命令组合在同一字段中，把相容性微命令组合在不同的字段中，每个字段独立编码，每种编码代表一个微命令且各字段编码含义单独定义，与其他字段无关</td>
+<td
+style="text-align: center;">微指令的控制字段中的每一位都代表一个微命令，选用某个微命令只要将该微命令对应的位设位1即可</td>
+<td
+style="text-align: center;">将微指令的微命令字段分成若干小字段，把互斥性微命令组合在同一字段中，把相容性微命令组合在不同的字段中，每个字段独立编码，每种编码代表一个微命令且各字段编码含义单独定义，与其他字段无关</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">特点</td>
-<td style="text-align: center;">简单，但指令字过长，n个微命令就由n位操作字段</td>
-<td style="text-align: center;">较复杂，每个小段不能包含太多的信息，否则会增加译码线路的复杂性和译码时间</td>
+<td
+style="text-align: center;">简单，但指令字过长，n个微命令就由n位操作字段</td>
+<td
+style="text-align: center;">较复杂，每个小段不能包含太多的信息，否则会增加译码线路的复杂性和译码时间</td>
 </tr>
 </tbody>
 </table>
@@ -1140,29 +1286,29 @@
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">指令类型</th>
 <th style="text-align: center;">经历阶段</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">运算类</td>
 <td style="text-align: center;">IF、ID、EX、WB</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">条件转移类</td>
 <td style="text-align: center;">IF、ID、EX、M</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">无条件转移类</td>
 <td style="text-align: center;">IF、ID、EX</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">Load</td>
 <td style="text-align: center;">IF、ID、EX、M、WB</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">Store</td>
 <td style="text-align: center;">IF、ID、EX、M</td>
 </tr>
@@ -1188,24 +1334,31 @@
 <h3 id="总线">总线</h3>
 <h4 id="总线的分类">总线的分类</h4>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">总线类型</th>
 <th style="text-align: center;">定义</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">片内总线（局部总线）</td>
-<td style="text-align: center;">CPU芯片内部寄存器与寄存器之间、寄存器与ALU之间的公共线路</td>
+<td
+style="text-align: center;">CPU芯片内部寄存器与寄存器之间、寄存器与ALU之间的公共线路</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">系统总线</td>
-<td style="text-align: center;">计算机系统内各功能部件（CPU、主存、I/O接口）之间相互连接的总线</td>
+<td
+style="text-align: center;">计算机系统内各功能部件（CPU、主存、I/O接口）之间相互连接的总线</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">通信总线（设备总线）</td>
-<td style="text-align: center;">计算机系统之间或计算机系统与其他系统之间信息传递的总线</td>
+<td
+style="text-align: center;">计算机系统之间或计算机系统与其他系统之间信息传递的总线</td>
 </tr>
 </tbody>
 </table>
@@ -1229,68 +1382,71 @@
 <li>总线传输周期：一次总线操作所需的时间，包含多个总线时钟周期</li>
 <li>总线工作频率：总线传输周期的倒数</li>
 <li>总线宽度：能同时传输的数据位数，通常是指数据总线的根数</li>
-<li>总线带宽：单位时间内总线上可传输数据的位数（总线带宽 = 总线宽度 <span class="math inline">\(\displaystyle \times\)</span> 总线工作频率）</li>
+<li>总线带宽：单位时间内总线上可传输数据的位数（总线带宽 = 总线宽度
+<span class="math inline">\(\displaystyle \times\)</span>
+总线工作频率）</li>
 </ol>
 <h4 id="猝发传输方式">猝发传输方式</h4>
-<p>常规传输：一次传输一个地址和一个数据 猝发传输：在一个总线周期内，可以传输多个存储地址连续的数据，即一次传输一个地址和一批地址连续的数据</p>
+<p>常规传输：一次传输一个地址和一个数据
+猝发传输：在一个总线周期内，可以传输多个存储地址连续的数据，即一次传输一个地址和一批地址连续的数据</p>
 <h4 id="总线标准">总线标准</h4>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">总线标准</th>
 <th style="text-align: center;">特点</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><strong>ISA</strong></td>
 <td style="text-align: center;">系统总线</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>EISA</strong></td>
 <td style="text-align: center;">系统总线</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">FBS</td>
 <td style="text-align: center;">系统总线</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">QPI</td>
 <td style="text-align: center;">系统总线</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">VESA</td>
 <td style="text-align: center;">局部总线</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>PCI</strong></td>
 <td style="text-align: center;">局部总线</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">AGP</td>
 <td style="text-align: center;">局部总线</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>PCI-E</strong></td>
 <td style="text-align: center;">串行局部总线</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">RS-232C</td>
 <td style="text-align: center;">串行通信总线</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">SCSI</td>
 <td style="text-align: center;">并行通信总线</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">PCMCIA（存储卡）</td>
 <td style="text-align: center;">通信总线（计算机之间）</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><strong>USB</strong></td>
 <td style="text-align: center;">串行通信总线</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">SATA</td>
 <td style="text-align: center;">串行通信总线</td>
 </tr>
@@ -1308,8 +1464,10 @@
 <li>刷新频率：单位时间内扫描整个屏幕内容的次数</li>
 <li>显示存储器（刷新存储器VRAM）
 <ul>
-<li><span class="math inline">\(\displaystyle VRAM容量=分辨率\times 灰度级位数\)</span></li>
-<li><span class="math inline">\(\displaystyle VRAM容量=分辨率\times 灰度级位数 \times 帧率\)</span></li>
+<li><span class="math inline">\(\displaystyle VRAM容量=分辨率\times
+灰度级位数\)</span></li>
+<li><span class="math inline">\(\displaystyle VRAM容量=分辨率\times
+灰度级位数 \times 帧率\)</span></li>
 </ul></li>
 </ol>
 <h4 id="io端口编址">I/O端口编址</h4>
@@ -1356,7 +1514,7 @@
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">特性/思想</th>
 <th style="text-align: center;">优点</th>
@@ -1364,35 +1522,48 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">分层结构</td>
-<td style="text-align: center;">内核分为多层，每层可<strong>单向调用更低层</strong>提供的接口</td>
-<td style="text-align: center;">①便于调试，自底向上逐层调试<br>②易于扩充和维护</td>
-<td style="text-align: center;">①难以合理定义各层的边界<br>②效率低，系统调用时间长</td>
+<td
+style="text-align: center;">内核分为多层，每层可<strong>单向调用更低层</strong>提供的接口</td>
+<td
+style="text-align: center;">①便于调试，自底向上逐层调试<br>②易于扩充和维护</td>
+<td
+style="text-align: center;">①难以合理定义各层的边界<br>②效率低，系统调用时间长</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">模块化</td>
-<td style="text-align: center;">将内核分为多个模块，各模块相互协作<br>内核=主模块+可加载内核模块<br>主模块：只负责核心功能，如调度，内存管理</td>
-<td style="text-align: center;">①模块间逻辑清晰易于维护<br>②支持动态加载新的内核模块，增强OS适应性<br>③任何模块都可以直接调用其他模块，无需采用消息传递通信，效率高</td>
+<td
+style="text-align: center;">将内核分为多个模块，各模块相互协作<br>内核=主模块+可加载内核模块<br>主模块：只负责核心功能，如调度，内存管理</td>
+<td
+style="text-align: center;">①模块间逻辑清晰易于维护<br>②支持动态加载新的内核模块，增强OS适应性<br>③任何模块都可以直接调用其他模块，无需采用消息传递通信，效率高</td>
 <td style="text-align: center;">①接口间的定义未必合理</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">宏内核（大内核）</td>
-<td style="text-align: center;">所有系统功能都放入内核（大内核通常也采用模块化思想）</td>
+<td
+style="text-align: center;">所有系统功能都放入内核（大内核通常也采用模块化思想）</td>
 <td style="text-align: center;">性能高，内核中各功能可以相互调用</td>
-<td style="text-align: center;">①内核庞大功能复杂，难以维护<br>②大内核中某模块出错，可能导致整个系统崩溃</td>
+<td
+style="text-align: center;">①内核庞大功能复杂，难以维护<br>②大内核中某模块出错，可能导致整个系统崩溃</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">微内核</td>
-<td style="text-align: center;">只把中断、原语、进程通信等最核心的功能放入内核。进程管理，文件管理等功能以用户进程的形式运行在用户态</td>
-<td style="text-align: center;">①内核小，功能少，易于维护，可靠性高<br>②内核外的某个功能模块出错不会导致整个系统崩溃</td>
-<td style="text-align: center;">①性能低，需要在管态/目态间频繁切换<br>②目态下各功能模块不能直接调用，只能通过内核的”消息传递“来间接通信</td>
+<td
+style="text-align: center;">只把中断、原语、进程通信等最核心的功能放入内核。进程管理，文件管理等功能以用户进程的形式运行在用户态</td>
+<td
+style="text-align: center;">①内核小，功能少，易于维护，可靠性高<br>②内核外的某个功能模块出错不会导致整个系统崩溃</td>
+<td
+style="text-align: center;">①性能低，需要在管态/目态间频繁切换<br>②目态下各功能模块不能直接调用，只能通过内核的”消息传递“来间接通信</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">外核</td>
-<td style="text-align: center;">内核负责进程调度等功能，外核负责为用户进程分配未经抽象的硬件资源，且由外核负责保证资源使用安全</td>
-<td style="text-align: center;">①外核可以直接给用户分配未经抽象的硬件资源，故用户进程可以更灵活的使用硬件资源<br>②减少了虚拟硬件资源的抽象层，效率提高</td>
-<td style="text-align: center;">①降低了系统的一致性<br>②系统变得更复杂</td>
+<td
+style="text-align: center;">内核负责进程调度等功能，外核负责为用户进程分配未经抽象的硬件资源，且由外核负责保证资源使用安全</td>
+<td
+style="text-align: center;">①外核可以直接给用户分配未经抽象的硬件资源，故用户进程可以更灵活的使用硬件资源<br>②减少了虚拟硬件资源的抽象层，效率提高</td>
+<td
+style="text-align: center;">①降低了系统的一致性<br>②系统变得更复杂</td>
 </tr>
 </tbody>
 </table>
@@ -1426,7 +1597,8 @@
 <li>栈</li>
 </ul>
 <blockquote>
-<p>操作系统通过内存管理部件MMU将进程使用的虚拟地址转换为物理地址 共享库用来存放进程用到的共享库函数代码</p>
+<p>操作系统通过内存管理部件MMU将进程使用的虚拟地址转换为物理地址
+共享库用来存放进程用到的共享库函数代码</p>
 </blockquote>
 <p><img data-src="https://s2.loli.net/2021/12/18/jxGBcXVba8TF4ht.png" /></p>
 <h5 id="进程的特点">进程的特点</h5>
@@ -1454,27 +1626,33 @@
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">用户级线程</th>
 <th style="text-align: center;">内核级线程</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">定义</td>
-<td style="text-align: center;">存在于用户空间中，线程的创建、撤销、切换（同一进程的下的不同线程）等功能均在用户空间完成，内核不知道用户级线程的存在（通过<strong>线程库</strong>管理）</td>
-<td style="text-align: center;">在内核支持下运行，线程的创建、撤销、切换等功能均在内核空间完成。内核根据<strong>线程控制块</strong>感知线程的存在</td>
+<td
+style="text-align: center;">存在于用户空间中，线程的创建、撤销、切换（同一进程的下的不同线程）等功能均在用户空间完成，内核不知道用户级线程的存在（通过<strong>线程库</strong>管理）</td>
+<td
+style="text-align: center;">在内核支持下运行，线程的创建、撤销、切换等功能均在内核空间完成。内核根据<strong>线程控制块</strong>感知线程的存在</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">优点</td>
-<td style="text-align: center;">①同一进程下的线程线程切换不需要转换到内存空间，开销小<br>②调度算法可以是进程专用的<br>③用户级线程的实现与操作系统无关，对于线程的管理代码都属于用户程序</td>
-<td style="text-align: center;">①在多处理器系统中，内核能够同时调度同一进程中的多个线程并行执行<br>②一个线程阻塞，可以调度进程中的其他线程或其他进程中的线程运行<br>③内核本身爷可以采用多线程技术，提高系统效率</td>
+<td
+style="text-align: center;">①同一进程下的线程线程切换不需要转换到内存空间，开销小<br>②调度算法可以是进程专用的<br>③用户级线程的实现与操作系统无关，对于线程的管理代码都属于用户程序</td>
+<td
+style="text-align: center;">①在多处理器系统中，内核能够同时调度同一进程中的多个线程并行执行<br>②一个线程阻塞，可以调度进程中的其他线程或其他进程中的线程运行<br>③内核本身爷可以采用多线程技术，提高系统效率</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">缺点</td>
-<td style="text-align: center;">①一个线程阻塞，同一进程内的所有线程都会阻塞，故无法充分利用多处理器系统有点<br>②内核以进程为单位分配CPU，因此同一时刻，一个进程中只有一个线程在运行</td>
-<td style="text-align: center;">同一个进程中的线程切换时，需要从目态转换为管态，系统开销较大</td>
+<td
+style="text-align: center;">①一个线程阻塞，同一进程内的所有线程都会阻塞，故无法充分利用多处理器系统有点<br>②内核以进程为单位分配CPU，因此同一时刻，一个进程中只有一个线程在运行</td>
+<td
+style="text-align: center;">同一个进程中的线程切换时，需要从目态转换为管态，系统开销较大</td>
 </tr>
 </tbody>
 </table>
@@ -1532,27 +1710,42 @@
 <ul>
 <li>CPU利用率
 <ul>
-<li><span class="math inline">\(\begin{aligned}  CPU利用率=\frac{CPU运行时间}{总时间}  \end{aligned}\)</span></li>
+<li><span class="math inline">\(\begin{aligned}
+  CPU利用率=\frac{CPU运行时间}{总时间}
+\end{aligned}\)</span></li>
 </ul></li>
 <li>系统吞吐量
 <ul>
-<li><span class="math inline">\(\begin{aligned}  系统吞吐量=\frac{总共完成的作业数}{总共消耗的时间}  \end{aligned}\)</span></li>
+<li><span class="math inline">\(\begin{aligned}
+  系统吞吐量=\frac{总共完成的作业数}{总共消耗的时间}
+\end{aligned}\)</span></li>
 </ul></li>
 <li>周转时间
 <ul>
-<li><span class="math inline">\(\begin{aligned}  周转时间=作业完成时间-作业提交时间  \end{aligned}\)</span></li>
-<li><span class="math inline">\(\begin{aligned}  平均周转时间=\frac{各作业周转时间之和}{作业数}  \end{aligned}\)</span></li>
-<li><span class="math inline">\(\begin{aligned}  带权周转时间=\frac{作业周转时间}{作业实际运行时间}  \end{aligned}\)</span></li>
-<li><span class="math inline">\(\begin{aligned}  平均带权周转时间=\frac{各作业带权周转时间之和}{作业数}  \end{aligned}\)</span></li>
+<li><span class="math inline">\(\begin{aligned}
+  周转时间=作业完成时间-作业提交时间
+\end{aligned}\)</span></li>
+<li><span class="math inline">\(\begin{aligned}
+  平均周转时间=\frac{各作业周转时间之和}{作业数}
+\end{aligned}\)</span></li>
+<li><span class="math inline">\(\begin{aligned}
+  带权周转时间=\frac{作业周转时间}{作业实际运行时间}
+\end{aligned}\)</span></li>
+<li><span class="math inline">\(\begin{aligned}
+  平均带权周转时间=\frac{各作业带权周转时间之和}{作业数}
+\end{aligned}\)</span></li>
 </ul></li>
 <li>等待时间
 <ul>
-<li><span class="math inline">\(进程/作业等待时间=等待被服务的时间之和\)</span></li>
-<li><span class="math inline">\(进程/作业平均等待时间=各进程/作业等待时间的平均值\)</span></li>
+<li><span
+class="math inline">\(进程/作业等待时间=等待被服务的时间之和\)</span></li>
+<li><span
+class="math inline">\(进程/作业平均等待时间=各进程/作业等待时间的平均值\)</span></li>
 </ul></li>
 <li>响应时间
 <ul>
-<li><span class="math inline">\(响应时间=首次响应时间-用户提交请求时间\)</span></li>
+<li><span
+class="math inline">\(响应时间=首次响应时间-用户提交请求时间\)</span></li>
 </ul></li>
 </ul></li>
 <li>不能进行调度的情况
@@ -1572,7 +1765,7 @@
 <col style="width: 31%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">算法</th>
 <th style="text-align: center;">进程/作业</th>
 <th style="text-align: center;">是否可抢占</th>
@@ -1581,60 +1774,71 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">先来先服务调度算法</td>
 <td style="text-align: center;">进程/作业</td>
 <td style="text-align: center;">非抢占式</td>
 <td style="text-align: center;">不会</td>
-<td style="text-align: center;">优点：①公平，简单②利于长作业③利于CPU繁忙型<br>缺点：①效率低②不利于短作业③不利于I/O繁忙型</td>
+<td
+style="text-align: center;">优点：①公平，简单②利于长作业③利于CPU繁忙型<br>缺点：①效率低②不利于短作业③不利于I/O繁忙型</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">短作业优先调度算法</td>
 <td style="text-align: center;">进程/作业</td>
-<td style="text-align: center;">默认非抢占式，也存在抢占式算法，即最短剩余时间算法（SRTN）</td>
+<td
+style="text-align: center;">默认非抢占式，也存在抢占式算法，即最短剩余时间算法（SRTN）</td>
 <td style="text-align: center;">会</td>
-<td style="text-align: center;">优点：”最短”平均等待时间、平均周转时间<br>缺点：对长作业不利；②难以做到正确评估运行时间</td>
+<td
+style="text-align: center;">优点：”最短”平均等待时间、平均周转时间<br>缺点：对长作业不利；②难以做到正确评估运行时间</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">高响应比优先调度算法</td>
 <td style="text-align: center;">进程/作业</td>
 <td style="text-align: center;">非抢占式</td>
 <td style="text-align: center;">不会</td>
-<td style="text-align: center;">优点：①有利于短作业②长作业不至于“饥饿”<br><span class="math inline">\(\displaystyle 相应比R_p = \frac{等待时间+要求服务时间}{要求服务时间}\)</span></td>
+<td
+style="text-align: center;">优点：①有利于短作业②长作业不至于“饥饿”<br><span
+class="math inline">\(\displaystyle 相应比R_p =
+\frac{等待时间+要求服务时间}{要求服务时间}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">优先级调度算法</td>
 <td style="text-align: center;">进程/作业</td>
 <td style="text-align: center;">有抢占式也有非抢占式</td>
 <td style="text-align: center;">会</td>
-<td style="text-align: center;">适用于实时操作系统<br>缺点：可能导致饥饿</td>
+<td
+style="text-align: center;">适用于实时操作系统<br>缺点：可能导致饥饿</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">时间片轮转调度算法</td>
 <td style="text-align: center;">进程</td>
 <td style="text-align: center;">抢占式</td>
 <td style="text-align: center;">不会</td>
-<td style="text-align: center;">适用于分时操作系统<br>优点：公平<br>时间片大：系统开销小，但交互性差<br>时间片大：有利于短作业，但系统开销大</td>
+<td
+style="text-align: center;">适用于分时操作系统<br>优点：公平<br>时间片大：系统开销小，但交互性差<br>时间片大：有利于短作业，但系统开销大</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">多级反馈队列调度算法</td>
 <td style="text-align: center;">进程</td>
 <td style="text-align: center;">抢占式</td>
 <td style="text-align: center;">会</td>
 <td style="text-align: center;">均衡，融合了前几种算法的优点</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><strong>多级队列调度算法</strong></td>
 <td style="text-align: center;">进程</td>
 <td style="text-align: center;">抢占式</td>
 <td style="text-align: center;">会</td>
-<td style="text-align: center;">队列间可以按优先级划分，也可按时间片划分</td>
+<td
+style="text-align: center;">队列间可以按优先级划分，也可按时间片划分</td>
 </tr>
 </tbody>
 </table>
 <p><strong>多级反馈队列中队列的划分原则是优先级，而多级队列中划分的原则则是进程的类型（各队列可设置优先级高低，也可设置时间片不同）</strong></p>
 <p><img data-src="https://s2.loli.net/2021/12/18/ziynBqkoGE5D8g2.png" /></p>
-<p><strong>优先级设置的原则：①系统进程 &gt; 用户进程 ②交互型进程 &gt; 非交互型进程（或前台进程 &gt; 后台进程） ③IO型进程 &gt; 计算型进程</strong></p>
+<p><strong>优先级设置的原则：①系统进程 &gt; 用户进程 ②交互型进程 &gt;
+非交互型进程（或前台进程 &gt; 后台进程） ③IO型进程 &gt;
+计算型进程</strong></p>
 <h4 id="同步与互斥">同步与互斥</h4>
 <ol type="1">
 <li>临界区互斥访问的软件方法
@@ -1689,7 +1893,7 @@
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">单一连续分配</th>
 <th style="text-align: center;">固定分区分配</th>
@@ -1697,19 +1901,21 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">方式</td>
-<td style="text-align: center;">分为系统区与用户区，通常低地址部分是用户区</td>
+<td
+style="text-align: center;">分为系统区与用户区，通常低地址部分是用户区</td>
 <td style="text-align: center;">将用户空间划分为固定大小的区域</td>
-<td style="text-align: center;">不预先对内存进行划分，而是在进程装入内存时动态建立分区，且分区大小刚好为进程所需大小</td>
+<td
+style="text-align: center;">不预先对内存进行划分，而是在进程装入内存时动态建立分区，且分区大小刚好为进程所需大小</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">碎片</td>
 <td style="text-align: center;">内部碎片</td>
 <td style="text-align: center;">内部碎片</td>
 <td style="text-align: center;">外部碎片</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">空间不足的解决办法</td>
 <td style="text-align: center;">覆盖</td>
 <td style="text-align: center;">覆盖/交换</td>
@@ -1735,7 +1941,7 @@
 <col style="width: 18%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">简单分页管理</th>
 <th style="text-align: center;">简单分段管理</th>
@@ -1743,11 +1949,14 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">特点</td>
-<td style="text-align: center;">①从计算机角度设计，旨在提高内存利用率与计算机性能<br>②通过硬件实现，页号与页内偏移对用户透明<br>③地址是一维的<br>④产生内部碎片<br>⑤页面大小一致</td>
-<td style="text-align: center;">①从用户角度出发，旨在方便编程，信息保护与共享、动态连接等方面<br>②段号与段内偏移由用户显式提供<br>③地址是二维的<br>④产生外部碎片<br>⑤段长不等</td>
-<td style="text-align: center;">对于一个进程，段表只有一个，而页表可以有多个</td>
+<td
+style="text-align: center;">①从计算机角度设计，旨在提高内存利用率与计算机性能<br>②通过硬件实现，页号与页内偏移对用户透明<br>③地址是一维的<br>④产生内部碎片<br>⑤页面大小一致</td>
+<td
+style="text-align: center;">①从用户角度出发，旨在方便编程，信息保护与共享、动态连接等方面<br>②段号与段内偏移由用户显式提供<br>③地址是二维的<br>④产生外部碎片<br>⑤段长不等</td>
+<td
+style="text-align: center;">对于一个进程，段表只有一个，而页表可以有多个</td>
 </tr>
 </tbody>
 </table>
@@ -1900,7 +2109,7 @@
 <li>虚拟文件系统只存在于内存中，作为内核空间中的一个软件层（抽象层），在系统启动时建立，系统关闭时消亡</li>
 </ul></li>
 </ol>
-<p>[][虚拟文件系统](https://s2.loli.net/2021/12/18/hB1IdVXAgeE6yUz.png)</p>
+<p>![][虚拟文件系统](https://s2.loli.net/2021/12/18/hB1IdVXAgeE6yUz.png)</p>
 <ol type="1">
 <li>文件系统挂载（mounting）
 <ul>
@@ -1916,8 +2125,8 @@
 </ol>
 <h4 id="两种文件系统在外存中的结构">两种文件系统在外存中的结构</h4>
 <ol type="1">
-<li><p>FAT在外存中 <img data-src="https://s2.loli.net/2021/12/18/8oUnyh3scrxRI7P.png" /></p></li>
-<li><p>混合索引在外存中 <img data-src="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png" /></p></li>
+<li><p>FAT在外存中 <img data-src="https://s2.loli.net/2021/12/18/8oUnyh3scrxRI7P.png" /></p></li>
+<li><p>混合索引在外存中 <img data-src="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png" /></p></li>
 </ol>
 <h4 id="文件系统在内存中的结构">文件系统在内存中的结构</h4>
 <p><img data-src="https://s2.loli.net/2021/12/18/DS7BU32gnlqeQuv.png" /></p>
@@ -1925,7 +2134,9 @@
 <ol type="1">
 <li>磁盘读写时间
 <ul>
-<li><span class="math inline">\(\displaystyle 磁盘读写时间=寻道时间+延迟时间（\frac{1}{2\times转速}） + 传输时间\)</span></li>
+<li><span class="math inline">\(\displaystyle
+磁盘读写时间=寻道时间+延迟时间（\frac{1}{2\times转速}） +
+传输时间\)</span></li>
 </ul></li>
 <li>磁盘调度算法
 <ul>
@@ -1948,32 +2159,41 @@
 <li>层次结构</li>
 </ol>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">层次</th>
 <th style="text-align: center;">说明</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">用户层I/O软件</td>
-<td style="text-align: center;">实现与用户交互的接口，用户可以使用I/O相关的库函数，用户软件层需要通过一组系统调用取得操作系统的服务</td>
+<td
+style="text-align: center;">实现与用户交互的接口，用户可以使用I/O相关的库函数，用户软件层需要通过一组系统调用取得操作系统的服务</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">设备独立性软件</td>
-<td style="text-align: center;">抽象层，向上提供统一的统一的接口，向下执行所有设备的共有操作</td>
+<td
+style="text-align: center;">抽象层，向上提供统一的统一的接口，向下执行所有设备的共有操作</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">设备驱动程序</td>
-<td style="text-align: center;">根据上层规定的抽象操作，实现具体的操作，并封装成标准接口提供给上层</td>
+<td
+style="text-align: center;">根据上层规定的抽象操作，实现具体的操作，并封装成标准接口提供给上层</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">中断处理程序</td>
-<td style="text-align: center;">进程上下文的切换，对处理中断信号源进行测试</td>
+<td
+style="text-align: center;">进程上下文的切换，对处理中断信号源进行测试</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">硬件设备</td>
-<td style="text-align: center;">通常包括机械部件与电子部件，电子部件又称为设备控制器（适配器）</td>
+<td
+style="text-align: center;">通常包括机械部件与电子部件，电子部件又称为设备控制器（适配器）</td>
 </tr>
 </tbody>
 </table>
@@ -2008,15 +2228,21 @@
 <li>I/O调度：确定一个合适的顺序处理I/O请求</li>
 <li>CPU处理一块数据的时间：若磁盘把一块数据输入缓冲区的时间为T，缓冲区将数据传送到用户区的时间为M，CPU处理这块数据的时间为C，
 <ul>
-<li>单缓冲区：每一块数据的处理时间为<span class="math inline">\(\displaystyle Max(C，T)+C\)</span>
+<li>单缓冲区：每一块数据的处理时间为<span
+class="math inline">\(\displaystyle Max(C，T)+C\)</span>
 <ul>
-<li><span class="math inline">\(\displaystyle 若T&gt;C，则处理n块数据的时间为n(T+M)+C\)</span></li>
-<li><span class="math inline">\(\displaystyle 若T&lt;C，则处理n块数据的时间为n(C+M)+T\)</span></li>
+<li><span class="math inline">\(\displaystyle
+若T&gt;C，则处理n块数据的时间为n(T+M)+C\)</span></li>
+<li><span class="math inline">\(\displaystyle
+若T&lt;C，则处理n块数据的时间为n(C+M)+T\)</span></li>
 </ul></li>
-<li>双缓冲区：每一块数据的处理时间为<span class="math inline">\(\displaystyle Max(C+M，T)\)</span>
+<li>双缓冲区：每一块数据的处理时间为<span
+class="math inline">\(\displaystyle Max(C+M，T)\)</span>
 <ul>
-<li><span class="math inline">\(\displaystyle 若T&gt;C+M，则处理n块数据的时间为nT+M+C\)</span></li>
-<li><span class="math inline">\(\displaystyle 若T&lt;C+M，则处理n块数据的时间为n(C+M)+T\)</span></li>
+<li><span class="math inline">\(\displaystyle
+若T&gt;C+M，则处理n块数据的时间为nT+M+C\)</span></li>
+<li><span class="math inline">\(\displaystyle
+若T&lt;C+M，则处理n块数据的时间为n(C+M)+T\)</span></li>
 </ul></li>
 </ul></li>
 </ol>
@@ -2063,34 +2289,34 @@
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">设备名称</th>
 <th style="text-align: center;">能否隔离冲突域</th>
 <th style="text-align: center;">能否隔离广播域</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">集线器</td>
 <td style="text-align: center;">不能</td>
 <td style="text-align: center;">不能</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">中继器</td>
 <td style="text-align: center;">不能</td>
 <td style="text-align: center;">不能</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">交换机</td>
 <td style="text-align: center;">能</td>
 <td style="text-align: center;">不能</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">网桥</td>
 <td style="text-align: center;">能</td>
 <td style="text-align: center;">不能</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">路由器</td>
 <td style="text-align: center;">能</td>
 <td style="text-align: center;">能</td>
@@ -2100,9 +2326,17 @@
 <h3 id="物理层">物理层</h3>
 <ol type="1">
 <li><p>奈奎斯特定理<br />
-<span class="math inline">\(\displaystyle \begin{aligned}  &amp;信道极限数据传输速率=2Wlog_2V \\  &amp;其中，W为理想低通信道的带宽，V为每个码元离散的电频数目（即V种不同的码元） \end{aligned}\)</span></p></li>
+<span class="math inline">\(\displaystyle
+\begin{aligned}
+&amp;信道极限数据传输速率=2Wlog_2V \\
+&amp;其中，W为理想低通信道的带宽，V为每个码元离散的电频数目（即V种不同的码元）
+\end{aligned}\)</span></p></li>
 <li><p>香农定理<br />
-<span class="math inline">\(\displaystyle \begin{aligned}  &amp;信道极限数据传输速率=Wlog_2{(1+\frac{S}{N})} \\  &amp;其中，W为信道的带宽，S为信道所传输信号的平均功率，N为信道内部的高斯噪声功率，\frac{S}{N}为信号的平均功率与噪声的平均功率之比，信噪比=10log_{10}{\frac{S}{N}}（db） \end{aligned}\)</span></p></li>
+<span class="math inline">\(\displaystyle
+\begin{aligned}
+&amp;信道极限数据传输速率=Wlog_2{(1+\frac{S}{N})} \\
+&amp;其中，W为信道的带宽，S为信道所传输信号的平均功率，N为信道内部的高斯噪声功率，\frac{S}{N}为信号的平均功率与噪声的平均功率之比，信噪比=10log_{10}{\frac{S}{N}}（db）
+\end{aligned}\)</span></p></li>
 <li><p>3种交换方式</p>
 <ul>
 <li>电路交换</li>
@@ -2111,12 +2345,16 @@
 </ul></li>
 <li><p>发送时延与传播时延</p>
 <ul>
-<li>发送（传输）时延：主机或路由器发送一个报文的时间，发送时延 = 报文长度/报文发送速率</li>
-<li>传播时延：电磁波在信道中的传播一定<strong>距离</strong>所花费的时间，传播时延 = 线路长度/信号传播速度</li>
+<li>发送（传输）时延：主机或路由器发送一个报文的时间，发送时延 =
+报文长度/报文发送速率</li>
+<li>传播时延：电磁波在信道中的传播一定<strong>距离</strong>所花费的时间，传播时延
+= 线路长度/信号传播速度</li>
 </ul></li>
 </ol>
 <blockquote>
-<p><strong>对于分组交换，发送时延 = n个分组在发送端的发送时延 + 1个分组从发送到被接收的时间（1 * m个中间结点发送时延 + 传播时延）</strong></p>
+<p><strong>对于分组交换，发送时延 = n个分组在发送端的发送时延 +
+1个分组从发送到被接收的时间（1 * m个中间结点发送时延 +
+传播时延）</strong></p>
 </blockquote>
 <ol start="5" type="1">
 <li>物理层特性
@@ -2137,13 +2375,18 @@
 </ul></li>
 <li>后退N帧协议（GBN）
 <ul>
-<li>若采用n比特对帧编号，则：<span class="math inline">\(\displaystyle 1 \le 发送窗口 \le 2^n-1}\quad \quad 接收窗口 = 1\)</span></li>
+<li>若采用n比特对帧编号，则：<span class="math inline">\(\displaystyle 1
+\le 发送窗口 \le 2^n-1}\quad  \quad 接收窗口 = 1\)</span></li>
 <li>接收方只允许按顺序接收数据帧，故即使收到了n号差错帧之后的所有数据帧，接收方也会将这些帧丢弃，并请求重传n号帧及其之后的帧</li>
-<li>通常采用累计确认机制，如发送方发送0~7 号帧，接收方返回0，2，3号帧的确认，表明接收方已经收到0~3 号帧，只需重传4~7 号帧</li>
+<li>通常采用累计确认机制，如发送方发送0~7
+号帧，接收方返回0，2，3号帧的确认，表明接收方已经收到0~3
+号帧，只需重传4~7 号帧</li>
 </ul></li>
 <li>选择重传协议（SR）
 <ul>
-<li>若采用n比特对帧编号，则：<span class="math inline">\(\displaystyle 发送窗口=接收窗口= 2^{n-1}\quad 且发送窗口+接收窗口 \le 2^n\)</span></li>
+<li>若采用n比特对帧编号，则：<span class="math inline">\(\displaystyle
+发送窗口=接收窗口= 2^{n-1}\quad 且发送窗口+接收窗口 \le
+2^n\)</span></li>
 <li>选择重传不采用累计确认，而是对每个正确收到的帧都返回与之对应的确认帧</li>
 </ul></li>
 </ol>
@@ -2169,9 +2412,17 @@
 <ul>
 <li>侦听：发送前先侦听信道，若空闲则立即发送数据并进行冲突检测；若信道忙，则继续侦听信道，直至信道空闲</li>
 <li>碰撞检测：适配器发送数据时检测信道上信号电压变化情况，以判断是否发生冲突，若检测到冲突，适配器停止发送数据，并传输一个拥塞信号，随后采用截断二进制退避算法等待一段随机时间后重新侦听</li>
-<li>争用期：即碰撞窗口，设单程传播时延为<span class="math inline">\(\displaystyle \tau\)</span>，则以太网端到端往返时间<span class="math inline">\(\displaystyle 2\tau\)</span>称为争用期，其意义是，若发送站在发送帧后经过时间<span class="math inline">\(\displaystyle 2\tau\)</span>，如果没有发生碰撞，则该帧就能顺利发送</li>
-<li><span class="math inline">\(\displaystyle 最小帧长=总线传播时延 \times 数据传输速率 \times 2\)</span></li>
-<li><span class="math inline">\(\displaystyle \frac{帧长}{传输速率}\ge 2\tau\)</span></li>
+<li>争用期：即碰撞窗口，设单程传播时延为<span
+class="math inline">\(\displaystyle
+\tau\)</span>，则以太网端到端往返时间<span
+class="math inline">\(\displaystyle
+2\tau\)</span>称为争用期，其意义是，若发送站在发送帧后经过时间<span
+class="math inline">\(\displaystyle
+2\tau\)</span>，如果没有发生碰撞，则该帧就能顺利发送</li>
+<li><span class="math inline">\(\displaystyle 最小帧长=总线传播时延
+\times 数据传输速率 \times 2\)</span></li>
+<li><span class="math inline">\(\displaystyle \frac{帧长}{传输速率}\ge
+2\tau\)</span></li>
 </ul></li>
 <li>CSMA/CA(碰撞避免)
 <ul>
@@ -2185,8 +2436,18 @@
 </ol></li>
 <li>发送周期于信道利用率
 <ul>
-<li><span class="math inline">\(\displaystyle  \begin{aligned}  &amp;发送周期T=\frac{帧长L}{数据传输速率V}+往返时延RTT+接收端发送确认帧的发送时延t \\  &amp;其中，确认帧很短，通常可将t1忽略  \end{aligned}\)</span></li>
-<li><span class="math inline">\(\displaystyle  \begin{aligned}  &amp;若发送周期为T，发送方的数据传输速率为V，发送方在周期T内共发送L比特的数据，则\\  &amp;信道利用率=\frac{L}{VT} \\  &amp;其中，确认帧很短，通常可将t1忽略  \end{aligned}\)</span></li>
+<li><span class="math inline">\(\displaystyle
+   \begin{aligned}
+       &amp;发送周期T=\frac{帧长L}{数据传输速率V}+往返时延RTT+接收端发送确认帧的发送时延t
+\\
+       &amp;其中，确认帧很短，通常可将t1忽略
+   \end{aligned}\)</span></li>
+<li><span class="math inline">\(\displaystyle
+   \begin{aligned}
+       &amp;若发送周期为T，发送方的数据传输速率为V，发送方在周期T内共发送L比特的数据，则\\
+       &amp;信道利用率=\frac{L}{VT} \\
+       &amp;其中，确认帧很短，通常可将t1忽略
+   \end{aligned}\)</span></li>
 </ul></li>
 </ol>
 <h4 id="局域网">局域网</h4>
@@ -2195,7 +2456,7 @@
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">目的地址</th>
 <th style="text-align: center;">源地址</th>
 <th style="text-align: center;">类型</th>
@@ -2204,7 +2465,7 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">6B</td>
 <td style="text-align: center;">6B</td>
 <td style="text-align: center;">2B</td>
@@ -2214,11 +2475,13 @@
 </tbody>
 </table>
 <ul>
-<li>前导码(8B，在物理层中添加的首部，不属于MAC帧)：前同步码(7B) + 帧开始定界符(1B)</li>
+<li>前导码(8B，在物理层中添加的首部，不属于MAC帧)：前同步码(7B) +
+帧开始定界符(1B)</li>
 <li>目的地址(6B)：MAC地址</li>
 <li>源地址码(6B)：MAC地址</li>
 <li>类型(2B)：指出数据域中携带的数据应交给那个协议实体处理</li>
-<li>数据(46~1500B)：包含高层协议信息，由于CSMA/CD算法的限制，由于以太网帧最小长度为64B，所以此部分最小长度为46B（64 - 首部地址14B - 尾部4B = 46B），若数据太少，则填充0~46B</li>
+<li>数据(46~1500B)：包含高层协议信息，由于CSMA/CD算法的限制，由于以太网帧最小长度为64B，所以此部分最小长度为46B（64
+- 首部地址14B - 尾部4B = 46B），若数据太少，则填充0~46B</li>
 <li>FCS(4B)：校验范围从目的地址到数据段末尾，算法采用32位CRC</li>
 </ul>
 <p><strong>MTU最大传输单元是指MAC帧的数据最大载荷，而MAC帧本身最大长度为1518B</strong></p>
@@ -2230,9 +2493,18 @@
 <ol type="1">
 <li>802.11中MAC帧</li>
 </ol>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">功能</th>
 <th style="text-align: center;">To DS</th>
 <th style="text-align: center;">From DS</th>
@@ -2243,7 +2515,7 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">IBSS</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
@@ -2252,7 +2524,7 @@
 <td style="text-align: center;">BSSID</td>
 <td style="text-align: center;">未使用</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">To AP</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">0</td>
@@ -2261,7 +2533,7 @@
 <td style="text-align: center;">DA</td>
 <td style="text-align: center;">未使用</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">Freom AP</td>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">1</td>
@@ -2270,7 +2542,7 @@
 <td style="text-align: center;">SA</td>
 <td style="text-align: center;">未使用</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">WDS(无线分布式系统)</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">1</td>
@@ -2295,7 +2567,7 @@
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">目的地址</th>
 <th style="text-align: center;">源地址</th>
 <th style="text-align: center;">VLAN标记</th>
@@ -2305,7 +2577,7 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">6B</td>
 <td style="text-align: center;">6B</td>
 <td style="text-align: center;">4B</td>
@@ -2316,7 +2588,8 @@
 </tbody>
 </table>
 <blockquote>
-<p>1.VLAN标记，<strong>前两个字节</strong>表示这是IEEE 802.1Q帧，<strong>随后4位</strong>没用，<strong>最后12位</strong>为VLAN标识符VID，用于唯一表示该帧属于哪个VLAN<br />
+<p>1.VLAN标记，<strong>前两个字节</strong>表示这是IEEE
+802.1Q帧，<strong>随后4位</strong>没用，<strong>最后12位</strong>为VLAN标识符VID，用于唯一表示该帧属于哪个VLAN<br />
 2.VID取值范围为1~4094<br />
 3.IEEE 802.1Q帧由交换机处理</p>
 </blockquote>
@@ -2386,7 +2659,8 @@
 <li><strong>主机号全0表示本网络本身，主机号全1表示本网络的广播地址</strong></li>
 <li><strong>127.0.0.0 保留为环回自检地址</strong></li>
 <li><strong>32位全0，即0.0.0.0 表示本网络上的本主机</strong></li>
-<li><strong>32位全1，即255.255.255.255 表示整个TCP/IP网络的广播地址，又称受限广播地址</strong></li>
+<li><strong>32位全1，即255.255.255.255
+表示整个TCP/IP网络的广播地址，又称受限广播地址</strong></li>
 </ul>
 <ol start="3" type="1">
 <li><p>路由表</p></li>
@@ -2564,7 +2838,8 @@
 <ul>
 <li>接收窗口：由接收端维护</li>
 <li>拥塞窗口：由发送端维护，发送端根据当前网络的拥塞程度确定</li>
-<li>发送窗口：由发送端维护，发送端在接收到下一个确认前能够发送的最大字节数，且<strong>发送窗口 = min{接收窗口， 拥塞窗口}</strong></li>
+<li>发送窗口：由发送端维护，发送端在接收到下一个确认前能够发送的最大字节数，且<strong>发送窗口
+= min{接收窗口， 拥塞窗口}</strong></li>
 </ul></li>
 <li>拥塞控制：
 <ul>
@@ -2589,44 +2864,44 @@
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">TCP</th>
 <th style="text-align: center;">UDP</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">可靠性</td>
 <td style="text-align: center;">保证可靠传输</td>
 <td style="text-align: center;">不保证可靠传输</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">是否建立连接</td>
 <td style="text-align: center;">是</td>
 <td style="text-align: center;">否</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">数据发送模式</td>
 <td style="text-align: center;">面向字节流</td>
 <td style="text-align: center;">面向报文</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">通信方式</td>
 <td style="text-align: center;">点对点</td>
 <td style="text-align: center;">一对一、一对多、多对一、多对多</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">首部开销</td>
 <td style="text-align: center;">20B</td>
 <td style="text-align: center;">8B</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">拥塞控制机制</td>
 <td style="text-align: center;">有</td>
 <td style="text-align: center;">无</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">流量控制机制</td>
 <td style="text-align: center;">有</td>
 <td style="text-align: center;">无</td>
@@ -2680,13 +2955,18 @@
 </ul></li>
 <li>非持久连接与持久连接
 <ul>
-<li>对于非持久连接：每个网页元素对象的传输都需要单独建立一个TCP连接，<span class="math inline">\(\displaystyle 请求一个万维网对象所需的时间 = 2RTT+该对象传输时间\)</span>，其中一个RTT用于TCP连接，另一个RTT用于请求和接收文档</li>
+<li>对于非持久连接：每个网页元素对象的传输都需要单独建立一个TCP连接，<span
+class="math inline">\(\displaystyle 请求一个万维网对象所需的时间 =
+2RTT+该对象传输时间\)</span>，其中一个RTT用于TCP连接，另一个RTT用于请求和接收文档</li>
 <li>对于持久连接，万维网服务器在发送相应后扔保持这条连接，使同一个客户和服务器可以继续在这条连接上传送后续的HTTP请求和响应报文</li>
 </ul></li>
 <li>流水线与非流水线（持久连接）
 <ul>
-<li>非流水线：客户在收到前一个响应后才能发出下一个请求，在已建立连接的情况下，对于<strong>每个文档</strong> $从发从请求到接收完毕的时间=RTT+文档的传输时间 $</li>
-<li>流水线：客户没遇到一个对象引用就发出一个请求，在已建立连接的情况下，当请求与响应都时连续发送时，<span class="math inline">\(\displaystyle 完成请求的总耗时=RTT+n个文件的传输时间\)</span></li>
+<li>非流水线：客户在收到前一个响应后才能发出下一个请求，在已建立连接的情况下，对于<strong>每个文档</strong>
+$从发从请求到接收完毕的时间=RTT+文档的传输时间 $</li>
+<li>流水线：客户没遇到一个对象引用就发出一个请求，在已建立连接的情况下，当请求与响应都时连续发送时，<span
+class="math inline">\(\displaystyle
+完成请求的总耗时=RTT+n个文件的传输时间\)</span></li>
 </ul></li>
 <li>cookie的运行过程
 <ul>
@@ -2701,25 +2981,25 @@
 </ol>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;">方法</th>
 <th style="text-align: center;">意义</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">GET</td>
 <td style="text-align: center;">请求读取由URL标识的信息</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">HEAD</td>
 <td style="text-align: center;">请求读取由URL表示的信息的首部</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">POST</td>
 <td style="text-align: center;">给服务器添加信息（如注释）</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">CONNECT</td>
 <td style="text-align: center;">用于代理服务器</td>
 </tr>
@@ -2743,7 +3023,7 @@
 <col style="width: 9%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">FTP控制连接</th>
 <th style="text-align: center;">FTP数据连接</th>
@@ -2758,7 +3038,7 @@
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">使用协议</td>
 <td style="text-align: center;">TCP</td>
 <td style="text-align: center;">TCP</td>
@@ -2771,7 +3051,7 @@
 <td style="text-align: center;">UDP</td>
 <td style="text-align: center;">IP</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">熟知端口号</td>
 <td style="text-align: center;">21</td>
 <td style="text-align: center;">20</td>
@@ -2802,7 +3082,7 @@
             </div>
             <div class="post-nav-item">
                 <a href="/2022/02/16/2022-2-16-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="next" title="二分查找">
-                  二分查找 <i class="fa fa-chevron-right"></i>
+                  二分查找 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -2821,44 +3101,60 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 2021 – 
-  <span itemprop="copyrightYear">2022</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Colaxy</span>
-</div>
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Colaxy</span>
+  </div>
 
     </div>
   </footer>
 
   
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
-  
-<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
   <script src="/js/third-party/fancybox.js"></script>
 
 
-  
-
-
-
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
