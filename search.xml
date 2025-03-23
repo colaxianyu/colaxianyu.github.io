@@ -1,3414 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>专业课知识点汇总</title>
-    <url>/2021/12/01/2021-12-01-%E4%B8%93%E4%B8%9A%E8%AF%BE%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB/</url>
-    <content><![CDATA[<h2 id="数据结构">数据结构</h2>
-<h3 id="循环队列">循环队列</h3>
-<p>队空条件：Q.rear == Q.front<br />
-队满条件：(Q.rear + 1) % MaxSize == Q.front<br />
-入队：Q.rear = (Q.rear + 1) % MaxSize<br />
-出队：Q.front = (Q.front + 1) % MaxSize<br />
-长度：(Q.rear - Q.front + MaxSize) % MaxSize</p>
-<h3 id="栈">栈</h3>
-<p><span class="math inline">\(\displaystyle
-\begin{aligned}
-    出栈序列个数 \frac{1}{n+1} C_{2n} ^{n}
-\end{aligned}\)</span></p>
-<span id="more"></span>
-<h3 id="树与二叉树">树与二叉树</h3>
-<h4 id="部分结论">部分结论</h4>
-<ol type="1">
-<li><p>树<br />
-<span class="math inline">\(\displaystyle
-\begin{aligned}
-    &amp;①.度为m的树，第i层至多有m^{i - 1}个节点\\
-    &amp;②.高度为h的m叉树至多有\frac{m^h-1}{m-1}个结点\\
-    &amp;③.具有n个结点的m叉树的最小高度为\lceil log_m(n(m-1)+1) \rceil
-\\
-    &amp;④.结点数 = 分支数 + 1
-\end{aligned}\)</span></p></li>
-<li><p>二叉树<br />
-<span class="math inline">\(\displaystyle
-\begin{aligned}
-    &amp;①.非空二叉树上第i层至多有2^{i-1}个结点\\
-    &amp;②.高度为h的二叉树至多有2^h-1个结点\\
-    &amp;③.对于完全二叉树，n个结点的完全二叉树高度为\lceil log_2(n+1)
-\rceil\\
-    &amp;④.非空二叉树上的叶子节点数等于度为2的结点数加1，即n_0=n_2+1
-\end{aligned}\)</span></p></li>
-</ol>
-<h4 id="红黑树">红黑树</h4>
-<ol type="1">
-<li>定义：
-<ul>
-<li>红黑树是二叉排序树</li>
-<li>根节点是黑色的</li>
-<li>叶节点（失败结点、外部节点、NULL结点）是黑色的</li>
-<li>不存在两个相邻的红色节点（即红色结点的<strong>父节点</strong>与<strong>子节点</strong>一定是黑色的）</li>
-<li>对每个结点，从该节点到任一叶节点的路径上，所含的黑色结点数量相同</li>
-</ul></li>
-<li>性质
-<ul>
-<li>从根节点到叶节点的最长路径不大于最短路径的两倍</li>
-<li><span class="math inline">\(\displaystyle有n个内部结点的红黑树高度 h
-\le 2log_2(n+1)\)</span></li>
-<li><span class="math inline">\(\displaystyle
-查找时间复杂度=log_2n\)</span></li>
-<li>若黑高为h，内部节点最少有<span class="math inline">\(\displaystyle
-2^h-1个\)</span>，最多有<span class="math inline">\(\displaystyle
-2^{2h}-1个\)</span></li>
-</ul></li>
-</ol>
-<p><strong>AVL树的对平衡的要求更高（树的高度更低），因此查找效率通常比红黑树更好，但插入删除的效率更差（频繁调整），AVL和红黑树的查找/插入/删除的最坏时间复杂度都是<span
-class="math inline">\(\displaystyle log_2n\)</span></strong></p>
-<ol type="1">
-<li>插入操作
-<ul>
-<li>确定插入位置</li>
-<li>新结点是根，染黑</li>
-<li>新节点非根，染红
-<ul>
-<li>若插入新节点后依然满足红黑树的定义，则插入结束</li>
-<li>若插入新结点后不满足红黑树定义，则进行调整（看叔结点的颜色）
-<ul>
-<li>红叔：染色+变新
-<ul>
-<li>叔父结点换色，爷结点变为新节点</li>
-</ul></li>
-<li>黑叔：旋转+染色
-<ul>
-<li>LL型：右单旋，父换爷+换色</li>
-<li>RR型：左单旋，父换爷+换色</li>
-<li>LR型：先左后右旋，儿换爷+换色</li>
-<li>RL型：先右后左旋，儿换爷+换色</li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ol>
-<h4 id="并查集">并查集</h4>
-<ol type="1">
-<li>逻辑上：是一种集合</li>
-<li>物理上：采用顺序表存储，每个集合构成一颗树，并用双亲表示法表示</li>
-<li>基本操作：
-<ul>
-<li>并(Union)：将两个不相交的集合合并为一个</li>
-<li>查(find)：找到一个指定元素所属的集合</li>
-</ul></li>
-</ol>
-<h3 id="图">图</h3>
-<p>无向完全图：e = v(v-1)/2<br />
-有向完全图：e = v(v-1)<br />
-无向图中所有顶点的<strong>度数之和</strong>等于<strong>边数的两倍</strong><br />
-有向图中全部定点的<strong>入度之和</strong>等于<strong>出度之和</strong>等于<strong>边数</strong><br />
-邻接矩阵表示中：行表示该结点的<strong>出度</strong>，列表示该结点的<strong>入度</strong><br />
-边少的图称为稀疏图，反之称为稠密图，当$E &lt; Vlog_2V
-$时，可将图视为稀疏图</p>
-<h3 id="查找">查找</h3>
-<h4 id="顺序查找">顺序查找</h4>
-<p><span class="math inline">\(\displaystyle
-\begin{aligned}
-    &amp;ASL_{成功} = \frac{n+1}{2} \\\\
-    &amp;ASL_{失败} =
-    \begin{cases}
-        n+1， \quad 一般线性表 \\\\
-        \frac{n}{2}+\frac{n}{n+1}, \quad 有序线性表
-    \end{cases}
-\end{aligned}\)</span></p>
-<h4
-id="折半查找只适用于有序的顺序表">折半查找（只适用于<strong>有序</strong>的<strong>顺序表</strong>）</h4>
-<p><span class="math inline">\(\displaystyle
-\begin{aligned}
-    &amp;关键字比较次数：失败=成功=\lfloor log_2(n)+1 \rfloor \\
-    &amp;ASL_{成功} = \frac{n+1}{n}log_2(n+1)-1 \approx log_2(n+1)-1
-\\\\
-\end{aligned}\)</span></p>
-<h4 id="b树m阶">B树（m阶）</h4>
-<ul>
-<li>根节点关键字个数：<span class="math inline">\(\displaystyle 1 \le n
-\le m-1\)</span></li>
-<li>非根结点关键字个数：<span class="math inline">\(\displaystyle \lceil
-\frac{m}{2} \rceil - 1 \le n \le m-1\)</span></li>
-<li>若根节点不是叶节点，则至少要有2棵子树，至多m颗</li>
-<li>除根节点外，所有非叶节点至少有<span
-class="math inline">\(\displaystyle \lceil \frac{m}{2}
-\rceil\)</span>棵子树，至多m颗</li>
-</ul>
-<h4 id="b树m阶-1">B+树（m阶）</h4>
-<ul>
-<li>根节点关键字个数：<span class="math inline">\(\displaystyle 1 \le n
-\le m\)</span></li>
-<li>非根结点关键字个数：<span class="math inline">\(\displaystyle \lceil
-\frac{m}{2} \rceil \le n \le m\)</span></li>
-<li>若根节点不是叶节点，则至少要有2棵子树，至多m颗</li>
-<li>除根节点外，所有非叶节点至少有<span
-class="math inline">\(\displaystyle \lceil \frac{m}{2}
-\rceil\)</span>棵子树，至多m颗</li>
-<li>结点的关键字个数等于该节点子树的个数</li>
-</ul>
-<h4 id="hash表">hash表</h4>
-<p><span class="math inline">\(\displaystyle
-\begin{aligned}
-    &amp;①hash函数通常采用除留余数法：H(key) = key \% p \\
-    &amp;②开放地址法处理冲突，
-在产生冲突后，第i次探测的地址为：H_i=(H(key)+d_i) \%  m\\
-    &amp;③线性探测法中d_i = 1，2，3，...，m-1 \\
-    &amp;④平方探测法（二次探测法）中d_i =
-1^2，-1^2，2^2，-2^2，...，k^2，-k^2，但表长m必须是一个可表示成4k+3的质数
-\\
-    &amp;⑤填装因子\alpha = \frac{记录数n}{hash表长度m}\\
-    &amp;⑥填装因子\alpha 越大，冲突的可能性越大\\
-    &amp;⑦hash表的查找效率取决于：散列函数、处理冲突的方法/填装因子
-\end{aligned}\)</span></p>
-<h3 id="排序">排序</h3>
-<ol type="1">
-<li>每趟排序都能确定一个<strong>元素的最终位置</strong>：冒泡排序、选择排序、堆排序、快速排序（枢轴元素）</li>
-<li>每趟排序都能确定一个<strong>局部有序的子序列</strong>：插入排序、shell排序、归并排序</li>
-<li>非稳定的排序算法：选择排序、shell排序、快速排序、堆排序</li>
-<li>使用辅助空间的排序算法：快速排序、归并排序、基数排序</li>
-<li>可运用于链表中的排序算法：插入排序、冒泡排序、选择排序</li>
-</ol>
-<p><strong>排序算法小结</strong></p>
-<table>
-<colgroup>
-<col style="width: 19%" />
-<col style="width: 39%" />
-<col style="width: 23%" />
-<col style="width: 17%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">算法种类</th>
-<th style="text-align: center;">时间复杂度(平均)</th>
-<th style="text-align: center;">空间复杂度</th>
-<th style="text-align: center;">是否稳定</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">插入排序</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(n^2)\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(1)\)</span></td>
-<td style="text-align: center;">是</td>
-</tr>
-<tr>
-<td style="text-align: center;">冒泡排序</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(n^2)\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(1)\)</span></td>
-<td style="text-align: center;">是</td>
-</tr>
-<tr>
-<td style="text-align: center;">选择排序</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(n^2)\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(1)\)</span></td>
-<td style="text-align: center;">否</td>
-</tr>
-<tr>
-<td style="text-align: center;">希尔排序</td>
-<td style="text-align: center;">-</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(1)\)</span></td>
-<td style="text-align: center;">否</td>
-</tr>
-<tr>
-<td style="text-align: center;">快速排序</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(log_2n)\)</span></td>
-<td style="text-align: center;">否</td>
-</tr>
-<tr>
-<td style="text-align: center;">堆排序</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(1)\)</span></td>
-<td style="text-align: center;">否</td>
-</tr>
-<tr>
-<td style="text-align: center;">2路归并排序</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(nlog_2n)\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(n)\)</span></td>
-<td style="text-align: center;">是</td>
-</tr>
-<tr>
-<td style="text-align: center;">基数排序</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(d(n+r))\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle O(r)\)</span></td>
-<td style="text-align: center;">是</td>
-</tr>
-</tbody>
-</table>
-<p><strong>外部排序中，对M个归并段进行N路归并排序，需要补充的虚段数为：<span
-class="math inline">\(\displaystyle (N-1)-(M-1)\%
-(N-1)\)</span></strong></p>
-<hr />
-<h2 id="计算机组成原理">计算机组成原理</h2>
-<h3 id="基础知识">基础知识</h3>
-<ol type="1">
-<li>数据线的宽度 = MDR的宽度</li>
-<li>地址线的宽度 = MAR的宽度</li>
-<li>机器字长：CPU一次能处理的二进制数据位数，通常等于内部寄存器的大小，与计算机运算精度有关（通常为字节的整数倍）</li>
-<li>存储字长：一个存储单元存储的二进制代码的长度（等于MDR的的位数）</li>
-<li>指令字长：一个指令字包含的二进制代码长度（通常为存储字长的整数倍）</li>
-</ol>
-<h3 id="数据的表示与运算">数据的表示与运算</h3>
-<h4 id="定点数">定点数</h4>
-<ol type="1">
-<li>长度为n+1位的定点数，各种编码方式下的数值范围</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">编码方式</th>
-<th style="text-align: center;">数值范围</th>
-<th style="text-align: center;">0的个数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">无符号定点整数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle 0 \le x \le 2^{n+1}-1\)</span></td>
-<td style="text-align: center;">-</td>
-</tr>
-<tr>
-<td style="text-align: center;">原码定点整数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle -2^n+1 \le x \le 2^n-1\)</span></td>
-<td style="text-align: center;">2</td>
-</tr>
-<tr>
-<td style="text-align: center;">反码定点整数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle -2^n+1 \le x \le 2^n-1\)</span></td>
-<td style="text-align: center;">2</td>
-</tr>
-<tr>
-<td style="text-align: center;">补码码定点整数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle -2^n \le x \le 2^n-1\)</span></td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr>
-<td style="text-align: center;">移码码定点整数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle -2^n \le x \le 2^n-1\)</span></td>
-<td style="text-align: center;">1</td>
-</tr>
-<tr>
-<td style="text-align: center;">无符号定点小数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle 0 \le x \le 1-2^{-n}\)</span></td>
-<td style="text-align: center;">-</td>
-</tr>
-<tr>
-<td style="text-align: center;">原码定点小数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle -1+2^{-n} \le x \le
-1-2^{-n}\)</span></td>
-<td style="text-align: center;">2</td>
-</tr>
-<tr>
-<td style="text-align: center;">反码定点小数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle -1+2^{-n} \le x \le
-1-2^{-n}\)</span></td>
-<td style="text-align: center;">2</td>
-</tr>
-<tr>
-<td style="text-align: center;">补码定点小数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle -1 \le x \le 1-2^{-n}\)</span></td>
-<td style="text-align: center;">1</td>
-</tr>
-</tbody>
-</table>
-<ol start="2" type="1">
-<li>符号位的生成</li>
-</ol>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">符号位</th>
-<th style="text-align: center;">生成方式</th>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">溢出标志OF</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle OF=C_n \bigoplus
-C_{n-1}\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle
-OF=1有符号数运算结果溢出\\OF=0有符号数运算结果未溢出\)</span></td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">符号标志SF</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle SF=F_{n-1}\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle
-SF=1表示运算结果为负\\OF=0表示运算结果为正\)</span></td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">零标志位ZF</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle ZF=(F==0?1:0)\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle
-OF=1表示运算结果为0\\OF=0表示运算结果不为0\)</span></td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">进位/借位标志CF</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle CF=C_{in}(SUB)\bigoplus
-C_{out}\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle CF=1表示无符号数运算结果溢出\\
-CF=0表示无符号数运算结果没溢出\)</span></td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><span class="math inline">\(\displaystyle
-C_n表示最高位进位\)</span></li>
-<li><span class="math inline">\(\displaystyle
-C_{n-1}表示次高位进位\)</span></li>
-<li><span class="math inline">\(\displaystyle
-F_{n-1}表示最高位本位和+低位的进位\)</span></li>
-<li><span class="math inline">\(\displaystyle
-F表示最终运算的结果\)</span></li>
-<li><span class="math inline">\(\displaystyle
-C_{in}(SUB)表示输入信号，1表示进行减法操作，0表示进行加法操作\)</span></li>
-<li><span class="math inline">\(\displaystyle
-C_{out}表示最高位进位\)</span></li>
-</ul>
-<p><strong>对于无符号数，只有CF与ZF标志位有意义，其中CF判断结果是否溢出，ZF判断结果是否为0</strong><br />
-<strong>对于有符号数，OF、SF、ZF有意义，其中OF判断结果是否溢出，SF判断结果正负性，ZF判断结果是否为0</strong></p>
-<ol start="3" type="1">
-<li>定点数的溢出判断
-<ol type="1">
-<li>无符号数
-<ul>
-<li>加减法：本质是看进位/借位标志CF是否为1，CF=1则溢出</li>
-<li>乘法：两个n位数相乘，结果用2n位<strong>暂存</strong>（实际运算结果只取低n位，即乘数寄存器的值），若乘积寄存器（高n位）全为0，则不溢出，否则，只要有任一1位为0，则溢出</li>
-</ul></li>
-<li>有符号数
-<ul>
-<li>加减法：本质是看溢出标志OF是否为1，OF=1则溢出</li>
-<li>乘法：两个n位数相乘，结果用2n位<strong>暂存</strong>（实际运算结果只取低n位，即乘数寄存器的值），若前n+1位全0或全1则不溢出，反之则溢出（<strong>真值是低n位的数值，但溢出判断是前n+1位，即于高n位与真值部分的最高位的符号位相同才不溢出</strong>）</li>
-</ul></li>
-</ol></li>
-<li>溢出的具体判断方法</li>
-</ol>
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">方法</th>
-<th style="text-align: center;">条件</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">单符号位</td>
-<td
-style="text-align: center;">运算结果的符号与参加操作的两个数的符号相同，则不溢出，否则溢出</td>
-</tr>
-<tr>
-<td style="text-align: center;">双符号位</td>
-<td
-style="text-align: center;">运算结果的两个符号位相同则未溢出<br>运算结果的两个符号位不同则溢出，且最高位的符号位表示真正的符号（01表示上溢，10表示下溢）</td>
-</tr>
-<tr>
-<td style="text-align: center;">单符号位和进位法</td>
-<td
-style="text-align: center;">符号位的进位与最高数位的进位相同，则不溢出，否则溢出（实际就是OF标志位的生成方法，最高位进位与次高位进位做异或运算）</td>
-</tr>
-</tbody>
-</table>
-<ol start="5" type="1">
-<li>定点数除法
-<ul>
-<li>除法电路，可完成定点整数与定点小数的除法，由于除法操作需要将被除数扩展为2n位，故对于定点整数，小数点隐含在商寄存器之后，故高n位的余数寄存器补0，而对于定点小数，小数点隐含在余数寄存器之前，低n位的商寄存器补0</li>
-</ul></li>
-</ol>
-<h4 id="ieee-754标准-浮点数">IEEE 754标准 浮点数</h4>
-<ol type="1">
-<li>浮点数格式</li>
-</ol>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">类型</th>
-<th style="text-align: center;">数符(S)</th>
-<th style="text-align: center;">阶码(E，移码表示)</th>
-<th style="text-align: center;">尾数(原码表示)</th>
-<th style="text-align: center;">总位数</th>
-<th style="text-align: center;">偏置值</th>
-<th style="text-align: center;">真值形式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">单精度浮点数float</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">8</td>
-<td style="text-align: center;">23</td>
-<td style="text-align: center;">32</td>
-<td style="text-align: center;">127</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle
-(-1)^S\times1.m\times2^{E-127}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: center;">双精度浮点数double</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">11</td>
-<td style="text-align: center;">52</td>
-<td style="text-align: center;">64</td>
-<td style="text-align: center;">1023</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle
-(-1)^S\times1.m\times2^{E-1023}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: center;">临时浮点数</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">15</td>
-<td style="text-align: center;">64</td>
-<td style="text-align: center;">80</td>
-<td style="text-align: center;">16383</td>
-<td style="text-align: center;">-</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>阶码全1表示无穷大，全0表示无穷小或非规格化数</p>
-</blockquote>
-<ol start="2" type="1">
-<li>浮点数表示范围</li>
-</ol>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">格式</th>
-<th style="text-align: center;">最小值</th>
-<th style="text-align: center;">最大值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">单精度浮点数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle E=1,m=0，\\2^{-126}\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle
-E=254,m=.111...1，\\2^{127}\times(2-2^{-23})\)</span></td>
-</tr>
-<tr>
-<td style="text-align: center;">双精度浮点数</td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle E=1,m=0，\\2^{-1022}\)</span></td>
-<td style="text-align: center;"><span
-class="math inline">\(\displaystyle
-E=254,m=.111...1，\\2^{1023}\times(2-2^{-52})\)</span></td>
-</tr>
-</tbody>
-</table>
-<ol start="3" type="1">
-<li>运算
-<ul>
-<li>对阶：低阶向高阶对齐，即，阶码小的尾数部分右移一位，阶码+1，直到阶相同</li>
-<li>尾数求和：按定点数运算规则运算</li>
-<li>规格化
-<ul>
-<li>左规：当尾数出现00.0x……或11.1x……时，左规，即尾数左移1位，阶码-1（可多次）</li>
-<li>右规：当尾数求和结果溢出时（如10.x……或01.x……），右规，即尾数右移1为，阶码+1（最多一次）</li>
-<li>舍入：对阶和右规过程中，可能会将尾数低位丢失，引起误差，可采用“0舍1入法”或“恒置1法”处理</li>
-<li>溢出判断：由阶码的符号位判断，若双符号位不同则溢出，且“<strong>01</strong>”表示上溢，进中断处理，“<strong>10</strong>”表示下溢，按机器0处理</li>
-</ul></li>
-</ul></li>
-</ol>
-<h3 id="存储系统">存储系统</h3>
-<h4 id="半导体随机存储器">半导体随机存储器</h4>
-<ol type="1">
-<li>RAM（易失性存储器）
-<ul>
-<li>SRAM（静态随机存储器）</li>
-<li>DRAM（动态随机存储器）</li>
-</ul></li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">SRAM</th>
-<th style="text-align: center;">DRAM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">存储信息</td>
-<td style="text-align: center;">触发器（晶体管）</td>
-<td style="text-align: center;">电容</td>
-</tr>
-<tr>
-<td style="text-align: center;">破坏性读出</td>
-<td style="text-align: center;">否</td>
-<td style="text-align: center;">是</td>
-</tr>
-<tr>
-<td style="text-align: center;">需要刷新</td>
-<td style="text-align: center;">否</td>
-<td style="text-align: center;">是（通常按行刷新）</td>
-</tr>
-<tr>
-<td style="text-align: center;">集成度</td>
-<td style="text-align: center;">低</td>
-<td style="text-align: center;">高</td>
-</tr>
-<tr>
-<td style="text-align: center;">速度</td>
-<td style="text-align: center;">快</td>
-<td style="text-align: center;">慢</td>
-</tr>
-<tr>
-<td style="text-align: center;">功耗</td>
-<td style="text-align: center;">大</td>
-<td style="text-align: center;">小</td>
-</tr>
-<tr>
-<td style="text-align: center;">用途</td>
-<td style="text-align: center;">Cache</td>
-<td style="text-align: center;">主存</td>
-</tr>
-</tbody>
-</table>
-<ol start="2" type="1">
-<li>ROM（非易失性存储器），通常包括
-<ul>
-<li>掩模式只读存储器MROM：写入后无法修改</li>
-<li>一次可编程只读存储器PROM：写入后无法修改</li>
-<li>可擦除可编程只读存储器EPROM：可多次改写，擦除方式可分为两种
-<ul>
-<li>紫外线擦除UVEPROM</li>
-<li>电擦除<span class="math inline">\(\displaystyle
-E^2PROM\)</span></li>
-</ul></li>
-<li>闪速存储器Flash Memory</li>
-<li>固态硬盘SSD</li>
-</ul></li>
-</ol>
-<h4 id="flash-memory的特点">Flash Memory的特点</h4>
-<ul>
-<li>基于<span class="math inline">\(\displaystyle
-E^2PROM\)</span>技术</li>
-<li>价格便宜，集成度高</li>
-<li>是非易失性存储器，可以长期保存信息</li>
-<li>能快速擦写，写入前必须先擦除，<strong>写比读慢</strong></li>
-</ul>
-<h4 id="ssd相关">SSD相关</h4>
-<ol type="1">
-<li>原理：基于flash技术，内部包含多个flash芯片，故也是<span
-class="math inline">\(\displaystyle E^2PROM\)</span></li>
-<li>组成：
-<ol type="1">
-<li>闪存翻译层：负责翻译逻辑块号，找到对应页</li>
-<li>存储介质：多个flash芯片（flash
-chip），每个芯片包含多个块（block），每个块包含多个页（page）</li>
-</ol></li>
-<li>读写特性：
-<ol type="1">
-<li>以页为单位<strong>读写</strong>（操作系统读写SSD的一个页，读写磁盘的一个块，即扇区）</li>
-<li>以块为单位<strong>擦除</strong>，对于擦除干净的块，其中的每个页都可以写一次，读无限次</li>
-<li>支持随机访问，系统给定逻辑地址，闪存翻译层可通过电路快速定位到对应的物理地址</li>
-<li>读快，写慢，且如果要写入的页中有数据，则不能直接写入，需要将块内各页中的数据全部复制到一个新的（擦除过的）块中，才能在写入数据</li>
-</ol></li>
-<li>对比机械硬盘
-<ol type="1">
-<li>SSD读写速度更快，随机访问能力更高，用电路控制访问位置；机械硬盘通过移动磁臂旋转磁盘控制访问位置，有寻道时间和旋转延迟</li>
-<li>SSD能耗低，造价高</li>
-<li>SSD的块若被频繁擦除（重复在同一块写入），可能会坏，而机械硬盘不会因为频繁写入而坏</li>
-</ol></li>
-<li>磨损均衡技术
-<ol type="1">
-<li>思想：将<strong>擦除操作</strong>平均分布到各个块上</li>
-<li>动态磨损均衡：写入数据时，优先选择<strong>累计擦除次数少的</strong>新闪存块</li>
-<li>静态磨损均衡：SSD检测并自动进行数据分配、迁移，即<strong>老的闪存块承担以读为主的任务</strong>，<strong>而较新的闪存块承担以写为主的任务</strong></li>
-</ol></li>
-</ol>
-<h4 id="多体并行存储器">多体并行存储器</h4>
-<ol type="1">
-<li>高体交叉存储器
-<ul>
-<li>高位地址为体号，低位为体内地址</li>
-<li>程序连续存放在一个体中</li>
-</ul></li>
-<li>低位交叉存储器
-<ul>
-<li>低位地址为体号，高位为体内地址</li>
-<li>程序连续存放在相邻体中</li>
-<li>若要实现流水线方式存取，存储器交叉模块数<span
-class="math inline">\(\displaystyle
-m\ge\frac{存取一个字的存取周期T}{总线传送周期为r}\)</span></li>
-</ul></li>
-<li>若存取一个字的存取周期为T，总线传送周期为r，对于m位交叉存储器，连续存取m个字的时间为（即r
-= T/m）</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">低位交叉存储器</th>
-<th style="text-align: center;">高位交叉存储器</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">时间</td>
-<td style="text-align: center;">T+(m-1)r</td>
-<td style="text-align: center;">mT</td>
-</tr>
-</tbody>
-</table>
-<h4 id="cache写策略">cache写策略</h4>
-<ol type="1">
-<li>写命中
-<ul>
-<li>全写法（直写法）：写命中时，必须把数据同时写入主存与cache，故cache中某块数据需要替换时，直接覆盖即可</li>
-<li>写回法：写命中时，只修改cache中的内容，只有当此块被换出时才写回主存</li>
-</ul></li>
-<li>写不命中
-<ul>
-<li>写分配法：现在主存块中更新相应存储单元，然后分配一个cache行，将更新后的主存块装入cache中，通常与写回法合用</li>
-<li>非写分配法：仅更新主存单元，不把主存块装入cache，通常与全写法合用</li>
-</ul></li>
-</ol>
-<h3 id="指令系统">指令系统</h3>
-<h4 id="寻址方式">寻址方式</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">寻址方式</th>
-<th style="text-align: center;">有效地址</th>
-<th style="text-align: center;">访存次数</th>
-<th style="text-align: center;"></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">立即寻址</td>
-<td style="text-align: center;">A是操作数</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">直接寻址</td>
-<td style="text-align: center;">EA=A</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">一次间址寻址</td>
-<td style="text-align: center;">EA = (A)</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">寄存器寻址</td>
-<td style="text-align: center;">EA = Ri</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">相对寻址</td>
-<td style="text-align: center;">EA = (PC) + A</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">基址寻址(多道程序设计)</td>
-<td style="text-align: center;">EA = (BR) + A</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">变址寻址(数组)</td>
-<td style="text-align: center;">EA = (IX) + A</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table>
-<h4 id="cisc与risc">CISC与RISC</h4>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">CISC</th>
-<th style="text-align: center;">RISC</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">指令系统</td>
-<td style="text-align: center;">复杂，庞大</td>
-<td style="text-align: center;">简单，精简</td>
-</tr>
-<tr>
-<td style="text-align: center;">指令数目</td>
-<td style="text-align: center;">一般大于200条</td>
-<td style="text-align: center;">一般小于200条</td>
-</tr>
-<tr>
-<td style="text-align: center;">指令字长</td>
-<td style="text-align: center;">不固定</td>
-<td style="text-align: center;">定长</td>
-</tr>
-<tr>
-<td style="text-align: center;">可访存指令</td>
-<td style="text-align: center;">无限制</td>
-<td style="text-align: center;">只有Load/Store指令</td>
-</tr>
-<tr>
-<td style="text-align: center;">各指令执行时间</td>
-<td style="text-align: center;">相差较大</td>
-<td style="text-align: center;">多在一个时钟周期内完成</td>
-</tr>
-<tr>
-<td style="text-align: center;">各指令使用频度</td>
-<td style="text-align: center;">相差较大</td>
-<td style="text-align: center;">都很常用</td>
-</tr>
-<tr>
-<td style="text-align: center;">通用寄存器数量</td>
-<td style="text-align: center;">较少</td>
-<td style="text-align: center;">多</td>
-</tr>
-<tr>
-<td style="text-align: center;">目标代码</td>
-<td style="text-align: center;">难以用优化编译生成高效的目标代码</td>
-<td
-style="text-align: center;">采用优化的编译程序，生成代码较为高效</td>
-</tr>
-<tr>
-<td style="text-align: center;">控制方式</td>
-<td style="text-align: center;">多为微程序控制</td>
-<td style="text-align: center;">多为组合逻辑控制</td>
-</tr>
-</tbody>
-</table>
-<p><strong>流水线技术特点：①指令长度大多一致，②指令格式尽量规整，③保证除Load/Store指令外的指令都不访问寄存器，④数据和指令在存储器中“对齐”存放</strong></p>
-<h3 id="中央处理器">中央处理器</h3>
-<h4 id="cpu基本结构">CPU基本结构</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">运算器</th>
-<th style="text-align: center;">控制器</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">算数逻辑单元ALU</td>
-<td style="text-align: center;">程序计数器PC</td>
-</tr>
-<tr>
-<td style="text-align: center;">累加寄存器ACC</td>
-<td style="text-align: center;">指令寄存器IR</td>
-</tr>
-<tr>
-<td style="text-align: center;">暂存寄存器DR</td>
-<td style="text-align: center;">指令译码器</td>
-</tr>
-<tr>
-<td style="text-align: center;">通用寄存器组</td>
-<td style="text-align: center;">存储器地址寄存器MAR</td>
-</tr>
-<tr>
-<td style="text-align: center;">程序状态字寄存器PSWR</td>
-<td style="text-align: center;">存储器数据寄存器MDR</td>
-</tr>
-<tr>
-<td style="text-align: center;">移位器</td>
-<td style="text-align: center;">时序系统</td>
-</tr>
-<tr>
-<td style="text-align: center;">计数器</td>
-<td style="text-align: center;">微操作信号发生器</td>
-</tr>
-</tbody>
-</table>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">寄存器</th>
-<th style="text-align: center;">用户是否可见</th>
-<th style="text-align: center;">功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">通用寄存器组</td>
-<td style="text-align: center;">是</td>
-<td style="text-align: center;">存放操作数和地址信息</td>
-</tr>
-<tr>
-<td style="text-align: center;">程序状态字寄存器PSWR</td>
-<td style="text-align: center;">是</td>
-<td
-style="text-align: center;">保留由逻辑运算指令或测试指令的结果建立的各种状态信息</td>
-</tr>
-<tr>
-<td style="text-align: center;">程序计数器PC</td>
-<td style="text-align: center;">是</td>
-<td style="text-align: center;">指出下一条指令在主存中的地址</td>
-</tr>
-<tr>
-<td style="text-align: center;">累加寄存器</td>
-<td style="text-align: center;">是</td>
-<td
-style="text-align: center;">暂时存放ALU运算的结果信息，用于实现加法运算</td>
-</tr>
-<tr>
-<td style="text-align: center;">指令寄存器</td>
-<td style="text-align: center;">否</td>
-<td style="text-align: center;">保存当前正在执行的指令</td>
-</tr>
-<tr>
-<td style="text-align: center;">暂存寄存器</td>
-<td style="text-align: center;">否</td>
-<td style="text-align: center;">暂存从主存读的数据</td>
-</tr>
-<tr>
-<td style="text-align: center;">存储器地址寄存器MAR</td>
-<td style="text-align: center;">否</td>
-<td style="text-align: center;">存放所要访问的主存单元的地址</td>
-</tr>
-<tr>
-<td style="text-align: center;">存储器数据寄存器MDR</td>
-<td style="text-align: center;">否</td>
-<td
-style="text-align: center;">存放向主存写入的信息或从主存中读入的信息</td>
-</tr>
-</tbody>
-</table>
-<h4 id="指令周期">指令周期</h4>
-<ol type="1">
-<li>取址周期（<strong>PC+1</strong>）</li>
-<li>间址周期</li>
-<li>执行周期</li>
-<li>中断周期</li>
-</ol>
-<h4 id="控制器">控制器</h4>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">控制方式</th>
-<th style="text-align: center;">设计思想</th>
-<th style="text-align: center;">特点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">硬布线控制器</td>
-<td
-style="text-align: center;">微操作控制信号由组合逻辑电路根据当前的指令码、状态和时序产生</td>
-<td style="text-align: center;">速度快，
-结构复杂，难扩展，常用于RISC</td>
-</tr>
-<tr>
-<td style="text-align: center;">微程序控制器</td>
-<td
-style="text-align: center;">一条机器指令对应一个微程序，一个微程序包含若干微指令</td>
-<td
-style="text-align: center;">速度慢，结构简单，易扩展，常用于CISC</td>
-</tr>
-</tbody>
-</table>
-<h4 id="微指令的编码方式">微指令的编码方式</h4>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">编码方式</th>
-<th style="text-align: center;">直接编码</th>
-<th style="text-align: center;">字段直接编码</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">实现方法</td>
-<td
-style="text-align: center;">微指令的控制字段中的每一位都代表一个微命令，选用某个微命令只要将该微命令对应的位设位1即可</td>
-<td
-style="text-align: center;">将微指令的微命令字段分成若干小字段，把互斥性微命令组合在同一字段中，把相容性微命令组合在不同的字段中，每个字段独立编码，每种编码代表一个微命令且各字段编码含义单独定义，与其他字段无关</td>
-</tr>
-<tr>
-<td style="text-align: center;">特点</td>
-<td
-style="text-align: center;">简单，但指令字过长，n个微命令就由n位操作字段</td>
-<td
-style="text-align: center;">较复杂，每个小段不能包含太多的信息，否则会增加译码线路的复杂性和译码时间</td>
-</tr>
-</tbody>
-</table>
-<h4 id="五段式指令流水线">五段式指令流水线</h4>
-<ol type="1">
-<li>取指IF</li>
-<li>译码/取数ID</li>
-<li>执行EX</li>
-<li>访存M</li>
-<li>写回寄存器WB</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">指令类型</th>
-<th style="text-align: center;">经历阶段</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">运算类</td>
-<td style="text-align: center;">IF、ID、EX、WB</td>
-</tr>
-<tr>
-<td style="text-align: center;">条件转移类</td>
-<td style="text-align: center;">IF、ID、EX、M</td>
-</tr>
-<tr>
-<td style="text-align: center;">无条件转移类</td>
-<td style="text-align: center;">IF、ID、EX</td>
-</tr>
-<tr>
-<td style="text-align: center;">Load</td>
-<td style="text-align: center;">IF、ID、EX、M、WB</td>
-</tr>
-<tr>
-<td style="text-align: center;">Store</td>
-<td style="text-align: center;">IF、ID、EX、M</td>
-</tr>
-</tbody>
-</table>
-<h4 id="流水线阻塞的原因">流水线阻塞的原因</h4>
-<ol type="1">
-<li>结构相关</li>
-<li>控制相关</li>
-<li>数据相关
-<ul>
-<li>读后写RAW</li>
-<li>写后读WAR</li>
-<li>写后写WAW</li>
-</ul></li>
-</ol>
-<h4 id="超标量流水线">超标量流水线</h4>
-<ol type="1">
-<li>超标量流水线技术：每个时钟周期内同时并发多条独立指令</li>
-<li>超流水线技术：将流水线在一个时钟周期内再分段</li>
-<li>超长指令字技术：在编译时挖掘指令间潜在的并行性，把多条能并行操作的的指令组合成一条具有多个操作码字段的超长指令</li>
-</ol>
-<h3 id="总线">总线</h3>
-<h4 id="总线的分类">总线的分类</h4>
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">总线类型</th>
-<th style="text-align: center;">定义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">片内总线（局部总线）</td>
-<td
-style="text-align: center;">CPU芯片内部寄存器与寄存器之间、寄存器与ALU之间的公共线路</td>
-</tr>
-<tr>
-<td style="text-align: center;">系统总线</td>
-<td
-style="text-align: center;">计算机系统内各功能部件（CPU、主存、I/O接口）之间相互连接的总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">通信总线（设备总线）</td>
-<td
-style="text-align: center;">计算机系统之间或计算机系统与其他系统之间信息传递的总线</td>
-</tr>
-</tbody>
-</table>
-<h4 id="总线事务">总线事务</h4>
-<ol type="1">
-<li>定义：从请求总线到完成总线使用的操作序列称为总线事务</li>
-<li>典型的总线事务：请求操作、裁决操作（哪个主控设备使用总线）、地址传输、数据传输、总线释放</li>
-</ol>
-<h4 id="总线的定时方式">总线的定时方式</h4>
-<ol type="1">
-<li>同步通信：采用统一的时钟信号</li>
-<li>异步通信：通过“握手”的方式实现控制
-<ul>
-<li>不互锁</li>
-<li>半互锁</li>
-<li>全互锁</li>
-</ul></li>
-</ol>
-<h4 id="总线性能指标">总线性能指标</h4>
-<ol type="1">
-<li>总线传输周期：一次总线操作所需的时间，包含多个总线时钟周期</li>
-<li>总线工作频率：总线传输周期的倒数</li>
-<li>总线宽度：能同时传输的数据位数，通常是指数据总线的根数</li>
-<li>总线带宽：单位时间内总线上可传输数据的位数（总线带宽 = 总线宽度
-<span class="math inline">\(\displaystyle \times\)</span>
-总线工作频率）</li>
-</ol>
-<h4 id="猝发传输方式">猝发传输方式</h4>
-<p>常规传输：一次传输一个地址和一个数据
-猝发传输：在一个总线周期内，可以传输多个存储地址连续的数据，即一次传输一个地址和一批地址连续的数据</p>
-<h4 id="总线标准">总线标准</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">总线标准</th>
-<th style="text-align: center;">特点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><strong>ISA</strong></td>
-<td style="text-align: center;">系统总线</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>EISA</strong></td>
-<td style="text-align: center;">系统总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">FBS</td>
-<td style="text-align: center;">系统总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">QPI</td>
-<td style="text-align: center;">系统总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">VESA</td>
-<td style="text-align: center;">局部总线</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>PCI</strong></td>
-<td style="text-align: center;">局部总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">AGP</td>
-<td style="text-align: center;">局部总线</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>PCI-E</strong></td>
-<td style="text-align: center;">串行局部总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">RS-232C</td>
-<td style="text-align: center;">串行通信总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">SCSI</td>
-<td style="text-align: center;">并行通信总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">PCMCIA（存储卡）</td>
-<td style="text-align: center;">通信总线（计算机之间）</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>USB</strong></td>
-<td style="text-align: center;">串行通信总线</td>
-</tr>
-<tr>
-<td style="text-align: center;">SATA</td>
-<td style="text-align: center;">串行通信总线</td>
-</tr>
-</tbody>
-</table>
-<h3 id="io系统">I/O系统</h3>
-<h4 id="显示器">显示器</h4>
-<ol type="1">
-<li>分辨率：显示器能表示的像素个数</li>
-<li>灰度级（颜色深度）
-<ul>
-<li>黑白显示器像素点亮暗差别：深色级8位，可显示256中亮度的像素</li>
-<li>彩色显示器像素点颜色不同：色深8位，可现实256种颜色的像素</li>
-</ul></li>
-<li>刷新频率：单位时间内扫描整个屏幕内容的次数</li>
-<li>显示存储器（刷新存储器VRAM）
-<ul>
-<li><span class="math inline">\(\displaystyle VRAM容量=分辨率\times
-灰度级位数\)</span></li>
-<li><span class="math inline">\(\displaystyle VRAM容量=分辨率\times
-灰度级位数 \times 帧率\)</span></li>
-</ul></li>
-</ol>
-<h4 id="io端口编址">I/O端口编址</h4>
-<ol type="1">
-<li>统一编址：把I/O端口看作存储器的单元进行地址分配
-<ul>
-<li>优点：不需要专门的I/O指令</li>
-<li>缺点：执行速度慢，占用了存储器地址</li>
-</ul></li>
-<li>独立编址：I/O端口地址与存储器地址无关，需要设置专门的I/O指令访问端口
-<ul>
-<li>优点：程序编址清晰，容易理解</li>
-<li>缺点：I/O指令少，一般只能对端口进行操作；增加了控制的复杂性</li>
-</ul></li>
-</ol>
-<h4 id="dma">DMA</h4>
-<ol type="1">
-<li>DMA传送方式：当I/O设备与CPU同时访问主存时，可能产生冲突
-<ul>
-<li>停止CPU访问：要求CPU放弃对相关总线的使用权，且在整个数据块传送期间不可以访问主存</li>
-<li>DMA与CPU交替访存：将CPU周期分为两个周期，一个供CPU访存，一个供DMA访存</li>
-<li>周期挪用：DMA挪用一个或几个存取周期</li>
-</ul></li>
-</ol>
-<p><strong>DMA使用系统总线的优先级高于CPU，因为若不能及时响应，可能会导致数据丢失</strong></p>
-<ol start="2" type="1">
-<li>DMA传送过程
-<ul>
-<li>预处理：完成准备工作，请求总线使用权</li>
-<li>数据传送：DMA直接控制总线</li>
-<li>后处理：发送中断请求，CPU执行中断服务程序</li>
-</ul></li>
-</ol>
-<h3 id="纠错">纠错</h3>
-<hr />
-<h2 id="操作系统">操作系统</h2>
-<h3 id="操作系统基础知识">操作系统基础知识</h3>
-<h4 id="操作系统结构">操作系统结构</h4>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">特性/思想</th>
-<th style="text-align: center;">优点</th>
-<th style="text-align: center;">缺点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">分层结构</td>
-<td
-style="text-align: center;">内核分为多层，每层可<strong>单向调用更低层</strong>提供的接口</td>
-<td
-style="text-align: center;">①便于调试，自底向上逐层调试<br>②易于扩充和维护</td>
-<td
-style="text-align: center;">①难以合理定义各层的边界<br>②效率低，系统调用时间长</td>
-</tr>
-<tr>
-<td style="text-align: center;">模块化</td>
-<td
-style="text-align: center;">将内核分为多个模块，各模块相互协作<br>内核=主模块+可加载内核模块<br>主模块：只负责核心功能，如调度，内存管理</td>
-<td
-style="text-align: center;">①模块间逻辑清晰易于维护<br>②支持动态加载新的内核模块，增强OS适应性<br>③任何模块都可以直接调用其他模块，无需采用消息传递通信，效率高</td>
-<td style="text-align: center;">①接口间的定义未必合理</td>
-</tr>
-<tr>
-<td style="text-align: center;">宏内核（大内核）</td>
-<td
-style="text-align: center;">所有系统功能都放入内核（大内核通常也采用模块化思想）</td>
-<td style="text-align: center;">性能高，内核中各功能可以相互调用</td>
-<td
-style="text-align: center;">①内核庞大功能复杂，难以维护<br>②大内核中某模块出错，可能导致整个系统崩溃</td>
-</tr>
-<tr>
-<td style="text-align: center;">微内核</td>
-<td
-style="text-align: center;">只把中断、原语、进程通信等最核心的功能放入内核。进程管理，文件管理等功能以用户进程的形式运行在用户态</td>
-<td
-style="text-align: center;">①内核小，功能少，易于维护，可靠性高<br>②内核外的某个功能模块出错不会导致整个系统崩溃</td>
-<td
-style="text-align: center;">①性能低，需要在管态/目态间频繁切换<br>②目态下各功能模块不能直接调用，只能通过内核的”消息传递“来间接通信</td>
-</tr>
-<tr>
-<td style="text-align: center;">外核</td>
-<td
-style="text-align: center;">内核负责进程调度等功能，外核负责为用户进程分配未经抽象的硬件资源，且由外核负责保证资源使用安全</td>
-<td
-style="text-align: center;">①外核可以直接给用户分配未经抽象的硬件资源，故用户进程可以更灵活的使用硬件资源<br>②减少了虚拟硬件资源的抽象层，效率提高</td>
-<td
-style="text-align: center;">①降低了系统的一致性<br>②系统变得更复杂</td>
-</tr>
-</tbody>
-</table>
-<h4 id="中断">中断</h4>
-<ol type="1">
-<li>中断隐指令
-<ul>
-<li>关中断</li>
-<li>保存断点（PC的内容）</li>
-<li>中断服务程序寻址</li>
-</ul></li>
-<li>中断服务程序
-<ul>
-<li>保存现场</li>
-<li>开中断（多级中断）</li>
-<li>执行中断服务程序</li>
-<li>关中断（多级中断）</li>
-<li>恢复现场</li>
-<li>开中断</li>
-<li>中断返回</li>
-</ul></li>
-</ol>
-<h3 id="进程管理">进程管理</h3>
-<h4 id="进程">进程</h4>
-<h5 id="进程映像与地址空间">进程映像与地址空间</h5>
-<ul>
-<li>代码段</li>
-<li>数据段</li>
-<li>进程控制块PCB</li>
-<li>堆</li>
-<li>栈</li>
-</ul>
-<blockquote>
-<p>操作系统通过内存管理部件MMU将进程使用的虚拟地址转换为物理地址
-共享库用来存放进程用到的共享库函数代码</p>
-</blockquote>
-<p><img data-src="https://s2.loli.net/2021/12/18/jxGBcXVba8TF4ht.png" /></p>
-<h5 id="进程的特点">进程的特点</h5>
-<ul>
-<li>资源分配和拥有的基本单位</li>
-<li>在没有线程的操作系统中，是调度的基本单位</li>
-<li>进程的地址空间相互独立</li>
-<li>通信方式：PV操作、共享存储、消息传递、管道</li>
-<li>进程切换时系统开销较大（如Cache失效，TLB失效，页表寄存器内容保存至PCB）</li>
-</ul>
-<h5 id="闲逛进程">闲逛进程</h5>
-<p>在进程切换时，若系统中没有就绪进程，则会调度闲逛进程（idle）运行，若没有其他进程就绪，该进程会一直运行，并在执行过程中测试中断，<strong>闲逛进程优先级最低，没有就绪进程便会运行，但只要有进程就绪便会立刻让出CPU，且闲逛进程不需要CPU外的任何资源，故不会被阻塞</strong></p>
-<h4 id="线程">线程</h4>
-<h5 id="线程的状态与切换">线程的状态与切换</h5>
-<ul>
-<li>执行状态：获得处理机并在运行中</li>
-<li>就绪状态：已具备执行条件，等待CPU</li>
-<li>阻塞状态：因某事件受阻而处于阻塞状态</li>
-</ul>
-<h5 id="用户级线程与内核级线程">用户级线程与内核级线程</h5>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">用户级线程</th>
-<th style="text-align: center;">内核级线程</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">定义</td>
-<td
-style="text-align: center;">存在于用户空间中，线程的创建、撤销、切换（同一进程的下的不同线程）等功能均在用户空间完成，内核不知道用户级线程的存在（通过<strong>线程库</strong>管理）</td>
-<td
-style="text-align: center;">在内核支持下运行，线程的创建、撤销、切换等功能均在内核空间完成。内核根据<strong>线程控制块</strong>感知线程的存在</td>
-</tr>
-<tr>
-<td style="text-align: center;">优点</td>
-<td
-style="text-align: center;">①同一进程下的线程线程切换不需要转换到内存空间，开销小<br>②调度算法可以是进程专用的<br>③用户级线程的实现与操作系统无关，对于线程的管理代码都属于用户程序</td>
-<td
-style="text-align: center;">①在多处理器系统中，内核能够同时调度同一进程中的多个线程并行执行<br>②一个线程阻塞，可以调度进程中的其他线程或其他进程中的线程运行<br>③内核本身爷可以采用多线程技术，提高系统效率</td>
-</tr>
-<tr>
-<td style="text-align: center;">缺点</td>
-<td
-style="text-align: center;">①一个线程阻塞，同一进程内的所有线程都会阻塞，故无法充分利用多处理器系统有点<br>②内核以进程为单位分配CPU，因此同一时刻，一个进程中只有一个线程在运行</td>
-<td
-style="text-align: center;">同一个进程中的线程切换时，需要从目态转换为管态，系统开销较大</td>
-</tr>
-</tbody>
-</table>
-<h5 id="线程库">线程库</h5>
-<ul>
-<li>定义：为程序员提供创建和管理线程的API</li>
-<li>实现方式有两种
-<ul>
-<li>①在用户空间提供一个没有内核支持的库，库中的代码和数据结构都位于用户空间，此时调用库内的函数实质是，调用用户空间的一个本地函数</li>
-<li>②由操作系统直接支持的内核级的库提供，此时库中的代码和数据结构均位于内核空间，调用库内的函数实质是，对内核的系统调用</li>
-</ul></li>
-<li>三种主要线程库
-<ul>
-<li>POSIX Pthread：可以提供用户级或内核级的库</li>
-<li>Windows线程库：Windows内核级线程库</li>
-<li>JAVA线程API：依赖于宿主系统实现（如在Windows系统就是由Windows线程库实现）</li>
-</ul></li>
-</ul>
-<h5 id="线程的组织与控制">线程的组织与控制</h5>
-<ul>
-<li>线程控制块TCB，主要包括
-<ul>
-<li>线程标识符</li>
-<li>寄存器信息：程序计数器、状态寄存器和通用寄存器</li>
-<li>线程运行状态</li>
-<li>优先级</li>
-<li>线程专有存储区（用于线程切换时保护线程等功能）</li>
-<li>堆栈指针</li>
-</ul></li>
-<li>线程的创建：线程的创建函数执行完成后，返回一个线程标识符</li>
-<li>线程的终止：通常，线程被终止后不立即释放所占有的资源，只有当进程中其他线程执行了分离函数，被终止的线程才与资源分离，此时这些资源才能被其他线程利用（被终止但未释放资源的线程仍可被其他线程调用）</li>
-</ul>
-<h5 id="特点">特点</h5>
-<ul>
-<li>线程自己基本不拥有系统资源，但可以访问所属进程内的所有资源</li>
-<li>在引入进程的操作系统中，线程是调度的基本单位</li>
-<li>通信方式：同一进程内的各线程直接读写进程的数据段（一个线程可以读写，甚至清除另一个线程的堆栈），不同进程内的线程通信属于进程间通信</li>
-<li>系统开销，线程切换只保存少量寄存器信息，开销小（保存程序计数器、寄存器、堆栈）</li>
-</ul>
-<h4 id="cpu调度">CPU调度</h4>
-<ol type="1">
-<li>调度器与调度程序
-<ul>
-<li>排队器：将就绪进程按一定策略排成一个或多个队列，以便调度程序选择</li>
-<li>分派器：依据调度程序所选的进程，将其从就绪队列取出并上处理机</li>
-<li>上下文切换器：在进程切换时，保存当前进程的上下文，将即将到来的进程的上下文恢复到CPU寄存器中</li>
-</ul></li>
-</ol>
-<blockquote>
-<p><strong>上下文切换时会执行大量Load/Store指令，用于保存寄存器的内容，故时间开销较大</strong></p>
-</blockquote>
-<p><img data-src="https://s2.loli.net/2021/12/18/OdBioqexzltUHaW.png" /></p>
-<ol type="1">
-<li>调度算法的评测标准
-<ul>
-<li>CPU利用率
-<ul>
-<li><span class="math inline">\(\begin{aligned}
-  CPU利用率=\frac{CPU运行时间}{总时间}
-\end{aligned}\)</span></li>
-</ul></li>
-<li>系统吞吐量
-<ul>
-<li><span class="math inline">\(\begin{aligned}
-  系统吞吐量=\frac{总共完成的作业数}{总共消耗的时间}
-\end{aligned}\)</span></li>
-</ul></li>
-<li>周转时间
-<ul>
-<li><span class="math inline">\(\begin{aligned}
-  周转时间=作业完成时间-作业提交时间
-\end{aligned}\)</span></li>
-<li><span class="math inline">\(\begin{aligned}
-  平均周转时间=\frac{各作业周转时间之和}{作业数}
-\end{aligned}\)</span></li>
-<li><span class="math inline">\(\begin{aligned}
-  带权周转时间=\frac{作业周转时间}{作业实际运行时间}
-\end{aligned}\)</span></li>
-<li><span class="math inline">\(\begin{aligned}
-  平均带权周转时间=\frac{各作业带权周转时间之和}{作业数}
-\end{aligned}\)</span></li>
-</ul></li>
-<li>等待时间
-<ul>
-<li><span
-class="math inline">\(进程/作业等待时间=等待被服务的时间之和\)</span></li>
-<li><span
-class="math inline">\(进程/作业平均等待时间=各进程/作业等待时间的平均值\)</span></li>
-</ul></li>
-<li>响应时间
-<ul>
-<li><span
-class="math inline">\(响应时间=首次响应时间-用户提交请求时间\)</span></li>
-</ul></li>
-</ul></li>
-<li>不能进行调度的情况
-<ul>
-<li>在处理中断的过程中：由于中断处理过程复杂，故实际上很难做到进程切换，中断是操作系统的工作，不属于进程的一部分，不应剥夺处理机</li>
-<li>进程在操作系统<strong>内核程序的临界区中</strong>，进入临界区，需要独占式的访问共享资源，理论上需要加锁操作，解锁前不应剥夺处理机</li>
-<li>处于完全屏蔽中断的原子操作中</li>
-</ul></li>
-<li>调度算法</li>
-</ol>
-<table>
-<colgroup>
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 31%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">算法</th>
-<th style="text-align: center;">进程/作业</th>
-<th style="text-align: center;">是否可抢占</th>
-<th style="text-align: center;">饥饿现象</th>
-<th style="text-align: center;">特点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">先来先服务调度算法</td>
-<td style="text-align: center;">进程/作业</td>
-<td style="text-align: center;">非抢占式</td>
-<td style="text-align: center;">不会</td>
-<td
-style="text-align: center;">优点：①公平，简单②利于长作业③利于CPU繁忙型<br>缺点：①效率低②不利于短作业③不利于I/O繁忙型</td>
-</tr>
-<tr>
-<td style="text-align: center;">短作业优先调度算法</td>
-<td style="text-align: center;">进程/作业</td>
-<td
-style="text-align: center;">默认非抢占式，也存在抢占式算法，即最短剩余时间算法（SRTN）</td>
-<td style="text-align: center;">会</td>
-<td
-style="text-align: center;">优点：”最短”平均等待时间、平均周转时间<br>缺点：对长作业不利；②难以做到正确评估运行时间</td>
-</tr>
-<tr>
-<td style="text-align: center;">高响应比优先调度算法</td>
-<td style="text-align: center;">进程/作业</td>
-<td style="text-align: center;">非抢占式</td>
-<td style="text-align: center;">不会</td>
-<td
-style="text-align: center;">优点：①有利于短作业②长作业不至于“饥饿”<br><span
-class="math inline">\(\displaystyle 相应比R_p =
-\frac{等待时间+要求服务时间}{要求服务时间}\)</span></td>
-</tr>
-<tr>
-<td style="text-align: center;">优先级调度算法</td>
-<td style="text-align: center;">进程/作业</td>
-<td style="text-align: center;">有抢占式也有非抢占式</td>
-<td style="text-align: center;">会</td>
-<td
-style="text-align: center;">适用于实时操作系统<br>缺点：可能导致饥饿</td>
-</tr>
-<tr>
-<td style="text-align: center;">时间片轮转调度算法</td>
-<td style="text-align: center;">进程</td>
-<td style="text-align: center;">抢占式</td>
-<td style="text-align: center;">不会</td>
-<td
-style="text-align: center;">适用于分时操作系统<br>优点：公平<br>时间片大：系统开销小，但交互性差<br>时间片大：有利于短作业，但系统开销大</td>
-</tr>
-<tr>
-<td style="text-align: center;">多级反馈队列调度算法</td>
-<td style="text-align: center;">进程</td>
-<td style="text-align: center;">抢占式</td>
-<td style="text-align: center;">会</td>
-<td style="text-align: center;">均衡，融合了前几种算法的优点</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>多级队列调度算法</strong></td>
-<td style="text-align: center;">进程</td>
-<td style="text-align: center;">抢占式</td>
-<td style="text-align: center;">会</td>
-<td
-style="text-align: center;">队列间可以按优先级划分，也可按时间片划分</td>
-</tr>
-</tbody>
-</table>
-<p><strong>多级反馈队列中队列的划分原则是优先级，而多级队列中划分的原则则是进程的类型（各队列可设置优先级高低，也可设置时间片不同）</strong></p>
-<p><img data-src="https://s2.loli.net/2021/12/18/ziynBqkoGE5D8g2.png" /></p>
-<p><strong>优先级设置的原则：①系统进程 &gt; 用户进程 ②交互型进程 &gt;
-非交互型进程（或前台进程 &gt; 后台进程） ③IO型进程 &gt;
-计算型进程</strong></p>
-<h4 id="同步与互斥">同步与互斥</h4>
-<ol type="1">
-<li>临界区互斥访问的软件方法
-<ul>
-<li>单标志法：违反空闲让进原则</li>
-<li>双标志先检查：违反忙则等待原则</li>
-<li>双标志后检查：违反了空闲让进与有限等待原则，会产生饥饿</li>
-<li>皮特森算法：违反了让权等待原则，不会饥饿</li>
-</ul></li>
-<li>临界区互斥访问的硬件方法
-<ul>
-<li>中断屏蔽法</li>
-<li>硬件指令：不满足让权等待，会导致忙等现象
-<ul>
-<li>TestAndSet</li>
-<li>Swap</li>
-</ul></li>
-</ul></li>
-<li>锁（互斥）与条件变量（同步）
-<ul>
-<li>锁：acquire()与release()必须是原子操作，故互斥锁常用硬件方式实现，主要<strong>缺点</strong>是忙等（需要连续循环忙等的互斥锁，可称为自旋锁），<strong>优点</strong>等待期间不用切换进程上下文，对于多处理器系统，若上锁时间段，其等待代价很低（其他核中的进程完成后释放临界区便解锁），故适用于多处理器系统，不适用于单处理器系统</li>
-<li>条件变量：类似于等待队列（<strong>信号量机制有初值，条件变量没有</strong>），包含两个操作：wait操作（类似于P操作），signal操作（类似于V操作），与锁配合使用</li>
-</ul></li>
-</ol>
-<p><img data-src="https://s2.loli.net/2021/12/18/z9HxOURt4yepNK7.png" /></p>
-<h4 id="死锁">死锁</h4>
-<ol type="1">
-<li>死锁产生的四个条件
-<ul>
-<li>互斥条件</li>
-<li>不剥夺条件</li>
-<li>请求和保持条件</li>
-<li>循环等待条件</li>
-</ul></li>
-<li>死锁的的处理策略
-<ul>
-<li>死锁预防：破坏死锁产生的四个条件之一</li>
-<li>死锁避免：银行家算法</li>
-<li>死锁检测：化简资源分配图</li>
-</ul></li>
-</ol>
-<h3 id="内存管理">内存管理</h3>
-<h4 id="连续分配方式">连续分配方式</h4>
-<ol type="1">
-<li>分配方式</li>
-</ol>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">单一连续分配</th>
-<th style="text-align: center;">固定分区分配</th>
-<th style="text-align: center;">动态分区分配</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">方式</td>
-<td
-style="text-align: center;">分为系统区与用户区，通常低地址部分是用户区</td>
-<td style="text-align: center;">将用户空间划分为固定大小的区域</td>
-<td
-style="text-align: center;">不预先对内存进行划分，而是在进程装入内存时动态建立分区，且分区大小刚好为进程所需大小</td>
-</tr>
-<tr>
-<td style="text-align: center;">碎片</td>
-<td style="text-align: center;">内部碎片</td>
-<td style="text-align: center;">内部碎片</td>
-<td style="text-align: center;">外部碎片</td>
-</tr>
-<tr>
-<td style="text-align: center;">空间不足的解决办法</td>
-<td style="text-align: center;">覆盖</td>
-<td style="text-align: center;">覆盖/交换</td>
-<td style="text-align: center;">交换</td>
-</tr>
-</tbody>
-</table>
-<ol start="2" type="1">
-<li>动态分区分配算法
-<ul>
-<li>首次适应算法：空闲分区按地址递增排序，找到第一个满足需求的分区使用（平均性能最好）</li>
-<li>循环首次适应算法：空闲分区按地址递增排序，分配内存时，从上一次查找结束的位置开始继续查找，直到找到满足需求的分区（性能比首次适应算法差）</li>
-<li>最佳适应算法：空闲分区按容量大小递增排序，找到第一个满足需求的分区使用（需要对分区大小排序，开销大，且产生大量外部碎片）</li>
-<li>最差适应算法：空闲分区按容量大小递减排序，找到第一个满足需求的分区使用（需要对分区大小排序，开销大，使系统缺少大块的连续空闲块）</li>
-</ul></li>
-</ol>
-<h4 id="非连续分配管理方式">非连续分配管理方式</h4>
-<table>
-<colgroup>
-<col style="width: 18%" />
-<col style="width: 29%" />
-<col style="width: 33%" />
-<col style="width: 18%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">简单分页管理</th>
-<th style="text-align: center;">简单分段管理</th>
-<th style="text-align: center;">段页式管理</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">特点</td>
-<td
-style="text-align: center;">①从计算机角度设计，旨在提高内存利用率与计算机性能<br>②通过硬件实现，页号与页内偏移对用户透明<br>③地址是一维的<br>④产生内部碎片<br>⑤页面大小一致</td>
-<td
-style="text-align: center;">①从用户角度出发，旨在方便编程，信息保护与共享、动态连接等方面<br>②段号与段内偏移由用户显式提供<br>③地址是二维的<br>④产生外部碎片<br>⑤段长不等</td>
-<td
-style="text-align: center;">对于一个进程，段表只有一个，而页表可以有多个</td>
-</tr>
-</tbody>
-</table>
-<h4 id="虚拟页式存储管理">虚拟页式存储管理</h4>
-<ol type="1">
-<li>虚拟存储器的实现方式
-<ul>
-<li>请求分页</li>
-<li>请求分段</li>
-<li>请求段页式</li>
-</ul></li>
-<li>虚拟存储器的三个特征
-<ul>
-<li>多次性</li>
-<li>对换性</li>
-<li>虚拟性</li>
-</ul></li>
-<li>页面置换算法
-<ul>
-<li>最佳置换算法（OPT）</li>
-<li>先进先出置换算法（FIFO）</li>
-<li>最近最久未用置换算法（LRU）</li>
-<li>时钟置换算法（Clock/NRU）
-<ul>
-<li>选择使用位u=0的页面，并将略过的页面的使用位改为u=0;</li>
-</ul></li>
-<li>改进型时钟置换算法
-<ul>
-<li>①优先选择（u, m） = (0, 0)的页面，此轮不修改</li>
-<li>②选择（u, m） = (0, 1)，并对每个掠过的页面，将其使用位改为u=0</li>
-</ul></li>
-</ul></li>
-<li>内存共享：是指多个进程访问内存的同一部分，通过内存映射完成（可以是”页“映射，也可以是”段“映射）</li>
-</ol>
-<p><img data-src="https://s2.loli.net/2021/12/18/JCcBRHwOy7I5Dvb.png" /></p>
-<ol type="1">
-<li>内存映射文件
-<ul>
-<li>方式：将磁盘中文件的全部或部分内容与进程的虚拟空间的某个区域建立映射</li>
-<li>优点：可以直接访问被映射的文件（可以简单理解为文件成为进程中data的一部分），而不用通过I/O操作访问，且多个进程可以共享内存映射文件</li>
-<li>映射的实际交互都是在内存中完成的（并不是进程与磁盘直接映射，内存是一个中转站），即，通过Open系统调用打开文件后，再通过mmap系统调用，<strong>将文件页映射到进程的虚拟空间中时，操作系统页会自动分配一些内存空间保存这些文件页，故当进程修改了文件的数据之后，退出文件或解除文件映射，所有改动的页面会从内存中写回磁盘文件</strong></li>
-</ul></li>
-</ol>
-<p><img data-src="https://s2.loli.net/2021/12/18/zDhPUL1T9EmeZl3.png" /></p>
-<ol type="1">
-<li>虚拟纯初期性能的影响因素
-<ul>
-<li>性能指标
-<ul>
-<li><strong>缺页率</strong></li>
-<li>TLB命中率</li>
-<li>Cache命中率</li>
-<li>页面置换速度</li>
-</ul></li>
-<li>影响性能的因素
-<ul>
-<li>页面大小：影响缺页率与页面置换速度</li>
-<li>分配的页框数量：影响缺页率</li>
-<li>页面置换算法：影响缺页率</li>
-<li>程序局部性：影响缺页率，TLB命中率、Cache命中率</li>
-<li>存交换区读写速度：影响页面置换速度</li>
-</ul></li>
-</ul></li>
-<li>页面分配策略
-<ul>
-<li>固定分配全局置换</li>
-<li>可变分配全局置换</li>
-<li>固定分配局部置换</li>
-</ul></li>
-<li>工作集合：任意时刻T，最近t次访问的页面（t=窗口大小）</li>
-</ol>
-<h3 id="文件管理">文件管理</h3>
-<h4 id="文件目录">文件目录</h4>
-<ol type="1">
-<li>文件控制块FCB
-<ul>
-<li>基本信息：文件名、文件物理位置、文件逻辑结构、文件物理结构等</li>
-<li>存取控制信息：文件存取权限、存储位置等</li>
-<li>使用信息：文件建立时间、修改时间等</li>
-</ul></li>
-<li>文件目录
-<ul>
-<li>FCB的有序集合，目录中的一个FCB就是一个目录项</li>
-<li><strong>目录永不未空，至少包含两个目录项，当前目录”.“和父目录项”..“</strong></li>
-</ul></li>
-<li>目录的操作
-<ul>
-<li>create系统调用：创建目录</li>
-<li>delete系统调用：删除目录，只有空目录可以删除</li>
-<li>opendir系统调用：打开目录，只是将目录文件的FCB读入内存</li>
-<li>readdir系统调用：读目录</li>
-<li>rename系统调用：重命名，本质是修改指向该目录文件的FCB</li>
-<li>link系统调用：建立硬链接</li>
-<li>unlink：解除硬链接，若共享计数器count=0，则删除文件数据</li>
-</ul></li>
-<li>普通文件的操作
-<ul>
-<li>打开open</li>
-<li>关闭close</li>
-<li>创建create</li>
-<li>删除delete</li>
-<li>读read</li>
-<li>写write</li>
-</ul></li>
-<li>文件元数据：即文件的属性，记录再FCB中</li>
-</ol>
-<h4 id="文件共享与文件保护">文件共享与文件保护</h4>
-<ol type="1">
-<li>文件共享
-<ul>
-<li>硬链接：采用索引节点方式，会导致链接计数器count变化
-<ul>
-<li>优点：实现了异名共享</li>
-<li>缺点：文件拥有者不能删除与他人共享的文件（只有当链接计数器count=0才是真正的删除）</li>
-</ul></li>
-<li>软链接（符号链接）：创建了一个包含被共享文件的路径名的LINK型文件
-<ul>
-<li>优点：文件拥有者可以直接删除共享文件</li>
-<li>缺点：其他用户读共享文件时，需要根据路径名访问，开销较大</li>
-</ul></li>
-</ul></li>
-<li>文件保护
-<ul>
-<li>口令保护</li>
-<li>加密保护</li>
-<li>访问控制</li>
-</ul></li>
-</ol>
-<h4 id="文件系统">文件系统</h4>
-<ol type="1">
-<li>文件的分配方式
-<ul>
-<li>连续分配：不利于文件拓展</li>
-<li>隐式链接分配：只能按链表的方式顺序读磁盘，开销大</li>
-<li>显式链接分配：内存中存放链接表显示的表示链接关系，减少了访问磁盘的次数，由于分配给文件的所有盘块号都存放于表中，故该表也称为文件分配表FAT</li>
-<li>索引分配：把每个文件的所有盘块号集中存放到一个索引块中</li>
-<li>混合索引方式：包含直接索引地址与间接索引地址，如下所示</li>
-</ul></li>
-</ol>
-<p><img data-src="https://s2.loli.net/2021/12/18/Lx354AKV7Syuvoc.png" /></p>
-<ol type="1">
-<li>虚拟文件系统VFS
-<ul>
-<li>目的：向用户提供同一的系统调用接口，屏蔽下层不同文件系统的实现差异（若系统盘使用FAT文件系统，U盘使用NTFS文件系统，但并不影响在计算机中的访问）</li>
-<li>具体实现
-<ul>
-<li>每打开一个文件，VFS舅在主存中新建一个Vnode，用统一的数据结构表示文件</li>
-<li>Vnode结点除了记录文件系统的格式，还有一个函数功能指针指向文件系统实现的各种功能</li>
-</ul></li>
-<li>虚拟文件系统只存在于内存中，作为内核空间中的一个软件层（抽象层），在系统启动时建立，系统关闭时消亡</li>
-</ul></li>
-</ol>
-<p>![][虚拟文件系统](https://s2.loli.net/2021/12/18/hB1IdVXAgeE6yUz.png)</p>
-<ol type="1">
-<li>文件系统挂载（mounting）
-<ul>
-<li>目的：将一个文件系统挂载到操作系统中（插U盘）</li>
-<li>过程：
-<ul>
-<li>在VFS中注册挂载的文件系统，<strong>内存中的挂载表</strong>包含每个文件系统的相关信息，包括文件系统类型，容量大小等</li>
-<li>新挂载的文件系统，要向VFS提供一个函数地址列表</li>
-<li>新文件系统加载到挂载电，即挂载到某个父目录下</li>
-</ul></li>
-<li>Windows系统会自动挂载，Linux需要手工挂载或配置西戎进行自动挂载（使用命令mount挂载，unmount卸载）</li>
-</ul></li>
-</ol>
-<h4 id="两种文件系统在外存中的结构">两种文件系统在外存中的结构</h4>
-<ol type="1">
-<li><p>FAT在外存中 <img data-src="https://s2.loli.net/2021/12/18/8oUnyh3scrxRI7P.png" /></p></li>
-<li><p>混合索引在外存中 <img data-src="https://s2.loli.net/2021/12/18/dw3tFUj6eDY718T.png" /></p></li>
-</ol>
-<h4 id="文件系统在内存中的结构">文件系统在内存中的结构</h4>
-<p><img data-src="https://s2.loli.net/2021/12/18/DS7BU32gnlqeQuv.png" /></p>
-<h4 id="磁盘">磁盘</h4>
-<ol type="1">
-<li>磁盘读写时间
-<ul>
-<li><span class="math inline">\(\displaystyle
-磁盘读写时间=寻道时间+延迟时间（\frac{1}{2\times转速}） +
-传输时间\)</span></li>
-</ul></li>
-<li>磁盘调度算法
-<ul>
-<li>先来先服务FCFS：公平，对于局部性较好的访问序列有较好的性能</li>
-<li>最短寻找时间优先SSTF：平均寻找时间不一定最小，性能比FCFS更好，单会产生“饥饿”</li>
-<li>扫描算法SCAN（电梯算法）：不会“饥饿”但不利于远离磁头一端的访问请求</li>
-<li>循环扫描算法C-SCAN</li>
-</ul></li>
-<li>磁盘地址表示方法：（柱面号，盘面号，扇区号）</li>
-<li>提高磁盘I/O的方式
-<ul>
-<li>提前读：在读磁盘当前块时，把下一个磁盘块也读入内存缓冲区</li>
-<li>延迟写：仅在缓冲区首部设置延迟写标志，然后释放此缓冲区并将其链入空闲缓冲区链表尾部，当其他进程申请到此缓冲区时，才真正把缓冲区的信息写入磁盘</li>
-<li>虚拟盘：用内存仿真磁盘，又称RAM盘</li>
-</ul></li>
-</ol>
-<h3 id="io管理">I/O管理</h3>
-<h4 id="io软件的层次结构">I/O软件的层次结构</h4>
-<ol type="1">
-<li>层次结构</li>
-</ol>
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">层次</th>
-<th style="text-align: center;">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">用户层I/O软件</td>
-<td
-style="text-align: center;">实现与用户交互的接口，用户可以使用I/O相关的库函数，用户软件层需要通过一组系统调用取得操作系统的服务</td>
-</tr>
-<tr>
-<td style="text-align: center;">设备独立性软件</td>
-<td
-style="text-align: center;">抽象层，向上提供统一的统一的接口，向下执行所有设备的共有操作</td>
-</tr>
-<tr>
-<td style="text-align: center;">设备驱动程序</td>
-<td
-style="text-align: center;">根据上层规定的抽象操作，实现具体的操作，并封装成标准接口提供给上层</td>
-</tr>
-<tr>
-<td style="text-align: center;">中断处理程序</td>
-<td
-style="text-align: center;">进程上下文的切换，对处理中断信号源进行测试</td>
-</tr>
-<tr>
-<td style="text-align: center;">硬件设备</td>
-<td
-style="text-align: center;">通常包括机械部件与电子部件，电子部件又称为设备控制器（适配器）</td>
-</tr>
-</tbody>
-</table>
-<ol start="2" type="1">
-<li><p>设备驱动程序的功能</p>
-<ul>
-<li>设备初始化：初次启动设备或传输数据时，预置设备和控制其及通道的状态</li>
-<li>执行设备驱动例程：负责启动设备，进行数据传输，对于具有通道的I/O系统，此例程还负责生成通道指令和通道程序，启动通道工作</li>
-<li>调用和执行中断处理程序：负责处理设备和控制器及通道发出的各种中断</li>
-</ul></li>
-<li><p>设备驱动程序接口：介于设备驱动程序与设备独立性软件之间，本质是按操作系统的要求将具体的功能封装好并提供统一的接口</p></li>
-<li><p>输入/输出应用程序接口：介于用户层I/O软件与设备独立性软件之间，根据设备类型的不同，又进一步分为若干接口</p>
-<ul>
-<li>字符设备接口：以字符为单位传输的设备，如键盘，特点是传输速率低，不可寻址（get/put系统调用）</li>
-<li>块设备接口：以块为单位传输的设备，如磁盘，特点是传输速率高，可寻址（read/write/seek系统调用）</li>
-<li>网络设备接口（网络套接字Socket接口）：用于通过网络与其他计算机进行通信
-<ul>
-<li>socket系统调用：创建一个网络套接字（类似于缓冲区），指明网络协议</li>
-<li>bind系统调用：将套接字绑定到某个本地端口</li>
-<li>connect系统调用：将套接字连接到远程地址</li>
-<li>read/write系统调用：从套接字读写数据</li>
-</ul></li>
-</ul></li>
-<li><p>阻塞I/O与非阻塞I/O</p>
-<ul>
-<li>阻塞I/O：应用程序发出I/O系统调用，<strong>进程需要转为阻塞态</strong></li>
-<li>非阻塞I/O：应用程序发出I/O系统调用，系统调用可迅速返回，<strong>进程无需阻塞</strong></li>
-</ul></li>
-</ol>
-<h4 id="io调度与缓冲区">I/O调度与缓冲区</h4>
-<ol type="1">
-<li>I/O调度：确定一个合适的顺序处理I/O请求</li>
-<li>CPU处理一块数据的时间：若磁盘把一块数据输入缓冲区的时间为T，缓冲区将数据传送到用户区的时间为M，CPU处理这块数据的时间为C，
-<ul>
-<li>单缓冲区：每一块数据的处理时间为<span
-class="math inline">\(\displaystyle Max(C，T)+C\)</span>
-<ul>
-<li><span class="math inline">\(\displaystyle
-若T&gt;C，则处理n块数据的时间为n(T+M)+C\)</span></li>
-<li><span class="math inline">\(\displaystyle
-若T&lt;C，则处理n块数据的时间为n(C+M)+T\)</span></li>
-</ul></li>
-<li>双缓冲区：每一块数据的处理时间为<span
-class="math inline">\(\displaystyle Max(C+M，T)\)</span>
-<ul>
-<li><span class="math inline">\(\displaystyle
-若T&gt;C+M，则处理n块数据的时间为nT+M+C\)</span></li>
-<li><span class="math inline">\(\displaystyle
-若T&lt;C+M，则处理n块数据的时间为n(C+M)+T\)</span></li>
-</ul></li>
-</ul></li>
-</ol>
-<h4 id="spooling系统">SPOOLing系统</h4>
-<ol type="1">
-<li>组成
-<ul>
-<li>预输入程序：将信息从输入设备送入磁盘的输入井</li>
-<li>缓输出程序：将信息从输出井送入输设备</li>
-<li>井管理程序：控制作业和磁盘输入井、输出井之间交换信息</li>
-</ul></li>
-<li>磁盘中
-<ul>
-<li>输入井：用于收容I/O设备输入的数据</li>
-<li>输出井：用于收容需要输出的数据</li>
-</ul></li>
-<li>内存中
-<ul>
-<li>输入缓冲区：暂存输入设备送来的数据，之后再送到输入井</li>
-<li>输出缓冲区：暂存输出井送来的数据，之后再送到输出设备</li>
-</ul></li>
-</ol>
-<hr />
-<h2 id="计网">计网</h2>
-<h3 id="基础知识-1">基础知识</h3>
-<ol type="1">
-<li>各层功能
-<ul>
-<li>物理层：在物理媒体上透明传输比特流</li>
-<li>链路层：组帧、差错控制、流量控制、介质访问控制（对共享信道访问的控制）</li>
-<li>网络层：拥塞控制、网际互连、路由与转发</li>
-<li>传输层：端到端管理、差错控制、流量控制、分用复用</li>
-<li>会话层：建立、管理进程间的会话</li>
-<li>表示层：数据压缩、加密解密</li>
-<li>应用层：用户与网络的界面</li>
-</ul></li>
-<li>各层设备
-<ul>
-<li>物理层：集线器、中继器（转发器）、放大器</li>
-<li>链路层：交换机、网桥</li>
-<li>网络层：路由器</li>
-</ul></li>
-<li>广播域与冲突域</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">设备名称</th>
-<th style="text-align: center;">能否隔离冲突域</th>
-<th style="text-align: center;">能否隔离广播域</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">集线器</td>
-<td style="text-align: center;">不能</td>
-<td style="text-align: center;">不能</td>
-</tr>
-<tr>
-<td style="text-align: center;">中继器</td>
-<td style="text-align: center;">不能</td>
-<td style="text-align: center;">不能</td>
-</tr>
-<tr>
-<td style="text-align: center;">交换机</td>
-<td style="text-align: center;">能</td>
-<td style="text-align: center;">不能</td>
-</tr>
-<tr>
-<td style="text-align: center;">网桥</td>
-<td style="text-align: center;">能</td>
-<td style="text-align: center;">不能</td>
-</tr>
-<tr>
-<td style="text-align: center;">路由器</td>
-<td style="text-align: center;">能</td>
-<td style="text-align: center;">能</td>
-</tr>
-</tbody>
-</table>
-<h3 id="物理层">物理层</h3>
-<ol type="1">
-<li><p>奈奎斯特定理<br />
-<span class="math inline">\(\displaystyle
-\begin{aligned}
-&amp;信道极限数据传输速率=2Wlog_2V \\
-&amp;其中，W为理想低通信道的带宽，V为每个码元离散的电频数目（即V种不同的码元）
-\end{aligned}\)</span></p></li>
-<li><p>香农定理<br />
-<span class="math inline">\(\displaystyle
-\begin{aligned}
-&amp;信道极限数据传输速率=Wlog_2{(1+\frac{S}{N})} \\
-&amp;其中，W为信道的带宽，S为信道所传输信号的平均功率，N为信道内部的高斯噪声功率，\frac{S}{N}为信号的平均功率与噪声的平均功率之比，信噪比=10log_{10}{\frac{S}{N}}（db）
-\end{aligned}\)</span></p></li>
-<li><p>3种交换方式</p>
-<ul>
-<li>电路交换</li>
-<li>报文交换</li>
-<li>分组交换</li>
-</ul></li>
-<li><p>发送时延与传播时延</p>
-<ul>
-<li>发送（传输）时延：主机或路由器发送一个报文的时间，发送时延 =
-报文长度/报文发送速率</li>
-<li>传播时延：电磁波在信道中的传播一定<strong>距离</strong>所花费的时间，传播时延
-= 线路长度/信号传播速度</li>
-</ul></li>
-</ol>
-<blockquote>
-<p><strong>对于分组交换，发送时延 = n个分组在发送端的发送时延 +
-1个分组从发送到被接收的时间（1 * m个中间结点发送时延 +
-传播时延）</strong></p>
-</blockquote>
-<ol start="5" type="1">
-<li>物理层特性
-<ul>
-<li>机械特性：定义规格、引线数目、引脚数目等</li>
-<li>电气特性：定义线路上信号的电压高低、传输速率、距离限制等</li>
-<li>功能特性：定义某条线路上的某一电平的电压表示什么意义</li>
-<li>过程特性（规程特性）：定义各功能中不同事件的出现顺序</li>
-</ul></li>
-</ol>
-<h3 id="数据链路层">数据链路层</h3>
-<h4 id="流量控制与可靠传输">流量控制与可靠传输</h4>
-<ol type="1">
-<li>停止-等待协议
-<ul>
-<li>发送窗口 = 接收窗口 = 1</li>
-<li>发送方每发送一个数据帧就必须停止并等待接收方确认</li>
-</ul></li>
-<li>后退N帧协议（GBN）
-<ul>
-<li>若采用n比特对帧编号，则：<span class="math inline">\(\displaystyle 1
-\le 发送窗口 \le 2^n-1}\quad  \quad 接收窗口 = 1\)</span></li>
-<li>接收方只允许按顺序接收数据帧，故即使收到了n号差错帧之后的所有数据帧，接收方也会将这些帧丢弃，并请求重传n号帧及其之后的帧</li>
-<li>通常采用累计确认机制，如发送方发送0~7
-号帧，接收方返回0，2，3号帧的确认，表明接收方已经收到0~3
-号帧，只需重传4~7 号帧</li>
-</ul></li>
-<li>选择重传协议（SR）
-<ul>
-<li>若采用n比特对帧编号，则：<span class="math inline">\(\displaystyle
-发送窗口=接收窗口= 2^{n-1}\quad 且发送窗口+接收窗口 \le
-2^n\)</span></li>
-<li>选择重传不采用累计确认，而是对每个正确收到的帧都返回与之对应的确认帧</li>
-</ul></li>
-</ol>
-<h3 id="介质访问控制">介质访问控制</h3>
-<ol type="1">
-<li>信道划分（静态）
-<ul>
-<li>频分多路复用FDM</li>
-<li>时分多路复用TDM</li>
-<li>波分多路复用WDM</li>
-<li>码分多路复用CDM</li>
-</ul></li>
-<li>随机访问（动态）
-<ol type="1">
-<li>ALPHA协议</li>
-<li>CSMA（载波侦听多路访问）
-<ul>
-<li>1-坚持：发送数据时，先侦听信道，空闲则发，<strong>忙则等待，且一直侦听信道直至信道空闲</strong>，若发生冲突，则随机等待一段时间后，再重新侦听信道</li>
-<li>非坚持：发送数据时，先侦听信道，空闲则发，<strong>忙则放弃，等待一个随机时间后再重复上述过程</strong></li>
-<li>p-坚持：发送数据时，先侦听信道，<strong>若信道忙，则等到下一时隙再侦听；若信道空闲，则以概率p发送数据，以概率1-p推迟到下一时隙，再重复上述过程</strong></li>
-</ul></li>
-<li>CSMA/CD（碰撞检测）
-<ul>
-<li>侦听：发送前先侦听信道，若空闲则立即发送数据并进行冲突检测；若信道忙，则继续侦听信道，直至信道空闲</li>
-<li>碰撞检测：适配器发送数据时检测信道上信号电压变化情况，以判断是否发生冲突，若检测到冲突，适配器停止发送数据，并传输一个拥塞信号，随后采用截断二进制退避算法等待一段随机时间后重新侦听</li>
-<li>争用期：即碰撞窗口，设单程传播时延为<span
-class="math inline">\(\displaystyle
-\tau\)</span>，则以太网端到端往返时间<span
-class="math inline">\(\displaystyle
-2\tau\)</span>称为争用期，其意义是，若发送站在发送帧后经过时间<span
-class="math inline">\(\displaystyle
-2\tau\)</span>，如果没有发生碰撞，则该帧就能顺利发送</li>
-<li><span class="math inline">\(\displaystyle 最小帧长=总线传播时延
-\times 数据传输速率 \times 2\)</span></li>
-<li><span class="math inline">\(\displaystyle \frac{帧长}{传输速率}\ge
-2\tau\)</span></li>
-</ul></li>
-<li>CSMA/CA(碰撞避免)
-<ul>
-<li>帧时间间隔IFS
-<ul>
-<li>SIFS：最短的IFS，使用SIFS的帧有ACK帧，CTS帧、分片后的数据帧、所有回答AP探寻的帧</li>
-<li>PIFS：中等长度的IFS，在PCF操作中使用</li>
-<li>DIFS：最长的IFS，用于异步帧竞争访问（RTS预约信道）</li>
-</ul></li>
-</ul></li>
-</ol></li>
-<li>发送周期于信道利用率
-<ul>
-<li><span class="math inline">\(\displaystyle
-   \begin{aligned}
-       &amp;发送周期T=\frac{帧长L}{数据传输速率V}+往返时延RTT+接收端发送确认帧的发送时延t
-\\
-       &amp;其中，确认帧很短，通常可将t1忽略
-   \end{aligned}\)</span></li>
-<li><span class="math inline">\(\displaystyle
-   \begin{aligned}
-       &amp;若发送周期为T，发送方的数据传输速率为V，发送方在周期T内共发送L比特的数据，则\\
-       &amp;信道利用率=\frac{L}{VT} \\
-       &amp;其中，确认帧很短，通常可将t1忽略
-   \end{aligned}\)</span></li>
-</ul></li>
-</ol>
-<h4 id="局域网">局域网</h4>
-<ol type="1">
-<li>以太网 IEEE 802.3（逻辑拓扑为总线形，物理拓扑为星形或拓展星形）</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">目的地址</th>
-<th style="text-align: center;">源地址</th>
-<th style="text-align: center;">类型</th>
-<th style="text-align: center;">数据</th>
-<th style="text-align: center;">FCS</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">6B</td>
-<td style="text-align: center;">6B</td>
-<td style="text-align: center;">2B</td>
-<td style="text-align: center;">46~1500B</td>
-<td style="text-align: center;">4B</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>前导码(8B，在物理层中添加的首部，不属于MAC帧)：前同步码(7B) +
-帧开始定界符(1B)</li>
-<li>目的地址(6B)：MAC地址</li>
-<li>源地址码(6B)：MAC地址</li>
-<li>类型(2B)：指出数据域中携带的数据应交给那个协议实体处理</li>
-<li>数据(46~1500B)：包含高层协议信息，由于CSMA/CD算法的限制，由于以太网帧最小长度为64B，所以此部分最小长度为46B（64
-- 首部地址14B - 尾部4B = 46B），若数据太少，则填充0~46B</li>
-<li>FCS(4B)：校验范围从目的地址到数据段末尾，算法采用32位CRC</li>
-</ul>
-<p><strong>MTU最大传输单元是指MAC帧的数据最大载荷，而MAC帧本身最大长度为1518B</strong></p>
-<ol type="1">
-<li>令牌环网（逻辑拓扑为环形，物理拓扑为星形）</li>
-<li>光线分布数字接口 FDDI（逻辑拓扑为环形，物理拓扑为双环形）</li>
-</ol>
-<h4 id="无线局域网-ieee-802.11">无线局域网 IEEE 802.11</h4>
-<ol type="1">
-<li>802.11中MAC帧</li>
-</ol>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-<col style="width: 14%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">功能</th>
-<th style="text-align: center;">To DS</th>
-<th style="text-align: center;">From DS</th>
-<th style="text-align: center;">Address1(接收端)</th>
-<th style="text-align: center;">Address2(发送端)</th>
-<th style="text-align: center;">Address3</th>
-<th style="text-align: center;">Address4</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">IBSS</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">DA</td>
-<td style="text-align: center;">SA</td>
-<td style="text-align: center;">BSSID</td>
-<td style="text-align: center;">未使用</td>
-</tr>
-<tr>
-<td style="text-align: center;">To AP</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">BSSID</td>
-<td style="text-align: center;">SA</td>
-<td style="text-align: center;">DA</td>
-<td style="text-align: center;">未使用</td>
-</tr>
-<tr>
-<td style="text-align: center;">Freom AP</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">DA</td>
-<td style="text-align: center;">BSSID</td>
-<td style="text-align: center;">SA</td>
-<td style="text-align: center;">未使用</td>
-</tr>
-<tr>
-<td style="text-align: center;">WDS(无线分布式系统)</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">RA</td>
-<td style="text-align: center;">TA</td>
-<td style="text-align: center;">DA</td>
-<td style="text-align: center;">SA</td>
-</tr>
-</tbody>
-</table>
-<ol start="2" type="1">
-<li>VLAN概念与原理
-<ul>
-<li>性质：将局域网内的设备划分成与物理位置无关的逻辑组</li>
-<li>原理：查交换机中的VLAN表
-<ul>
-<li>基于接口的VLAN技术：VLAN ID —— 端口</li>
-<li>基于MAC地址的VLAN技术：VLAN —— MAC地址</li>
-</ul></li>
-</ul></li>
-<li>VLAN的实现（添加VLAN标记） —— IEEE 802.1Q帧</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">目的地址</th>
-<th style="text-align: center;">源地址</th>
-<th style="text-align: center;">VLAN标记</th>
-<th style="text-align: center;">类型</th>
-<th style="text-align: center;">数据</th>
-<th style="text-align: center;">FCS</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">6B</td>
-<td style="text-align: center;">6B</td>
-<td style="text-align: center;">4B</td>
-<td style="text-align: center;">2B</td>
-<td style="text-align: center;">46~1500B</td>
-<td style="text-align: center;">4B</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>1.VLAN标记，<strong>前两个字节</strong>表示这是IEEE
-802.1Q帧，<strong>随后4位</strong>没用，<strong>最后12位</strong>为VLAN标识符VID，用于唯一表示该帧属于哪个VLAN<br />
-2.VID取值范围为1~4094<br />
-3.IEEE 802.1Q帧由交换机处理</p>
-</blockquote>
-<h3 id="广域网与ppp协议">广域网与PPP协议</h3>
-<ol type="1">
-<li>PPP协议的功能（如拨号上网）
-<ul>
-<li>只支持全双工链路</li>
-<li>无需纠错，无需流量控制</li>
-<li>封装成帧</li>
-<li>实现透明传输</li>
-<li>实现差错检测（只检查不纠错）</li>
-</ul></li>
-<li>PPP协议的三个部分
-<ul>
-<li>将IP数据报封装到串行链路（同步串行/异步串行）的方法</li>
-<li>链路控制协议LCP：建立并维护数据链路连接（身份验证）</li>
-<li>网络控制协议NCP：PPP支持多种网络层协议，每个不同的网络层协议都需要一个相应的NCP来配置，为网络层协议建立和配置逻辑连接</li>
-</ul></li>
-</ol>
-<h3 id="网络层">网络层</h3>
-<ol type="1">
-<li>IP数据报（首部固定部分<strong>20B</strong>，最大60B）
-<ul>
-<li>固定部分（20B）
-<ul>
-<li>第一行（32位）
-<ul>
-<li>版本4位</li>
-<li>首部长度4位（单位4B）</li>
-<li>区分服务8位</li>
-<li>总长度16位（单位1B）</li>
-</ul></li>
-<li>第二行（32位）
-<ul>
-<li>标识16位</li>
-<li>标志3位：最低位MF（之后是否还有分片）、中间位DF（是否可以分片</li>
-<li>片偏移13位（单位8B）</li>
-</ul></li>
-<li>第三行（32位）
-<ul>
-<li>生存时间8位</li>
-<li>协议8位（6表示TCP协议，17表示UDP协议）</li>
-<li>首部校验和16位（只校验分组首部，不校验数据部分）</li>
-</ul></li>
-<li>第四行（32位）
-<ul>
-<li>源地址32位</li>
-</ul></li>
-<li>第五行（32位）
-<ul>
-<li>目的地址32位</li>
-</ul></li>
-</ul></li>
-<li>可变部分（0~40B）</li>
-</ul></li>
-<li>IPv4地址划分
-<ul>
-<li>A类（1~126）：网络号8位（0 + 后7位），主机号24位</li>
-<li>B类（128~191）：网络号16位（10 + 后14位），主机号16位</li>
-<li>C类（192~223）：网络号24位（110 + 后21位），主机号8位</li>
-<li>D类（224~239）：1110 + 后28位多播地址</li>
-<li>E类（240~255）：1111 + 后28位保留</li>
-</ul></li>
-</ol>
-<ul>
-<li><strong>主机号全0表示本网络本身，主机号全1表示本网络的广播地址</strong></li>
-<li><strong>127.0.0.0 保留为环回自检地址</strong></li>
-<li><strong>32位全0，即0.0.0.0 表示本网络上的本主机</strong></li>
-<li><strong>32位全1，即255.255.255.255
-表示整个TCP/IP网络的广播地址，又称受限广播地址</strong></li>
-</ul>
-<ol start="3" type="1">
-<li><p>路由表</p></li>
-<li><p>ARP协议、ICMP协议、DHCP协议</p>
-<ol type="1">
-<li>地址解析协议ARP：完成IP地址到MAC地址的映射</li>
-<li>网际控制报文协议ICMP：使主机与路由器报告差错和异常，具体可分为<strong>ICMP差错报告报文（目标主机或路由器向源主机报告差错与异常）</strong>与<strong>ICMP询问报文</strong>
-<ol type="1">
-<li>ICMP差错报告报文：分为5类
-<ul>
-<li>终点不可达：当路由器或主机<strong>不能交付数据报</strong>时，向源点发送该报文</li>
-<li>源点抑制：当路由器或主机因<strong>拥塞而丢弃数据报时</strong>，向源点发送该报文</li>
-<li>时间超过：当路由器收到<strong>生存时间TTL为0的数据报时</strong>，丢弃该数据报，并向源点发送该报文</li>
-<li>参数问题：当路由器或主机<strong>收到的数据报首部中有的字段的值不正确时</strong>，丢弃该数据报，并向源点发送该报文</li>
-<li>改变路由（重定向）：<strong>路由器把该报文发送给主机，让主机知道下次应将数据报发送给别的路由器</strong></li>
-</ul></li>
-<li>ICMP询问报文分为4类
-<ul>
-<li>回送请求和回答报文</li>
-<li>时间戳请求和回答报文</li>
-<li>掩码地址请求和回答报文</li>
-<li>路由器询问和通告报文</li>
-</ul></li>
-</ol></li>
-<li>动态主机配置协议DHCP：用于给主机动态分配IP地址
-<ul>
-<li>是应用层协议</li>
-<li>是基于UDP的</li>
-</ul></li>
-</ol></li>
-<li><p>路由协议</p>
-<ol type="1">
-<li>内部网关协议
-<ol type="1">
-<li>路由信息协议RIP：基于距离向量的路由选择协议
-<ul>
-<li><strong>应用层协议，使用UDP传送</strong></li>
-<li>网络中每个路由器都要维护从它自己到其他每个目的网络的距离记录</li>
-<li>从一个路由器到直接连接的网络跳数为1，每经过一个路由器，跳数+1</li>
-<li>一条路径最多包含15各路由器（即15跳），故距离大于等于16时，目的网络不可达</li>
-<li><strong>跳数少的路径即为最佳路径</strong></li>
-</ul></li>
-<li>开放最短路径优先协议（OSPF）：分布式链路状态路由算法
-<ul>
-<li><strong>是网络层协议，使用IP数据报传送</strong></li>
-<li><strong>使用Dijkstra最短路径算法</strong></li>
-<li>向本自治系统内所有路由器发送信息，使用洪范法</li>
-<li>发送的信息就是与本路由器相邻的所有路由器的链路状态（包括本路由与哪些路由器相邻，该链路的代价等）</li>
-<li>只有当链路状态发生变化时，路由器才用洪范法向所有路由器发送信息，并且更新过程收敛快，不会出现RIP中“坏消息传得慢”的问题</li>
-<li><strong>代价最低即为最佳路径</strong></li>
-</ul></li>
-</ol></li>
-<li>外部网关协议
-<ol type="1">
-<li>边界网关协议BGP：用于不同自治系统的路由器之间交换路由信息
-<ul>
-<li><strong>是应用层协议，使用TCP传送</strong></li>
-<li>BGP-4使用4种报文
-<ul>
-<li>打开报文Open：用来与另一个BGP发言人建立关系</li>
-<li>更新报文Update：用来发送某一路由的信息，以及要撤销的路由</li>
-<li>保活报文Keepalive：用来确认打开报文并周期性的证实邻站关系</li>
-<li>通知报文Notification：用来发送检测到的差错</li>
-</ul></li>
-<li><strong>选则的路径不一定是最佳路径</strong></li>
-</ul></li>
-</ol></li>
-</ol></li>
-<li><p>路由器功能</p>
-<ol type="1">
-<li>转发：微观上控制数据报如何从该路由器的哪一个输出链路进行发送，通常使用硬件解决（对应数据平面）</li>
-<li>路由选择：宏观上控制数据报从源主机到目的主机的路径（对应控制平面）</li>
-</ol></li>
-<li><p>IPv6</p>
-<ul>
-<li>特点：
-<ul>
-<li>采用无类别编制CIDR</li>
-<li>采用网络地址转换NAT</li>
-<li>128位</li>
-<li>支持单播、多播、任播</li>
-</ul></li>
-</ul></li>
-<li><p>IP组播</p>
-<ul>
-<li>使用英特网组管理协议IGMP</li>
-<li>特点：
-<ul>
-<li>不提供可靠交付</li>
-<li>不产生差错报文</li>
-</ul></li>
-</ul></li>
-<li><p>数据平面与控制平面</p>
-<ol type="1">
-<li>数据平面：通过转发表进行转发（转发表基于路由表生成，且不由数据平面维护）</li>
-<li>控制平面
-<ol type="1">
-<li>传统方法（每路由器法）：<strong>路由选择算法运行在每台路由器中</strong>，且在每台路由器中都包含转发和路由选择两种功能（由<strong>路由选择处理器</strong>执行相关功能）</li>
-<li>SDN方法：控制平面在<strong>物理上</strong>从路由器中分离，路由器仅实现<strong>转发</strong>功能，<strong>远程控制器</strong>计算和分发转发表给每台路由器使用，具体方式是路由器通过交换<strong>包含转发表和其他路由选择信息的报文</strong>与远程控制器通信，而远程控制器使用软件形式实现的，且是可编程的，（<strong>路由选择处理器负责与远程控制器通信</strong>）</li>
-</ol></li>
-<li>对于SDN控制平面
-<ul>
-<li>两个核心组成部分
-<ul>
-<li>SDN控制器（向上有北向API与网络控制应用程序相连，向下有南向API与数据平面相连）</li>
-<li>网络控制应用程序</li>
-</ul></li>
-</ul></li>
-<li>对于SDN控制器
-<ul>
-<li>三个层次
-<ul>
-<li>对于网络控制应用程序的接口：通过北向API与网络控制应用程序交互，允许网络控制应用程序在状态管理层之间读写网络状态</li>
-<li>网络范围状态管理层：SDN控制平面作出最终控制决定</li>
-<li>通信层：SDN控制器与受控网络设备之间的通信（OpenFlow协议），包含南向API</li>
-</ul></li>
-</ul></li>
-</ol></li>
-</ol>
-<h3 id="传输层">传输层</h3>
-<ol type="1">
-<li>TCP协议（首部固定部分<strong>20B</strong>，最大60B，与IP数据报相同）
-<ul>
-<li>固定部分（20B）
-<ul>
-<li>第一行（32位）
-<ul>
-<li>源端口16位</li>
-<li>目的端口16位</li>
-</ul></li>
-<li>第二行（32位）
-<ul>
-<li>序号32位</li>
-</ul></li>
-<li>第三行（32位）
-<ul>
-<li>确认号32位</li>
-</ul></li>
-<li>第四行（32位）
-<ul>
-<li>数据偏移4位</li>
-<li>保留部分6位</li>
-<li>符号位6位
-<ul>
-<li><strong>确认位ACK</strong></li>
-<li><strong>同步位SYN</strong></li>
-<li><strong>终止位FIN</strong></li>
-<li>紧急位URG</li>
-<li>复位位RST</li>
-<li>推送为PSH</li>
-</ul></li>
-<li>窗口</li>
-</ul></li>
-<li>第五行（32位）
-<ul>
-<li>检验和16位</li>
-<li>紧急指针16位</li>
-</ul></li>
-</ul></li>
-<li>可变部分（0~40B）</li>
-</ul></li>
-<li>TCP可靠传输
-<ol type="1">
-<li>序号：TCP面向字节流，故为数据流中的每个字节都编上一个序号，TCP首部中序号字段的值指出本报文段所发送的数据的第一个字节的序号</li>
-<li>确认：TCP首部的确认号是指已接收到的数据中<strong>最后一个字节的序号加1（加1是指期望收到的下一个报文段数据部分的第一个字节的序号）</strong>，且TCP采用累计确认（确认号之前的都正确接收）</li>
-<li>重传
-<ul>
-<li>超时：计时器的重传时间到仍未收到确认，则重传</li>
-<li>冗余ACK：每当接收方收到比期望序号大的失序报文段到达时，发送一个冗余ACK，指明下一个期待的序号，当连续收到队同一个报文段的3个冗余ACK，则重传</li>
-</ul></li>
-</ol></li>
-<li>TCP流量控制与拥塞控制
-<ol type="1">
-<li>流量控制：通过动态控制发送端发送窗口大小实现
-<ul>
-<li>接收窗口：由接收端维护</li>
-<li>拥塞窗口：由发送端维护，发送端根据当前网络的拥塞程度确定</li>
-<li>发送窗口：由发送端维护，发送端在接收到下一个确认前能够发送的最大字节数，且<strong>发送窗口
-= min{接收窗口， 拥塞窗口}</strong></li>
-</ul></li>
-<li>拥塞控制：
-<ul>
-<li>慢开始与拥塞避免算法</li>
-<li>快开始和快恢复算法</li>
-</ul></li>
-</ol></li>
-<li>UDP协议（首部8B）
-<ul>
-<li>第一行（32位）
-<ul>
-<li>源端口16位</li>
-<li>目的端口16位</li>
-</ul></li>
-<li>第二行（32位）
-<ul>
-<li>UDP长度16位</li>
-<li>UDP校验和16位</li>
-</ul></li>
-</ul></li>
-<li>TCP与UDP</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">TCP</th>
-<th style="text-align: center;">UDP</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">可靠性</td>
-<td style="text-align: center;">保证可靠传输</td>
-<td style="text-align: center;">不保证可靠传输</td>
-</tr>
-<tr>
-<td style="text-align: center;">是否建立连接</td>
-<td style="text-align: center;">是</td>
-<td style="text-align: center;">否</td>
-</tr>
-<tr>
-<td style="text-align: center;">数据发送模式</td>
-<td style="text-align: center;">面向字节流</td>
-<td style="text-align: center;">面向报文</td>
-</tr>
-<tr>
-<td style="text-align: center;">通信方式</td>
-<td style="text-align: center;">点对点</td>
-<td style="text-align: center;">一对一、一对多、多对一、多对多</td>
-</tr>
-<tr>
-<td style="text-align: center;">首部开销</td>
-<td style="text-align: center;">20B</td>
-<td style="text-align: center;">8B</td>
-</tr>
-<tr>
-<td style="text-align: center;">拥塞控制机制</td>
-<td style="text-align: center;">有</td>
-<td style="text-align: center;">无</td>
-</tr>
-<tr>
-<td style="text-align: center;">流量控制机制</td>
-<td style="text-align: center;">有</td>
-<td style="text-align: center;">无</td>
-</tr>
-</tbody>
-</table>
-<h3 id="应用层">应用层</h3>
-<ol type="1">
-<li>域名系统DNS
-<ul>
-<li>域名服务器
-<ul>
-<li>根域名服务器</li>
-<li>顶级域名服务器</li>
-<li>权限域名服务器</li>
-<li>本地域名服务器</li>
-</ul></li>
-<li>域名解析过程
-<ul>
-<li>递归查询方式</li>
-<li>迭代查询方式</li>
-</ul></li>
-</ul></li>
-<li>文件传输协议FTP
-<ol type="1">
-<li>控制连接：<strong>端口21，采用C/S工作方式，建立在TCP连接上</strong>，用于传送FTP控制命令（如连接请求、传送请求、终止请求等），<strong>整个会话期间一直保持打开状态，且传输文件时可以使用控制连接</strong></li>
-<li>数据连接：<strong>端口20，采用C/S工作方式，建立在TCP连接上</strong>，用于连接客户端与服务器的数据传输进程，<strong>每次数据传输完毕后就关闭</strong></li>
-</ol></li>
-<li>电子邮件
-<ol type="1">
-<li>SMTP协议：<strong>采用C/S工作方式，建立在TCP连接上，端口号25</strong>，采用“<strong>推</strong>“的通信方式，用于<strong>用户代理向邮件服务器</strong>与<strong>邮件服务器之间</strong>发送邮件，只支持传输ASCII码的内容</li>
-<li>POP协议（POP3）：<strong>采用C/S工作方式，建立在TCP连接上，端口号110</strong>，采用“<strong>拉</strong>“的通信方式，<strong>用于用户代理从邮件服务器的用户邮箱中读取邮件</strong></li>
-<li>英特网报文存取协议IMAP：一个更复杂的邮件读取协议</li>
-</ol></li>
-</ol>
-<p><strong>多用途网际邮件扩充MIME：并未改动SMTP，而是增加了邮件主体的结构，并定义了传送非ASCII码的编码规则</strong></p>
-<ol start="4" type="1">
-<li>万维网 WWW
-<ol type="1">
-<li>构成
-<ul>
-<li>统一资源定位符（URL）：负责表示万维网上的各种文档，并使其具有唯一的标识符URL</li>
-<li>超文本传输协议（HTTP）：应用层协议，使用TCP协议保证可靠传输</li>
-<li>超文本标记语言（HTML）：一种文档结构的标记语言，对页面上的各种信息（文字、声音、图像、视频等）格式进行描述</li>
-</ul></li>
-<li>特点
-<ul>
-<li>无状态的：同一个客户第二次访问同一个服务器的页面时，服务器并不记得该客户</li>
-<li>无连接的：虽然使用了TCP连接（保证可靠性），但通信的双方在交换HTTP报文之前不需要建立GTTP连接</li>
-<li>可采用非持久连接或持久连接（HTTP/1.1支持）</li>
-</ul></li>
-<li>非持久连接与持久连接
-<ul>
-<li>对于非持久连接：每个网页元素对象的传输都需要单独建立一个TCP连接，<span
-class="math inline">\(\displaystyle 请求一个万维网对象所需的时间 =
-2RTT+该对象传输时间\)</span>，其中一个RTT用于TCP连接，另一个RTT用于请求和接收文档</li>
-<li>对于持久连接，万维网服务器在发送相应后扔保持这条连接，使同一个客户和服务器可以继续在这条连接上传送后续的HTTP请求和响应报文</li>
-</ul></li>
-<li>流水线与非流水线（持久连接）
-<ul>
-<li>非流水线：客户在收到前一个响应后才能发出下一个请求，在已建立连接的情况下，对于<strong>每个文档</strong>
-$从发从请求到接收完毕的时间=RTT+文档的传输时间 $</li>
-<li>流水线：客户没遇到一个对象引用就发出一个请求，在已建立连接的情况下，当请求与响应都时连续发送时，<span
-class="math inline">\(\displaystyle
-完成请求的总耗时=RTT+n个文件的传输时间\)</span></li>
-</ul></li>
-<li>cookie的运行过程
-<ul>
-<li>①客户端在浏览器键入web服务器的URL，浏览器发送读取网页的请求</li>
-<li>②服务器接收请求后，产生一个Set-Cookie报头，放在HTTP报文中一起回传客户端，发起一次会话</li>
-<li>③客户端收到应答后，若要继续该次会话，则将Set-Cookie中的内容取出，形成一个Cookie.txt文件存放在客户端计算机中</li>
-<li>④当客户端再次向服务器发出请求时，浏览器在电脑中寻找对应该网站的Cookie.txt文件，若找到，则根据次Cookie.txt产生报头，放在HTTP请求中发给服务器</li>
-<li>⑤服务器接收到包含Cookie报头的请求，检索其Cookie中与用户有关的信息，生成一个客户端所请求的页面应答给客户端，浏览器的每一次网页请求（如刷新）都可以传递已存在的Cookie文件</li>
-</ul></li>
-</ol></li>
-<li>HTTP请求报文中常用的几个方法</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">方法</th>
-<th style="text-align: center;">意义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">GET</td>
-<td style="text-align: center;">请求读取由URL标识的信息</td>
-</tr>
-<tr>
-<td style="text-align: center;">HEAD</td>
-<td style="text-align: center;">请求读取由URL表示的信息的首部</td>
-</tr>
-<tr>
-<td style="text-align: center;">POST</td>
-<td style="text-align: center;">给服务器添加信息（如注释）</td>
-</tr>
-<tr>
-<td style="text-align: center;">CONNECT</td>
-<td style="text-align: center;">用于代理服务器</td>
-</tr>
-</tbody>
-</table>
-<ol start="6" type="1">
-<li>应用层协议小结</li>
-</ol>
-<table>
-<colgroup>
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-<col style="width: 9%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;"></th>
-<th style="text-align: center;">FTP控制连接</th>
-<th style="text-align: center;">FTP数据连接</th>
-<th style="text-align: center;">DNS</th>
-<th style="text-align: center;">HTTP</th>
-<th style="text-align: center;">SMTP</th>
-<th style="text-align: center;">POP3</th>
-<th style="text-align: center;">远程终端协议TELNET</th>
-<th style="text-align: center;">简单文件传输协议TFTP</th>
-<th style="text-align: center;">简单网络管理协议SNMP</th>
-<th style="text-align: center;">边界网关协议BGP</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">使用协议</td>
-<td style="text-align: center;">TCP</td>
-<td style="text-align: center;">TCP</td>
-<td style="text-align: center;">UDP</td>
-<td style="text-align: center;">TCP</td>
-<td style="text-align: center;">TCP</td>
-<td style="text-align: center;">TCP</td>
-<td style="text-align: center;">TCP</td>
-<td style="text-align: center;">UDP</td>
-<td style="text-align: center;">UDP</td>
-<td style="text-align: center;">IP</td>
-</tr>
-<tr>
-<td style="text-align: center;">熟知端口号</td>
-<td style="text-align: center;">21</td>
-<td style="text-align: center;">20</td>
-<td style="text-align: center;">53</td>
-<td style="text-align: center;">80</td>
-<td style="text-align: center;">25</td>
-<td style="text-align: center;">110</td>
-<td style="text-align: center;">23</td>
-<td style="text-align: center;">69</td>
-<td style="text-align: center;">161</td>
-<td style="text-align: center;">-</td>
-</tr>
-</tbody>
-</table>
-]]></content>
-      <categories>
-        <category>随笔</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>二分查找</title>
-    <url>/2022/02/16/2022-2-16-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
-    <content><![CDATA[<blockquote>
-<p><strong>二分查找的思路非常简单，但在实际写算法的过程中发现有很多细节还需要多加理解，比如</strong></p>
-<p>① 为什么有时right = nums.size()，有时却是right = nums.size() -
-1<br />
-② while循环中的条件，为什么有时是&lt;=，有时是&lt;<br />
-③ 在区间划分时，为什么有时left = mid + 1，right = mid - 1; 有时却是left
-= mid + 1,right = mid</p>
-</blockquote>
-<span id="more"></span>
-<hr />
-<p>以最简单的二叉搜索为例 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 二分查找的基本用法</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BinarySearch</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> right = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">        <span class="comment">// 取mid的另一种形式</span></span><br><span class="line">        <span class="comment">// mid = (left + right) / 2与mid = left + (right - left) / 2</span></span><br><span class="line">        <span class="comment">// 在形式上是等价的，区别是前者存在溢出的可能</span></span><br><span class="line">        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;    </span><br><span class="line">        <span class="keyword">if</span>(nums[mid] == targrt)&#123;</span><br><span class="line">            <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &lt; target)&#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            right = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="区间与循环终止的条件">区间与循环终止的条件</h2>
-<h3 id="区间">区间</h3>
-<ol type="1">
-<li><strong>两种比较常见的区间形式</strong>
-<ul>
-<li>两端都是闭区间：[left，right]，即<strong>right = nums.size() -
-1</strong></li>
-<li>左闭右开：[left，right)，即<strong>right =
-nums.size()</strong>（右边界在数组中越界）</li>
-</ul></li>
-<li><strong>left = mid + 1，right = mid - 1与left = mid + 1，right =
-mid两种划分区间的方式有何区别</strong>
-<ul>
-<li>对于两端都是闭区间的[left，right]，因为mid已经搜索过，也就是将整个区间分为了三个部分，即[left，mid
-- 1]、[mid]、[mid + 1，right]，此时<strong>left = mid + 1，right = mid -
-1</strong></li>
-<li>对于左闭右开的[left，right)，因为mid已经搜索过，区间也分为了三个部分，为了保持区间形式的一致性，此时的三个区间应该是[left，mid)、[mid]、[mid
-+ 1，right)，故<strong>left = mid + 1，right = mid</strong></li>
-<li>同理，对于左开右闭的(left，right]，三个区间应该是(left，mid -
-1]、[mid]、(mid，right]，故<strong>left = mid，right = mid -
-1</strong></li>
-</ul></li>
-</ol>
-<h3 id="循环终止条件">循环终止条件</h3>
-<ol type="1">
-<li><strong>为什么有时是&lt;=，有时是&lt;</strong>
-<ul>
-<li>对于<strong>left &lt;= right</strong>，当循环结束时，left = right +
-1，无论区间形式是[right，left]，还是[left，right)，此时整个序列都已经搜索完毕，待搜索区间为空（但后者会出现错误）</li>
-<li>对于<strong>left &lt; right</strong>，当循环结束时，left =
-right，区间形式是[left，left]或[left，left)
-<ul>
-<li>也就是说对于两端都是闭区间的[left，right]形式，当循环结束时，整个序列并没有搜索完毕，剩下了一个[left，left]尚未搜索，此时并不能直接返回，需要再做处理</li>
-<li>而对于左闭右开的[left，right)形式，当循环结束时，整个序列已经搜索完毕（不会出现错误）</li>
-</ul></li>
-</ul></li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 对于left &lt; right，且是[left, right]形，需要补充</span></span><br><span class="line"><span class="keyword">return</span> nums[left] == target? left : <span class="number">-1</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="具体使用">具体使用</h3>
-<ol type="1">
-<li><strong>是否可以随意搭配使用</strong>
-<ul>
-<li>不可以，正如上面所说，<strong>对于循环结束条件为left &lt;=
-right</strong>与<strong>左闭右开的[left，right)形式</strong>组合使用时，无论采取何种划分区间的方式，总是会出现错误</li>
-</ul></li>
-<li><strong>以nums = {0，2，4，5}为例分析</strong>
-<ul>
-<li>当target在数组中确实存在时（如target = 2），此时可以正常工作</li>
-<li>当 <span class="math inline">\(\displaystyle target
-\le  5\)</span>但不等于数组中的任一一个值时（如target = 3或target = -1）
-<ul>
-<li>以<strong>left = mid + 1，right =
-mid</strong>方式划分区间，此时会造成while死循环，原因是区间收缩的<strong>最后一步</strong>总是右边界向左收缩，即right
-= mid，导致left = right恒成立，故无法跳出循环</li>
-<li>以<strong>left = mid + 1，right = mid -
-1</strong>方式划分区间，此时可以正常工作</li>
-</ul></li>
-<li>当 <span class="math inline">\(\displaystyle target
-&gt;  5\)</span>时（如target = 7）
-<ul>
-<li>以<strong>left = mid + 1，right =
-mid</strong>方式划分区间，可以正常工作</li>
-<li>以<strong>left = mid + 1，right = mid -
-1</strong>方式划分区间，此时会造成数组越界，原因是区间收缩的过程<strong>一直是</strong>左边界向右收缩，即left
-= mid + 1，最终收缩到left =
-right，而区间形式是[left，right)的，此时无法在right处取到数据，故数组越界</li>
-</ul></li>
-</ul></li>
-<li><strong>如何解决</strong>
-<ul>
-<li>上面已经分析了，只有<strong>循环结束条件为left &lt;=
-right</strong>与<strong>左闭右开的[left，right)形式</strong>组合使用时会出错，那么只需要避免使用这种组合即可，也就是有3中正确的组合方式
-<ul>
-<li><strong>循环结束条件为left &lt;=
-right</strong>与<strong>两端都是闭区间的[left，right]形式</strong>组合</li>
-<li><strong>循环结束条件为left &lt;
-right</strong>与<strong>左闭右开的[left，right)形式</strong>组合</li>
-<li><strong>循环结束条件为left &lt;
-right</strong>与<strong>两端都是闭区间的[left，right]形式</strong>组合（循环结束会剩下[left，left]需要单独处理，因此最好是使用前两种固定组合）</li>
-</ul></li>
-</ul></li>
-</ol>
-<h2 id="二分查找的进阶运用">二分查找的进阶运用</h2>
-<p>除了基础的使用二分查找在有序序列中搜索一个数，还有两种进阶的使用方式，代码也需要做一些小的修改</p>
-<h3 id="寻找左边界">寻找左边界</h3>
-<ol type="1">
-<li><strong>假如有一个有序序列[1, 2, 2, 2, 3,
-4]，现在要找到第一个’2‘所在位置的下标</strong>
-<ul>
-<li>一个容易想到的办法是顺序遍历这个有序序列，就能轻松的找到一个’2‘的下标</li>
-<li>另一个办法就是使用二分查找来减少搜索的次数，但用上述的二分查找代码，我们得到并不是第一个’2‘的下标1，而是第二个’2‘的下标2，故此时需要对二分查找进行一定的改进</li>
-</ul></li>
-<li><strong>怎么改进代码</strong>
-<ul>
-<li>在之前提到，对于<strong>循环结束条件为left &lt;
-right</strong>的形式，循环结束时，left =
-right，而<strong>左闭右开的[left，right)</strong>形式，能保证在循环结束时完整的遍历整个序列，因此，最终需要确定的就是如何划分区间</li>
-<li>一个关键的地方在于，普通的查找，只要找到target就立刻返回（即存在nums[mid]
-=
-target就返回），但此时为了查找左边界就不应该这么操作，而是应该收缩右边界，即<strong>right
-=
-mid</strong>，此时二分查找会继续搜索[left，right)是否还有满足要求的target，最终找到左边界</li>
-</ul></li>
-<li><strong>代码与例题</strong>
-<ul>
-<li>例题：<a
-href="https://leetcode-cn.com/problems/first-bad-version/">leetcode
-278.第一个错误版本</a>（原理相同）</li>
-<li>代码</li>
-</ul></li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">LeftBoundary</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">int</span> left </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> right = nums.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;    </span><br><span class="line">        <span class="keyword">if</span>(nums[mid] == targrt)&#123;</span><br><span class="line">            right = mid;    <span class="comment">// 收缩右边界</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &lt; target)&#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            right = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> left;</span><br></pre></td></tr></table></figure>
-<h3 id="寻找右边界">寻找右边界</h3>
-<ol type="1">
-<li><strong>怎么改进代码</strong>
-<ul>
-<li>根据寻找左边界的思想，不难想到，当找到target时，不立刻返回，而是收缩左边界，为了保证<strong>左闭右开的[left，right)</strong>形式，应该令<strong>left
-= mid + 1</strong>，需要注意的是，因为是左边界收缩到left =
-right，而right是开区间，故<strong>实际的右边界是right - 1（或left -
-1）</strong></li>
-</ul></li>
-<li><strong>代码与例题</strong>
-<ul>
-<li>例题：指定一个target，要求找到其在非降序的数组nums中的插入位置的下标，要求插入后还要保持非降序的特性（例如target
-= 3， nums[1, 2, 2, 2, 4, 5]，此时应该返回下标4）</li>
-<li>代码</li>
-</ul></li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">RightBoundary</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">int</span> left </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> right = nums.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;    </span><br><span class="line">        <span class="keyword">if</span>(nums[mid] == targrt)&#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;    <span class="comment">// 收缩右边界</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &lt; target)&#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            right = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> left;        <span class="comment">// 实际的右边界是left - 1</span></span><br><span class="line">                        <span class="comment">// 但插入位置是右边界之后的位置，故直接返回left即可</span></span><br></pre></td></tr></table></figure>
-<h3 id="tips">Tips</h3>
-<ol type="1">
-<li><p>二分查找的使用并不严格要求所求序列有序，如：<a
-href="https://leetcode-cn.com/problems/peak-index-in-a-mountain-array/">852.
-山脉数组的峰顶索引</a></p></li>
-<li><p>二分查找的重点在于理解，并明确所求，如何时是查找左边界，何时是查找有边界，对于两种常见的组合形式</p>
-<ul>
-<li><strong>循环结束条件为left &lt;=
-right</strong>与<strong>两端都是闭区间的[left，right]形式</strong>组合</li>
-<li><strong>循环结束条件为left &lt;
-right</strong>与<strong>左闭右开的[left，right)形式</strong>组合</li>
-</ul></li>
-</ol>
-<p>最后都可以完成<strong>利用二分查找搜索数</strong>、<strong>寻找左边界</strong>、<strong>寻找右边界</strong>的功能，不同的组合只需要根据不同的应用场合做一定的边界处理即可</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>2022-03-15-PE文件解析（三）</title>
-    <url>/2022/03/20/2022-03-15-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89/</url>
-    <content><![CDATA[<p>之前讲解了输入表与输入地址表以及他们的工作原理，现在我们开始分析输出表与重定位表</p>
-<h3 id="输出表">输出表</h3>
-<p>创建一个DLL时，实际上创建了一组能让exe或其他DLL调用的函数，而PE装载器将根据DLL文件中的输出信息修正正被执行文件中的IAT。通常exe文件中不存在输出表（并不绝对），而大部分DLL文件中则存在输出表</p>
-<h4 id="输出表的结构">输出表的结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_EXPORT_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;            <span class="comment">// 旗标，未使用，总是为0</span></span><br><span class="line">    DWORD   TimeDateStamp;</span><br><span class="line">    WORD    MajorVersion;               <span class="comment">// 主版本号，一般为0</span></span><br><span class="line">    WORD    MinorVersion;               <span class="comment">// 次版本号，一般为0</span></span><br><span class="line">    DWORD   Name;</span><br><span class="line">    DWORD   Base;</span><br><span class="line">    DWORD   NumberOfFunctions;</span><br><span class="line">    DWORD   NumberOfNames;</span><br><span class="line">    DWORD   AddressOfFunctions;     </span><br><span class="line">    DWORD   AddressOfNames;         </span><br><span class="line">    DWORD   AddressOfNameOrdinals;  </span><br><span class="line">&#125; IMAGE_EXPORT_DIRECTORY</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>现在对一些重要属性做出解释</p>
-<ul>
-<li>TimeDateStamp：输出表的创建时间（GMT时间）</li>
-<li>Name：指向一个ASCII字符串的RVA，即DLL的名字</li>
-<li>Base：一个初始序号值，当通过序号查询输出的函数时，实际数值 =
-查询数值 - Base，实际数值即为输出函数地址表（EAT）的索引</li>
-<li>NumberOfFunctions：输出函数地址表中条目的数量</li>
-<li>NumberOfNames：输出函数名称表（ENT）和输出函数序号表中条目的数量</li>
-<li>AddressOfFunctions：输出函数地址表的RVA，是一个RVA数组</li>
-<li>AddressOfNames：输出函数名称表的RVA，也是一个RVA数组，<strong>该表会排序</strong></li>
-<li>AddressOfNameOrdinals：输出序号表的RVA，指向输出序号的数组，即一个WORD大小的数组</li>
-</ul>
-<p>我们看到结构中提到了3张表，分别是输出函数地址表EAT、输出函数名称表ENT、输出函数序号表，那么他们之间有什么联系呢？且DLL中的函数既可以通过名称导出，也可以通过序号导出，那么两种不同的导出方式，又要如何定位函数的地址呢？</p>
-<ul>
-<li>函数通过名称导出时，如何建立名称到地址的映射关系就成了关键，而输出函数序号表就是承担中转工作的，我们之前提到这三张表都是数组，假设我们有一个名称A的函数，通过查询ENT表得到其索引为3，那么函数A的序号在函数序号表的索引也是3，我们从序号表中取出该函数的序号，这个序号就是函数A在EAT表中的索引</li>
-<li>函数通过序号导出时，导出序号 - base = EAT表索引</li>
-</ul>
-<h4 id="实例">实例</h4>
-<p>为了便于理解，假设我们有DLLTest.dll文件，其中定义了4个函数Plus、Sub、Mul和Div，其中Plus、Sub、和Div以函数名导出，并将其导出序号分别设置为1、5、9，而Mul以序号导出，其序号为为7，具体如下</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-def.png" /></p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-Petools.png" /></p>
-<p>此时我们画一张导出表的示意图来进行细致的解释</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-图解.png" /></p>
-<ul>
-<li>对于名称导出方式，以Sub函数为例，我们可以看到它在ENT表中的索引为2，那么我们到序号表中查询索引为2的序号值，其结果为4，这意味着Sub函数的RVA地址存放在EAT表中的索引为4的地方，此时我们再查看EAT表就可以得到Sub函数的RVA为0x1060</li>
-<li>对于序号导出方式，我们将Mul以序号7将其导出，此时Base =
-1，那么Mul的RVA地址在EAT表中的索引就是7 - 1 =
-6，通过查EAT表我们得到了Mul的RVA为0x1070</li>
-</ul>
-<h3 id="重定位表">重定位表</h3>
-<p>首先，为什么会有重定位表，我们都知道在可选映像头中有一个ImageBase属性，这个属性标识了PE文件默认的载入基地址，但是一个exe文件可能同时包含了多个DLL，而这些DLL的ImageBase又都是0x10000000，为了避免冲突现象，我们只能将没抢占到0x10000000这个位置的DLL放入内存中的其他位置，此时就产生了一个问题，DLL中某些数据的地址写的是直接地址（ImageBase
-+
-RVA），此时换了一个新的基地址，我们要如何取到正确的取得这些数据呢，这就是重定位表的作用，标识出那些需要修正的位置</p>
-<h4 id="重定位表的结构">重定位表的结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_BASE_RELOCATION</span> &#123;</span></span><br><span class="line">    DWORD   VirtualAddress;</span><br><span class="line">    DWORD   SizeOfBlock;</span><br><span class="line"><span class="comment">//  WORD    TypeOffset[1];</span></span><br><span class="line">&#125; IMAGE_BASE_RELOCATION;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>VirtualAddress：重定位数据开始的RVA地址</li>
-<li>SizeOfBlock：重定位块的大小</li>
-</ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表图.png" /></p>
-<ul>
-<li>首先需要注意的是IMAGE_BASE_RELOCATION并不是孤立的一张表，在结构体后紧跟是一个WORD类型（2字节）的数组，数组长度为（SizeOfBlock
-- 8）/ 2</li>
-<li>其次，这些数据是高4位+低12位的结构，其中高4位为修改标记，若其为0011（即十进制的3），则表示该数据需要修改，低12位是一个Offset，需要用重定位表中的VirtualAddress
-+
-Offset才是需要修改的数据的RVA；若高4位为0，则不需要修改，作为对齐用</li>
-<li>每一张重定位表，都会记录一个4KB大小的数据块中需要修改的数据</li>
-<li>最后，重定位表最终以一个8字节大小的全0结构作为结束的标志</li>
-</ul>
-<p>最后，可能有人会有疑问，对于一个寻址能力为32位的操作系统，为什么Offset是一个2个字节大小的结构，内存地址不是需要4字节才能完整表示吗？</p>
-<p>这是因为重定位表采用VirtualAddress +
-Offset表示RVA造成的，我们先来看看这么做的好处，假设我们有一个16KB大小的数据块，其中有1000个需要重定位的数据</p>
-<ul>
-<li>如果我们采用直接记录RVA的方式，那么只需要一张重定位表，其大小为1000
-* 4 = 4000字节（如果需要SizeOfBlock记录大小，则至少为4004字节）</li>
-<li>如果我们采用VirtualAddress +
-Offset的方式，那么按实际的重定位表结构，我们将会有4张重定位表（每个重定位表只记录4KB大小的数据块），假设这1000个数据均匀分布在这4张表中，那么每张重定位表的大小为
-8 + 250 * 2 =
-508字节，那么4张重定位表总共2032字节，我们可以发现这样的设计大大缩小了重定位表的大小</li>
-</ul>
-<p>在理解了这样设计的好处之后，现在我们来回答，为什么Offset只需要两字节</p>
-<p>从原理的角度：一张重定位表记录一个4BK大小的数据块（即0x0000 ~
-0x0FFF），也就是说，我们的Offset只要能表示这个范围内的地址即可，因此Offset只需要12位即可表示（即重定位表中数据的低12位），处于对齐和功能性，我们将其设计为16位，即2字节，那么高4位就用来记录是否需要修改这一信息，所以VirtualAddress大小为4字节，可以记录任意数据块的在内存中的起始地址RVA，而Offset只需要2字节就可表示块内的任意Offset</p>
-<h4 id="实例-1">实例</h4>
-<p>还是以之前DLLTest.dll为例，我们在PE
-Tools中可以看到，该文件共有两张重定位表，标识了不同区块中需要修正的数据，其中.text中共有140个可能需要重定位的数据，而.data中有16个</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表.png" /></p>
-<p>我们以.text中的第一个、第三个需要修改的数据为例，首先分析下他们的RVA
-0x1012和0x101E是怎么得到的，我们在16进制编辑器中找到重定位表，红框圈中的即为第一项数据0x3012和第三项数据0x301E，我们将其转换为二进制分别为0011
-0000 0001 0010和0011 0000 0001
-1110，可以发现他们的高4位都为0011，即需要修改，那么他们的低12位为Offset，分别是0x12和0x1E，那么需要修改的数据的RVA分别为VirtualAddress
-+ Offset，即0x1012和0x101E</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-16进制重定位.png" /></p>
-<p>此时DLLTest.dll的ImageBase为0x10000000，我们用另一个程序调用DLLTest.dll，并用x64Dbg打开该程序，找到0x10001012处，可以发现其中一个是Push指令，而另一个是call指令（因为Push指令的操作码为0x68，需要占用一个字节，所以指令开始的地址是0x0x10001011，而0x10001012才是实际需要修改的数据的起始地址，call指令同理），那么当DLLTest.dll发生重定位时，这两个部分的数据就需要修改，此时记下他们：①0x100020A4；②0x10002030</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位汇编.png" /></p>
-<p>现在我们让DLL不从ImageBase载入，但不修改ImageBase中的值，我们在VS中将随机基址的打开，然后重新编译我们的DLL和调用该DLL的程序，现在虽然DLL的ImageBase还是0x10000000，但实际载入内存时DLL并不会从ImageBase载入
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-修改基址.png" /></p>
-<p>我们在x64Dbg中重新定位，可以发现此时我们的DLL已经被放到了内存中的其他位置，且载入的基地址为0x78590000，此时我们看到RVA为0x1012处的数据被改成了0x785920A4，而RVA为0x101E处的数据被改为了0x78592030</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-新地址.png" /></p>
-<p>我们不难看出这两个值是如何计算得到的</p>
-<ul>
-<li>0x785920A4 = 0x100020A4 - 默认基地址0x10000000 +
-新基地址0x78590000</li>
-<li>0x78592030 = 0x10002030 - 默认基地址0x10000000 +
-新基地址0x78590000</li>
-</ul>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>PE文件解析（四）</title>
-    <url>/2022/03/21/2022-03-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="资源表">资源表</h3>
-<p>资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页</p>
-<p>为了便于理解，先给出一张资源表的树形结构图</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源表树形.png" /></p>
-<span id="more"></span>
-<h4 id="资源目录结构">资源目录结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;        <span class="comment">//资源属性，但通常为0</span></span><br><span class="line">    DWORD   TimeDateStamp;          <span class="comment">// 资源建立时间</span></span><br><span class="line">    WORD    MajorVersion;           <span class="comment">// 资源的版本，但通常为0</span></span><br><span class="line">    WORD    MinorVersion;           </span><br><span class="line">    WORD    NumberOfNamedEntries;   <span class="comment">// 使用名字的资源条目的个数</span></span><br><span class="line">    WORD    NumberOfIdEntries;      <span class="comment">// 使用ID的资源条目个数</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY</span><br></pre></td></tr></table></figure>
-<p>其中最关键的属性是NumberOfNamedEntries和NumberOfIdEntries，他们指出了本目录种目录项的总和（即资源类型的总个数）</p>
-<h4 id="资源目录入口结构">资源目录入口结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY_ENTRY</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD NameOffset:<span class="number">31</span>;</span><br><span class="line">            DWORD NameIsString:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME;</span><br><span class="line">        DWORD   Name;</span><br><span class="line">        WORD    Id;</span><br><span class="line">    &#125; DUMMYUNIONNAME;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   OffsetToData;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD   OffsetToDirectory:<span class="number">31</span>;</span><br><span class="line">            DWORD   DataIsDirectory:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME2;</span><br><span class="line">    &#125; DUMMYUNIONNAME2;</span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY_ENTRY</span><br></pre></td></tr></table></figure>
-<p>可以看到其中有两个union结构，我们可以简单的理解为，资源目录入口结构包含两个属性Name（ID）、OffsetToData，根据情况的不同，他们有不同的含义</p>
-<ul>
-<li>Name（ID）属性：定义了目录项的名称或ID，当最高位（NameIsString）为0时，表示该属性通过ID使用；为1时，表示该属性通过Name使用，且资源名称使用Unicode编码，低31位为Name的Offset，但NameOffset并不直接指向字符串，而是指向一个IMAGE_RESOURCE_DIR_STRING_U结构，该结构如下所示
-<ul>
-<li>当用于第一层目录时，定义的是资源的类型</li>
-<li>当用于第二层目录时，定义的是资源的名称</li>
-<li>当用于第三层目录时，定义的时代码页的编号</li>
-</ul></li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIR_STRING_U</span> &#123;</span></span><br><span class="line">    WORD    Length;             <span class="comment">// 字符串的长度（不一定以0结尾，所以该属性很重要）</span></span><br><span class="line">    WCHAR   NameString[ <span class="number">1</span> ];    <span class="comment">// 具体的Unicode字符串</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIR_STRING_U</span><br></pre></td></tr></table></figure>
-<ul>
-<li>OffsetToData属性：一个指针，当最高位为1时，低31位指向下一层IMAGE_RESOURCE_DIRECTORY的起始地址；当最高位为0时，指向IMAGE_RESOURCE_DATA_ENTRY结构</li>
-</ul>
-<p><strong>当NameOffset和OffsetToData作为Offset使用时，该指针从资源区块的开始处计算偏移，即它们并不是RVA</strong></p>
-<p><strong>当IMAGE_RESOURCE_DIRECTORY_ENTRY用在第一层的目录时，其Name（ID）属性用于标记资源类型，而Windows有14种预定义的类型，且用ID标识，ID的数值在1到16之间</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">ID值</th>
-<th style="text-align: center;">资源类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">01h</td>
-<td style="text-align: center;">光标（Cursor）</td>
-</tr>
-<tr>
-<td style="text-align: center;">02h</td>
-<td style="text-align: center;">位图（Bitmap）</td>
-</tr>
-<tr>
-<td style="text-align: center;">03h</td>
-<td style="text-align: center;">图标（Icon）</td>
-</tr>
-<tr>
-<td style="text-align: center;">04h</td>
-<td style="text-align: center;">菜单（Menu）</td>
-</tr>
-<tr>
-<td style="text-align: center;">05h</td>
-<td style="text-align: center;">对话框（Dialog）</td>
-</tr>
-<tr>
-<td style="text-align: center;">06h</td>
-<td style="text-align: center;">字符串（String）</td>
-</tr>
-<tr>
-<td style="text-align: center;">07h</td>
-<td style="text-align: center;">字体目录（Front Directory）</td>
-</tr>
-<tr>
-<td style="text-align: center;">08h</td>
-<td style="text-align: center;">字体（Front）</td>
-</tr>
-<tr>
-<td style="text-align: center;">09h</td>
-<td style="text-align: center;">快捷键（Accelerators）</td>
-</tr>
-<tr>
-<td style="text-align: center;">0Ah</td>
-<td style="text-align: center;">未格式化资源（Unformatted）</td>
-</tr>
-<tr>
-<td style="text-align: center;">0Bh</td>
-<td style="text-align: center;">消息表（Message Table）</td>
-</tr>
-<tr>
-<td style="text-align: center;">0Ch</td>
-<td style="text-align: center;">光标组（Group Cursor）</td>
-</tr>
-<tr>
-<td style="text-align: center;">0Eh</td>
-<td style="text-align: center;">图标组（Group Icon）</td>
-</tr>
-<tr>
-<td style="text-align: center;">10h</td>
-<td style="text-align: center;">版本信息（Version Information）</td>
-</tr>
-</tbody>
-</table>
-<h4 id="资源数据入口结构">资源数据入口结构</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DATA_ENTRY</span> &#123;</span></span><br><span class="line">    DWORD   OffsetToData;       <span class="comment">// 资源数据的RVA</span></span><br><span class="line">    DWORD   Size;               <span class="comment">// 资源数据的长度</span></span><br><span class="line">    DWORD   CodePage;           <span class="comment">// 代码页，一般为0</span></span><br><span class="line">    DWORD   Reserved;           <span class="comment">// 保留字段</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DATA_ENTRY</span><br></pre></td></tr></table></figure>
-<p>该结构就是真正的资源数据的结构了，其中OffsetToData是RVA，而不是相对于资源块起始位置的Offset</p>
-<h3 id="实例">实例</h3>
-<p>我这里用一个Win32程序为实例，先用PE Tools查看其资源表内容</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-示例资源表.png" /></p>
-<h4 id="根目录">根目录</h4>
-<p>可以看到其中共有7种不同的资源类（24好像是清单类型，暂时每找到相关文档信息），首先在16进制编辑器中观察其根目录</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-根目录.png" /></p>
-<ul>
-<li>4字节Characteristics，此时为0</li>
-<li>4字节TimeDateStamp，为0</li>
-<li>2字节MajorVersion，为0</li>
-<li>2字节MinorVersion，为0</li>
-<li>2字节NumberOfNamedEntries，为0</li>
-<li>2字节NumberOfIdEntries，为7</li>
-</ul>
-<h4
-id="根目录下的image_resource_directory_entry">根目录下的IMAGE_RESOURCE_DIRECTORY_ENTRY</h4>
-<p>我们以Menu作为分析对象，它是第二个IMAGE_RESOURCE_DIRECTORY_ENTRY结构，因为该结构大小位8字节，所以它的位置应该是2400h
-+ 8 = 2408h，我们在16进制编辑器中可以看到如下内容</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第一层Entry.png" /></p>
-<p>可以看到其Name（ID）属性值为：0x00000004，其OffsetToData属性值为0x800000E8，我们进一步解析</p>
-<ul>
-<li>Name（ID）属性的最高位为0，表示它通过ID标识，由于是第一层目录中，它代表一个预定义的资源，查表我们发现04h是Menu</li>
-<li>OffsetToData属性的最高位为1，表示它指向下一层目录，其Offset是E8h，那么下一层目录的地址为2400h
-+ E8h = 24E8h</li>
-</ul>
-<h4
-id="第二层目录的image_resource_directory">第二层目录的IMAGE_RESOURCE_DIRECTORY</h4>
-<p>第二层目录如下所示</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第二层目录.png" /></p>
-<p>可以知道其NumberOfIdEntries为1，表示Menu资源下只有一个该类资源</p>
-<p>紧跟其后的8字节就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构，可以看到其Name（ID）属性值为：0x0000006D，其OffsetToData属性值为0x80003030</p>
-<ul>
-<li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为6Dh，即十进制的109</li>
-<li>OffsetToData属性的最高位为1，表示它指向下一层目录，其Offset是330h，那么下一层目录的地址为2400h
-+ 330h = 2730h</li>
-</ul>
-<h4
-id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE_DIRECTORY</h4>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层目录.png" /></p>
-<p>可以知道其NumberOfIdEntries为1，表示该资源代码页只有一项</p>
-<p>紧跟其后就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层Entry.png" /></p>
-<p>可以看到其Name（ID）属性值为：0x00000804，其OffsetToData属性值为0x000004F8</p>
-<ul>
-<li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为804h</li>
-<li>OffsetToData属性的最高位为0，表示它指向IMAGE_RESOURCE_DATA_ENTRY结构，其Offset是4F8h，那么该结构的地址为2400h
-+ 4F8h = 28F8h</li>
-</ul>
-<h4 id="image_resource_data_entry">IMAGE_RESOURCE_DATA_ENTRY</h4>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源data.png" /></p>
-<ul>
-<li>OffsetToData为01AE90h</li>
-<li>Size为50h</li>
-<li>CodePage为0<br />
-</li>
-<li>Reserved为0</li>
-</ul>
-<h4 id="image_resource_dir_string_u">IMAGE_RESOURCE_DIR_STRING_U</h4>
-<p>因为示例程序比较简单，没有用到这个结构，所以这里单独找一个比较复杂的程序用来展示</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂程序.png" /></p>
-<p>可以看到根目录下第一类资源是用Name标识的，其名字为"AFX_DIALOG_LAYOUT"，我们在16进制中观察其IMAGE_RESOURCE_DIRECTORY_ENTRY</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂entry.png" /></p>
-<p>可以看到其Name（ID）属性值为：0x8000CB2E，其OffsetToData属性值为0x800000B0</p>
-<ul>
-<li>Name（ID）属性的最高位为1，表示它通过Name标识，且Name的Offset为CB2Eh，那么IMAGE_RESOURCE_DIR_STRING_U结构的地址为630000h
-+ CB2Eh = 63CB2Eh</li>
-<li>OffsetToData属性的最高位为1，表示它指向下一层目录</li>
-</ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-名字结构.png" /></p>
-<p>可以看到IMAGE_RESOURCE_DIR_STRING_U结构中Length为11h，而NameString为Unicode表示的"AFX_DIALOG_LAYOUT"（可以注意到字符串并没有以0结尾，所以Length属性很重要）</p>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>逆向之植物大战僵尸（一）</title>
-    <url>/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<p>植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能：<br />
-1. 无限阳光和无限金币<br />
-2. 取消植物放置的CD<br />
-3. 同一个位置可以重复放置植物</p>
-<h3 id="无限阳光">无限阳光</h3>
-<h4 id="静态基址与动态地址">静态基址与动态地址</h4>
-<ol type="1">
-<li><p>静态基址：是指静态基址中的内容，不会因程序的重新启动而改变，只有在程序重新编译后才会变动</p></li>
-<li><p>动态地址：是指地址中的内容，会因程序的重新启动而变动的地址，也就是说，当前状态下，地址中保存的信息是我们所需的信息，但程序重新启动后，该地址中的内容就不再是我们所需的信息了</p></li>
-</ol>
-<span id="more"></span>
-<h4 id="寻找阳光动态地址">寻找阳光动态地址</h4>
-<ol type="1">
-<li>首先通过CE附加植物大战僵尸进程，因为阳光是一个精确的数值50，所以可以选择exact
-value来进行搜索，首次搜索会得到很多相关的结果</li>
-</ol>
-<figure>
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png"
-alt="1" />
-<figcaption aria-hidden="true">1</figcaption>
-</figure>
-<ol start="2" type="1">
-<li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-%E9%98%B3%E5%85%892.png" />
-为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
-<p>如何判断这个地址是否是静态基址，若CE标识的地址为绿色，则该地址为静态基址，而此处的地址并不是绿色的，所以这是个动态地址，因此我们需要寻找基址</p>
-<h4 id="寻找基址">寻找基址</h4>
-<ol type="1">
-<li>我们已经找到了阳光的动态地址，那么如何寻找基址，思路是，阳光每次变动就意味着一定有一条指令修改了这个地址中的值，那么我们可以下一个内存写入断点，看看哪条指令写入了这个地址，所以我们再CE中选中这个地址，右键找到find
-out what writes to this address</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光3.png" /></p>
-<p>之后我们收集一个阳光，发现得到了一条指令，我们双击打开</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光4.png" /></p>
-<p>此时我们可以知道，ecx的值0x19，也就是25，写入了阳光地址标识的内存中，因此阳光的地址
-= eax + 0x5560，该地址内存放了当前阳光的具体数值，其中eax =
-0x17326B58，而0x5560为偏移地址</p>
-<ol start="2" type="1">
-<li>此时我们猜想，内存中有没有一个位置存放了0x17326B58这个值，因此我们可以使用CE，并以16进制搜索0x17326B58，发现很多搜索结果，首先可以排除地址在0x00400000以下的内容，这部分是不进行映射的，以便捕获异常的空指针引用，因此我们找到第一个大于0x00400000的地址，这个值通常是我们需要的，即0x0290A938</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光5.png" /></p>
-<p>此时我们可以知道0x0290A938这个地址内保存了0x17326B58这个值，但是0x0290A938这个地址仍是个动态地址，所以我们还需要进一步寻找基址</p>
-<p>此时我们用CE下个内存访问断点，查看哪条指令访问了0x0290A938这个地址内的值，可以看到4个结果，我们点进第一个指令发现0x0290A938
-= edi + 0x768，其中edi = 0290A1D0，0x768也是偏移地址</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光6.png" /></p>
-<p>那么同理我们可以看看内存中哪里存放了0290A1D0，得到如下结果</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光7.png" /></p>
-<p>这时我们看到几个绿色的地址，这就代表这些地址就是静态基址，我们选择第一个，可以看到其地址为0x6A9EC0，这就是我们需要的静态基址，那么如何通过静态基址找到最后的阳光地址呢</p>
-<ol type="1">
-<li>现在梳理一下这个过程
-<ul>
-<li>阳光的动态地址 = 0x17326B58 +
-0x5560，而0x17326B58存在地址为0x0290A938的内存中，即[0x0290A938] =
-0x17326B58</li>
-<li>地址0x0290A938 = 0290A1D0 +
-0x768，而0290A1D0存在地址为静态基址为0x6A9EC0的内存中，即[0x6A9EC0] =
-0x0290A1D0</li>
-<li>所以我们可以得到，阳光地址 = [[0x6A9EC0] + 0x768] + 0x5560</li>
-</ul></li>
-</ol>
-<p>之后我们在CE中验证我们的结果，选择add address manually</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光8.png" /></p>
-<p>之后选择Point，因为此处包含两个偏移地址，因此再点击add
-offset，然后填入我们找到的基址与偏移地址</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光9.png" /></p>
-<p>最终我们可以看到，这个地址内，存的就是当前阳光的数值，修改后，游戏内的阳光也随之改变，且重启游戏后，该地址仍然存的是阳光的数值</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光10.png" /></p>
-<h4 id="实现无限阳光的功能">实现无限阳光的功能</h4>
-<p>的到进程空间中阳光的地址，并向阳光地址处写入所需阳光数，即可实现无限阳光的功能，具体实现细节就不做赘述，给出核心代码</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将寻找地址功能封装成GetThirdLevelAddress()函数，方便后续寻找金币地址</span></span><br><span class="line">DWORD sunAddress = <span class="built_in">GetThirdLevelAddress</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义阳光数量</span></span><br><span class="line">DWORD dwSun = <span class="number">9999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入             </span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess, (LPVOID)sunAddress, (LPCVOID)&amp;dwSun, <span class="built_in"><span class="keyword">sizeof</span></span>(DWORD), &amp;pid)          </span><br></pre></td></tr></table></figure>
-<p>金币地址的寻找大同小异，这里也不再赘述，这样我们就完成了无限阳光与无限金币的功能</p>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>逆向之植物大战僵尸（二）</title>
-    <url>/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
-    <content><![CDATA[<p>回顾一下<a
-href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89">上一章</a>实现无限阳光的方法，我们首先猜想有一个变量存储了当前阳光的值，即在内存中有一块空间存储了阳光的值，只需要找到该空间，再将期望的阳光数写入该空间即可实现无限阳光的功能，通过CE多次搜索阳光，我们最终通过基址
-+ 2次间址的形式定位到了阳光的具体地址</p>
-<h3 id="取消植物放置cd">取消植物放置CD</h3>
-<h4 id="思路">思路</h4>
-<p>现在我们实现取消植物放置CD的功能，可以猜想有一个变量存放了某个植物的放置CD，而另一个变量存放了CD计时器，然后通过一个函数判断，当<strong>CD计时器从0开始增长到大于等于CD时</strong>或<strong>CD计时器从CD值开始减少到0时</strong>，可以再次放置植物，即</p>
-<span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> plantCD = xxx</span><br><span class="line"><span class="keyword">int</span> CDTimers = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers增加</span></span><br><span class="line"><span class="keyword">if</span>(CDTimers &gt;= plantCD)&#123;     </span><br><span class="line">     可以放置植物;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  or</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers减少</span></span><br><span class="line">CDTimers = plantCD</span><br><span class="line"><span class="keyword">if</span>(CDtimer &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">    可以放置植物;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在此猜想上我们不难发现两种实现思路：<br />
-1. 方法一是置植物CD为0<br />
-2. 方法二是让if判断能一直成立</p>
-<p>对于方法一，因为每个植物都有其独立的CD，要搜索每一个植物的CD值工作量相对较大，且我们并不知道植物CD的具体数值，在搜索中也较为困难，且在搜索到植物CD后还需要再定位其静态基址</p>
-<p>对于方法二，无论植物CD是多少，能否放置植物都依赖于函数的判断，如果我们能定位到该if判断的位置，那么我们就能通过修改程序执行的流程，使其无条件的执行可以放置植物的代码</p>
-<p>因此我们的思路就是：
-首先找到CDTimers，然后定位if判断的位置，修改程序执行的流程</p>
-<h4 id="寻找cdtimers">寻找CDTimers</h4>
-<ol type="1">
-<li>因为我们无法确定CDTimers的初始值，所以在CE的搜索方式中我们选择未知初始值，并点击First
-Scan</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-搜索.png" /></p>
-<ol start="2" type="1">
-<li>我们以向日葵作为对象，此时放置向日葵，并选择changed
-value，然后再次搜索</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次搜索.png" /></p>
-<ol start="3" type="1">
-<li>我们发现CE得到了非常多的搜索结果，此时游戏处于暂停阶段，CDTimers并未改变，所以我们可以在CE中选择unchanged
-value，并多次搜索过滤大量无关数据</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-多次搜索过滤.png" /></p>
-<ol start="4" type="1">
-<li>此时搜索结果减少的量已经很少了，此时我们让游戏继续一段时间，此时CDTimers的值改变，因此再CE中再次选择changed
-value并搜索</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次精准搜索.png" /></p>
-<ol start="5" type="1">
-<li>我们重复步骤3和4，直至搜索到少量结果（向日葵CD结束可再放置一次重复搜索）</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-最终结果.png" /></p>
-<ol start="6" type="1">
-<li>我们发现最后一个结果的值172比较符合我们的猜想，并发现在游戏进行时，该值不断增大，此时向日葵处于不可放置的状态，那么该值是否会增大到某一个界限后导致向日葵可以重新安放呢，为印证猜想，我们在此处将该值改为1000</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-修改可疑值.png" /></p>
-<p>我们发现此时向日葵恢复了可放置的状态，猜想正确，该值就是CDTimers</p>
-<h4 id="定位if判断的位置">定位If判断的位置</h4>
-<ol type="1">
-<li>我们知道当植物处于不可放置状态时，CDTimers的值会不断增加，因此我们可以得知必定有一条指令像该内存写入了数据，因此我们可以对CDTimer下一个内存写入断点</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-内存写入断点.png" /></p>
-<ol start="2" type="1">
-<li>此时我们选择show
-disassembler可以看到如下内容，我们发现该值增加后存入了eax寄存器，而之后eax与内存中[edi+0x24]处的值进行了对比，我们猜测该CMP指令就是我们要找的if判断指令，我们记下该CMP指令的地址</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-反汇编.png" /></p>
-<ol start="3" type="1">
-<li>用x64Dbg附加植物大战僵尸进程（若附加失败可关闭CE后再尝试附加），之后我们在x64Dbg中通过地址找到CMP指令，并在该处下断点，是程序运行到CMP指令处</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-调试器.png" /></p>
-<ol start="4" type="1">
-<li>此时我们单步执行一次，发现跳转指令jle执行，而此时向日葵是处于无法安置状态的，如果该CMP就是我们需要的if判断，那么可以推测出，若跳转执行，则植物仍在CD，不可放置；若跳转不执行，则植物没有CD，可以放置</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-jle指令.png" /></p>
-<ol start="5" type="1">
-<li>为验证猜想，我们可以改变程序的执行流程，即让jle指令不跳转，因为jle跳转与否是由标志寄存器（ZF
-== 1 || SF != OF）决定，此时SF !=
-OF，跳转执行，因此我们将SF的值该为0，此时跳转就不会执行，之后我们运行程序，可以观察到植物的CD取消</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-改执行流程.png" /></p>
-<ol start="6" type="1">
-<li>此时我们可以确定该CMP就是我们需要的if判断，而其结果决定了jle指令是否跳转，若我们让jle指令永不跳转，那就实现了植物放置无CD的功能，因此我们在x64Dbg中将jle指令用nop填充并取消断点，回到游戏中，我们发现放置植物之后将不会有CD，功能实现成功</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-nop.png" /></p>
-<h4 id="实现取消cd功能">实现取消CD功能</h4>
-<p>其过程就是用代码的形式将jle指令用nop填充 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// nop指令的机器码，保证与原jle指令长度相同</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0x90</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在jle指令地址处，用nop填充</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x00487296</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      <categories>
-        <category>逆向</category>
-      </categories>
-  </entry>
-  <entry>
     <title>八股</title>
     <url>/2025/03/07/2025-03-07-%E5%85%AB%E8%82%A1/</url>
     <content><![CDATA[<h1 id="c">C++</h1>
@@ -3773,8 +365,378 @@ id="说说地址变换中有快表和没快表的流程">说说地址变换中�
       </categories>
   </entry>
   <entry>
+    <title>逆向之植物大战僵尸（一）</title>
+    <url>/2023/02/21/2023-02-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<p>植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能：<br />
+1. 无限阳光和无限金币<br />
+2. 取消植物放置的CD<br />
+3. 同一个位置可以重复放置植物</p>
+<h3 id="无限阳光">无限阳光</h3>
+<h4 id="静态基址与动态地址">静态基址与动态地址</h4>
+<ol type="1">
+<li><p>静态基址：是指静态基址中的内容，不会因程序的重新启动而改变，只有在程序重新编译后才会变动</p></li>
+<li><p>动态地址：是指地址中的内容，会因程序的重新启动而变动的地址，也就是说，当前状态下，地址中保存的信息是我们所需的信息，但程序重新启动后，该地址中的内容就不再是我们所需的信息了</p></li>
+</ol>
+<span id="more"></span>
+<h4 id="寻找阳光动态地址">寻找阳光动态地址</h4>
+<ol type="1">
+<li>首先通过CE附加植物大战僵尸进程，因为阳光是一个精确的数值50，所以可以选择exact
+value来进行搜索，首次搜索会得到很多相关的结果</li>
+</ol>
+<figure>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png"
+alt="1" />
+<figcaption aria-hidden="true">1</figcaption>
+</figure>
+<ol start="2" type="1">
+<li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-%E9%98%B3%E5%85%892.png" />
+为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
+<p>如何判断这个地址是否是静态基址，若CE标识的地址为绿色，则该地址为静态基址，而此处的地址并不是绿色的，所以这是个动态地址，因此我们需要寻找基址</p>
+<h4 id="寻找基址">寻找基址</h4>
+<ol type="1">
+<li>我们已经找到了阳光的动态地址，那么如何寻找基址，思路是，阳光每次变动就意味着一定有一条指令修改了这个地址中的值，那么我们可以下一个内存写入断点，看看哪条指令写入了这个地址，所以我们再CE中选中这个地址，右键找到find
+out what writes to this address</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光3.png" /></p>
+<p>之后我们收集一个阳光，发现得到了一条指令，我们双击打开</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光4.png" /></p>
+<p>此时我们可以知道，ecx的值0x19，也就是25，写入了阳光地址标识的内存中，因此阳光的地址
+= eax + 0x5560，该地址内存放了当前阳光的具体数值，其中eax =
+0x17326B58，而0x5560为偏移地址</p>
+<ol start="2" type="1">
+<li>此时我们猜想，内存中有没有一个位置存放了0x17326B58这个值，因此我们可以使用CE，并以16进制搜索0x17326B58，发现很多搜索结果，首先可以排除地址在0x00400000以下的内容，这部分是不进行映射的，以便捕获异常的空指针引用，因此我们找到第一个大于0x00400000的地址，这个值通常是我们需要的，即0x0290A938</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光5.png" /></p>
+<p>此时我们可以知道0x0290A938这个地址内保存了0x17326B58这个值，但是0x0290A938这个地址仍是个动态地址，所以我们还需要进一步寻找基址</p>
+<p>此时我们用CE下个内存访问断点，查看哪条指令访问了0x0290A938这个地址内的值，可以看到4个结果，我们点进第一个指令发现0x0290A938
+= edi + 0x768，其中edi = 0290A1D0，0x768也是偏移地址</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光6.png" /></p>
+<p>那么同理我们可以看看内存中哪里存放了0290A1D0，得到如下结果</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光7.png" /></p>
+<p>这时我们看到几个绿色的地址，这就代表这些地址就是静态基址，我们选择第一个，可以看到其地址为0x6A9EC0，这就是我们需要的静态基址，那么如何通过静态基址找到最后的阳光地址呢</p>
+<ol type="1">
+<li>现在梳理一下这个过程
+<ul>
+<li>阳光的动态地址 = 0x17326B58 +
+0x5560，而0x17326B58存在地址为0x0290A938的内存中，即[0x0290A938] =
+0x17326B58</li>
+<li>地址0x0290A938 = 0290A1D0 +
+0x768，而0290A1D0存在地址为静态基址为0x6A9EC0的内存中，即[0x6A9EC0] =
+0x0290A1D0</li>
+<li>所以我们可以得到，阳光地址 = [[0x6A9EC0] + 0x768] + 0x5560</li>
+</ul></li>
+</ol>
+<p>之后我们在CE中验证我们的结果，选择add address manually</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光8.png" /></p>
+<p>之后选择Point，因为此处包含两个偏移地址，因此再点击add
+offset，然后填入我们找到的基址与偏移地址</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光9.png" /></p>
+<p>最终我们可以看到，这个地址内，存的就是当前阳光的数值，修改后，游戏内的阳光也随之改变，且重启游戏后，该地址仍然存的是阳光的数值</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光10.png" /></p>
+<h4 id="实现无限阳光的功能">实现无限阳光的功能</h4>
+<p>的到进程空间中阳光的地址，并向阳光地址处写入所需阳光数，即可实现无限阳光的功能，具体实现细节就不做赘述，给出核心代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将寻找地址功能封装成GetThirdLevelAddress()函数，方便后续寻找金币地址</span></span><br><span class="line">DWORD sunAddress = <span class="built_in">GetThirdLevelAddress</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义阳光数量</span></span><br><span class="line">DWORD dwSun = <span class="number">9999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入             </span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess, (LPVOID)sunAddress, (LPCVOID)&amp;dwSun, <span class="built_in"><span class="keyword">sizeof</span></span>(DWORD), &amp;pid)          </span><br></pre></td></tr></table></figure>
+<p>金币地址的寻找大同小异，这里也不再赘述，这样我们就完成了无限阳光与无限金币的功能</p>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>二分查找</title>
+    <url>/2022/02/16/2022-02-16-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<blockquote>
+<p><strong>二分查找的思路非常简单，但在实际写算法的过程中发现有很多细节还需要多加理解，比如</strong></p>
+<p>① 为什么有时right = nums.size()，有时却是right = nums.size() -
+1<br />
+② while循环中的条件，为什么有时是&lt;=，有时是&lt;<br />
+③ 在区间划分时，为什么有时left = mid + 1，right = mid - 1; 有时却是left
+= mid + 1,right = mid</p>
+</blockquote>
+<span id="more"></span>
+<hr />
+<p>以最简单的二叉搜索为例 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 二分查找的基本用法</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BinarySearch</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> right = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">        <span class="comment">// 取mid的另一种形式</span></span><br><span class="line">        <span class="comment">// mid = (left + right) / 2与mid = left + (right - left) / 2</span></span><br><span class="line">        <span class="comment">// 在形式上是等价的，区别是前者存在溢出的可能</span></span><br><span class="line">        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;    </span><br><span class="line">        <span class="keyword">if</span>(nums[mid] == targrt)&#123;</span><br><span class="line">            <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &lt; target)&#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            right = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="区间与循环终止的条件">区间与循环终止的条件</h2>
+<h3 id="区间">区间</h3>
+<ol type="1">
+<li><strong>两种比较常见的区间形式</strong>
+<ul>
+<li>两端都是闭区间：[left，right]，即<strong>right = nums.size() -
+1</strong></li>
+<li>左闭右开：[left，right)，即<strong>right =
+nums.size()</strong>（右边界在数组中越界）</li>
+</ul></li>
+<li><strong>left = mid + 1，right = mid - 1与left = mid + 1，right =
+mid两种划分区间的方式有何区别</strong>
+<ul>
+<li>对于两端都是闭区间的[left，right]，因为mid已经搜索过，也就是将整个区间分为了三个部分，即[left，mid
+- 1]、[mid]、[mid + 1，right]，此时<strong>left = mid + 1，right = mid -
+1</strong></li>
+<li>对于左闭右开的[left，right)，因为mid已经搜索过，区间也分为了三个部分，为了保持区间形式的一致性，此时的三个区间应该是[left，mid)、[mid]、[mid
++ 1，right)，故<strong>left = mid + 1，right = mid</strong></li>
+<li>同理，对于左开右闭的(left，right]，三个区间应该是(left，mid -
+1]、[mid]、(mid，right]，故<strong>left = mid，right = mid -
+1</strong></li>
+</ul></li>
+</ol>
+<h3 id="循环终止条件">循环终止条件</h3>
+<ol type="1">
+<li><strong>为什么有时是&lt;=，有时是&lt;</strong>
+<ul>
+<li>对于<strong>left &lt;= right</strong>，当循环结束时，left = right +
+1，无论区间形式是[right，left]，还是[left，right)，此时整个序列都已经搜索完毕，待搜索区间为空（但后者会出现错误）</li>
+<li>对于<strong>left &lt; right</strong>，当循环结束时，left =
+right，区间形式是[left，left]或[left，left)
+<ul>
+<li>也就是说对于两端都是闭区间的[left，right]形式，当循环结束时，整个序列并没有搜索完毕，剩下了一个[left，left]尚未搜索，此时并不能直接返回，需要再做处理</li>
+<li>而对于左闭右开的[left，right)形式，当循环结束时，整个序列已经搜索完毕（不会出现错误）</li>
+</ul></li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 对于left &lt; right，且是[left, right]形，需要补充</span></span><br><span class="line"><span class="keyword">return</span> nums[left] == target? left : <span class="number">-1</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="具体使用">具体使用</h3>
+<ol type="1">
+<li><strong>是否可以随意搭配使用</strong>
+<ul>
+<li>不可以，正如上面所说，<strong>对于循环结束条件为left &lt;=
+right</strong>与<strong>左闭右开的[left，right)形式</strong>组合使用时，无论采取何种划分区间的方式，总是会出现错误</li>
+</ul></li>
+<li><strong>以nums = {0，2，4，5}为例分析</strong>
+<ul>
+<li>当target在数组中确实存在时（如target = 2），此时可以正常工作</li>
+<li>当 <span class="math inline">\(\displaystyle target
+\le  5\)</span>但不等于数组中的任一一个值时（如target = 3或target = -1）
+<ul>
+<li>以<strong>left = mid + 1，right =
+mid</strong>方式划分区间，此时会造成while死循环，原因是区间收缩的<strong>最后一步</strong>总是右边界向左收缩，即right
+= mid，导致left = right恒成立，故无法跳出循环</li>
+<li>以<strong>left = mid + 1，right = mid -
+1</strong>方式划分区间，此时可以正常工作</li>
+</ul></li>
+<li>当 <span class="math inline">\(\displaystyle target
+&gt;  5\)</span>时（如target = 7）
+<ul>
+<li>以<strong>left = mid + 1，right =
+mid</strong>方式划分区间，可以正常工作</li>
+<li>以<strong>left = mid + 1，right = mid -
+1</strong>方式划分区间，此时会造成数组越界，原因是区间收缩的过程<strong>一直是</strong>左边界向右收缩，即left
+= mid + 1，最终收缩到left =
+right，而区间形式是[left，right)的，此时无法在right处取到数据，故数组越界</li>
+</ul></li>
+</ul></li>
+<li><strong>如何解决</strong>
+<ul>
+<li>上面已经分析了，只有<strong>循环结束条件为left &lt;=
+right</strong>与<strong>左闭右开的[left，right)形式</strong>组合使用时会出错，那么只需要避免使用这种组合即可，也就是有3中正确的组合方式
+<ul>
+<li><strong>循环结束条件为left &lt;=
+right</strong>与<strong>两端都是闭区间的[left，right]形式</strong>组合</li>
+<li><strong>循环结束条件为left &lt;
+right</strong>与<strong>左闭右开的[left，right)形式</strong>组合</li>
+<li><strong>循环结束条件为left &lt;
+right</strong>与<strong>两端都是闭区间的[left，right]形式</strong>组合（循环结束会剩下[left，left]需要单独处理，因此最好是使用前两种固定组合）</li>
+</ul></li>
+</ul></li>
+</ol>
+<h2 id="二分查找的进阶运用">二分查找的进阶运用</h2>
+<p>除了基础的使用二分查找在有序序列中搜索一个数，还有两种进阶的使用方式，代码也需要做一些小的修改</p>
+<h3 id="寻找左边界">寻找左边界</h3>
+<ol type="1">
+<li><strong>假如有一个有序序列[1, 2, 2, 2, 3,
+4]，现在要找到第一个’2‘所在位置的下标</strong>
+<ul>
+<li>一个容易想到的办法是顺序遍历这个有序序列，就能轻松的找到一个’2‘的下标</li>
+<li>另一个办法就是使用二分查找来减少搜索的次数，但用上述的二分查找代码，我们得到并不是第一个’2‘的下标1，而是第二个’2‘的下标2，故此时需要对二分查找进行一定的改进</li>
+</ul></li>
+<li><strong>怎么改进代码</strong>
+<ul>
+<li>在之前提到，对于<strong>循环结束条件为left &lt;
+right</strong>的形式，循环结束时，left =
+right，而<strong>左闭右开的[left，right)</strong>形式，能保证在循环结束时完整的遍历整个序列，因此，最终需要确定的就是如何划分区间</li>
+<li>一个关键的地方在于，普通的查找，只要找到target就立刻返回（即存在nums[mid]
+=
+target就返回），但此时为了查找左边界就不应该这么操作，而是应该收缩右边界，即<strong>right
+=
+mid</strong>，此时二分查找会继续搜索[left，right)是否还有满足要求的target，最终找到左边界</li>
+</ul></li>
+<li><strong>代码与例题</strong>
+<ul>
+<li>例题：<a
+href="https://leetcode-cn.com/problems/first-bad-version/">leetcode
+278.第一个错误版本</a>（原理相同）</li>
+<li>代码</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">LeftBoundary</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">int</span> left </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> right = nums.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;    </span><br><span class="line">        <span class="keyword">if</span>(nums[mid] == targrt)&#123;</span><br><span class="line">            right = mid;    <span class="comment">// 收缩右边界</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &lt; target)&#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            right = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> left;</span><br></pre></td></tr></table></figure>
+<h3 id="寻找右边界">寻找右边界</h3>
+<ol type="1">
+<li><strong>怎么改进代码</strong>
+<ul>
+<li>根据寻找左边界的思想，不难想到，当找到target时，不立刻返回，而是收缩左边界，为了保证<strong>左闭右开的[left，right)</strong>形式，应该令<strong>left
+= mid + 1</strong>，需要注意的是，因为是左边界收缩到left =
+right，而right是开区间，故<strong>实际的右边界是right - 1（或left -
+1）</strong></li>
+</ul></li>
+<li><strong>代码与例题</strong>
+<ul>
+<li>例题：指定一个target，要求找到其在非降序的数组nums中的插入位置的下标，要求插入后还要保持非降序的特性（例如target
+= 3， nums[1, 2, 2, 2, 4, 5]，此时应该返回下标4）</li>
+<li>代码</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">RightBoundary</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">int</span> left </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> right = nums.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;    </span><br><span class="line">        <span class="keyword">if</span>(nums[mid] == targrt)&#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;    <span class="comment">// 收缩右边界</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &lt; target)&#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            right = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> left;        <span class="comment">// 实际的右边界是left - 1</span></span><br><span class="line">                        <span class="comment">// 但插入位置是右边界之后的位置，故直接返回left即可</span></span><br></pre></td></tr></table></figure>
+<h3 id="tips">Tips</h3>
+<ol type="1">
+<li><p>二分查找的使用并不严格要求所求序列有序，如：<a
+href="https://leetcode-cn.com/problems/peak-index-in-a-mountain-array/">852.
+山脉数组的峰顶索引</a></p></li>
+<li><p>二分查找的重点在于理解，并明确所求，如何时是查找左边界，何时是查找有边界，对于两种常见的组合形式</p>
+<ul>
+<li><strong>循环结束条件为left &lt;=
+right</strong>与<strong>两端都是闭区间的[left，right]形式</strong>组合</li>
+<li><strong>循环结束条件为left &lt;
+right</strong>与<strong>左闭右开的[left，right)形式</strong>组合</li>
+</ul></li>
+</ol>
+<p>最后都可以完成<strong>利用二分查找搜索数</strong>、<strong>寻找左边界</strong>、<strong>寻找右边界</strong>的功能，不同的组合只需要根据不同的应用场合做一定的边界处理即可</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>逆向之植物大战僵尸（三）</title>
+    <url>/2023/02/27/2023-02-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/</url>
+    <content><![CDATA[<p><a
+href="https://colaxianyu.github.io/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89">上一章</a>我们实现了植物无CD的功能，主要使通过定位CDTimers间接定位到了if判断的位置，并通过使用nop填充jle指令，改变了程序的执行流程，使其总是运行植物不处于CD状态中的代码</p>
+<p>现在我们希望实现另一个功能，即在同一个位置能够重复的放置植物</p>
+<h3 id="同一格重复放置植物">同一格重复放置植物</h3>
+<h4 id="思路">思路</h4>
+<ol type="1">
+<li><p>思路一：我们假设放置植物是通过一个二维数组记录的，当二维数组中记录如-1之类的值时，代表位置空闲，可以放置植物，当数组中记录植物编号时，代表位置被占用，不可放置，该思路需要我们能定位到该二维数组，在放置植物时保证二维数组中的值不变，使该位置为空位置</p></li>
+<li><p>思路二：在我们放置植物时，我们需要一个if判断，用于判断该位置是否可放植物，若可放置，则阳光会减少放置植物所需的cost，即该思路需要我们定位一个cmp指令，即</p></li>
+</ol>
+<span id="more"></span>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(可以放置植物)&#123;</span><br><span class="line">    阳光减少</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>通过对比我们可以发现思路二更简单，且方法与上一章实现植物无CD相同，同时，阳光在内存中的位置，我们在第一章中也已经定位到，因此使用思路二能使我们更快的定位到CMP位置，</li>
+</ol>
+<h4 id="定位是否可以放置跳转">定位是否可以放置跳转</h4>
+<ol type="1">
+<li>我们已经知道，若在一个空位置放置植物，阳光会减少相应的cost，因此我们在阳光的内存处下一个内存写入断点，之后在一个空位放置向日葵，可以发现CE显示了一条指令，我们双击该指令观察esi的值，发现其中的值正是放置向日葵后的阳光数</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-植物cost.png" /></p>
+<ol start="2" type="1">
+<li>我们记下该指令的地址，用x64Dbg附加游戏，找到该指令并在此处下一个断点，在游戏中再放一个向日葵，使游戏执行到该处，我们可以看到该指令之后将会返回至另一个位置，在堆栈窗口中，我们可以看到其返回的具体地址</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-堆栈中.png" /></p>
+<ol start="3" type="1">
+<li>跟进到返回后的位置，我们将该call假设为阳光减少call，我们发现该call周围有大量的跳转指令，且整个代码段中都有大量跳转指令，因此我们无法判断代码段中的哪个跳转指令，此时我们需要一个方法来筛选哪些跳转指令是我们需要关注的</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-阳光call.png" /></p>
+<ol start="4" type="1">
+<li>一个可行的方法是，我们向上找到该代码段的起始位置，并下一个断点，在游戏中我们先在空闲位置放置一个向日葵，此时程序会断在代码段起始位置，我们单步调试，在每一个跳转指令处记录其是否跳转，以0标记不跳转，1标记跳转，直至该代码段结束</li>
+</ol>
+<figure>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-空闲跳.png"
+alt="2022-03-01-空闲跳" />
+<figcaption aria-hidden="true">2022-03-01-空闲跳</figcaption>
+</figure>
+<p>之后我们返回游戏，选择向日葵，将其放置在一个有植物的位置，再次单步调试跟进每一个跳转指令，寻找发生变化的跳转指令，之后我们定位到该跳转指令发生了变化</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-非空闲跳转.png" /></p>
+<ol type="1">
+<li>为了印证该跳转是不是决定了该位置为空位置，我们先在此处下个断点，然后修改其执行流程，因为此次放置非空位置，若修改后可以在同一位置重复放置植物，则成功，若不能重复放置，方便我们从此处再对后续的跳转指令进行对比，这里我们将ZF标志位置为1，je指令从不跳转变为跳转</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改ZF.png" /></p>
+<ol start="6" type="1">
+<li>运行游戏，此时我们发现向日葵重复放置在了同一位置，因此该跳转使得我们可以实现重复放置的功能，即跳转则可放，不跳转则不可放，且通过分析反汇编我们不难得出，跳转指令之前的call实现了判断位置是否为空的功能</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-判空.png" /></p>
+<ol start="7" type="1">
+<li>如果要让跳转指令一直跳转，我们可以将其改为jmp无条件跳转指令，此时回到游戏我们就已经实现了重复种植的功能</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改为jmp.png" /></p>
+<h4 id="实现重复放置功能">实现重复放置功能</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// JMP 0x00410754的硬编码，硬编码的操作码部分为偏移地址</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0xE9</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x20</span>;</span><br><span class="line">buffer[<span class="number">2</span>] = <span class="number">0x09</span>;</span><br><span class="line">buffer[<span class="number">3</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">4</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">5</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 填充至原je跳转指令处</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x0040FE2F</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>PE文件解析（二）</title>
+    <url>/2024/07/03/2024-07-03-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <content><![CDATA[<p>之前已经对PE文件的总体结构进行了解析，但PE文件中的很多重要的数据还存放在各类数据表中，因此我们还需要对这些表信息进行解析，这里主要包块输入表与输入地址表、输出表、重定位表、资源表五个部分</p>
+<h3 id="输入表与输入地址表">输入表与输入地址表</h3>
+<h4 id="什么是输入表">什么是输入表</h4>
+<p>可执行文件使用来自其他DLL的代码与数据的行为称为输入，当PE文件载入内存时，Windows加载器的工作之一就是找到这些输入的函数与数据，并让文件可以使用这些代码与数据的正确地址，而这个过程正是通过输入表（Import
+Table）完成的，输入表中保存了输入的函数名和这些函数所在的DLL名称</p>
+<span id="more"></span>
+<h4 id="什么是输入地址表">什么是输入地址表</h4>
+<p>当我们调用DLL中的函数时，调用者程序无法得知这些函数的实际地址，因为这些函数的实际地址只有当PE文件载入内存中时才得以确定，所以我们采取了一种间接调用的形式，即在内存中仅保留函数名（或序号），通过此方法告知Windows加载器，我们需要这样的一个函数，当PE文件载入内存后，Windows加载器便将相关DLL载入内存，同时将函数名替换成函数实际所处的地址，而记录这些中间函数信息并最终被替换成实际地址的结构即为输入地址表IAT，记住这个转换过程，之后我们会做详细讲解</p>
+<h4 id="输入表的结构">输入表的结构</h4>
+<p>在了解什么是输入表、什么是输入地址表之后，我们了解下它们载入内存前的大致结构
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-输入表.png" /></p>
+<p>我们发现图中一共包含了4张表，分别是输入表IMAGE_IMPORT_DESCRIPTOR、输入名称表（INT）、输入地址表（IAT）、函数表IMAGE_IMPORT_BY_NAME，现在我们分别给出这四个表在winnt.h的具体定义</p>
+<p>输入表 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_IMPORT_DESCRIPTOR</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   Characteristics;            </span><br><span class="line">        DWORD   OriginalFirstThunk;         </span><br><span class="line">    &#125; DUMMYUNIONNAME;                       <span class="comment">// INT表的RVA</span></span><br><span class="line">    DWORD   TimeDateStamp;                  </span><br><span class="line">    DWORD   ForwarderChain;                 </span><br><span class="line">    DWORD   Name;                           <span class="comment">// DLL名字的RVA</span></span><br><span class="line">    DWORD   FirstThunk;                     <span class="comment">// IAT表的RVA</span></span><br><span class="line">&#125; IMAGE_IMPORT_DESCRIPTOR</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>OriginalFirstThunk：指向输入名称表INT的RVA，INT是一个IMAGE_THUNK_DATA结构的数组，数组以一个全0内容来标识数组的结束</li>
+<li>TimeDateStamp：32位时间标记</li>
+<li>ForwarderChain：当程序使用一个DLL中的API，而该API又使用其他DLL中的API时使用，通常为0</li>
+<li>Name：DLL名字的RVA</li>
+<li>FirstThunk：指向输入地址表IAT的RVA，与INT类似，IAT也是一个IMAGE_THUNK_DATA结构的数组</li>
+</ul>
+<p>IMAGE_THUNK_DATA的结构 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_THUNK_DATA32</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD ForwarderString;      </span><br><span class="line">        DWORD Function;             </span><br><span class="line">        DWORD Ordinal;</span><br><span class="line">        DWORD AddressOfData;        </span><br><span class="line">    &#125; u1;                                   </span><br><span class="line">&#125; IMAGE_THUNK_DATA32;</span><br></pre></td></tr></table></figure>
+每个IMAGE_THUNK_DATA都对应一个输入函数，由于是一个联合结构，所以其本质是一个大小为4字节的数，但该数在不同时刻具有不同含义</p>
+<ul>
+<li>当该数的最高位为1时，表示该函数以序号方式输入，此时低31位就是该函数的序号</li>
+<li>当该数的最高位为0时，表示该函数以名称方式输入，此时整个32位就代表一个指向IMAGE_IMPORT_BY_NAME的RVA</li>
+</ul>
+<p>IMAGE_IMPORT_BY_NAME的结构 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_IMPORT_BY_NAME</span> &#123;</span></span><br><span class="line">    WORD    Hint;</span><br><span class="line">    CHAR   Name[<span class="number">1</span>];</span><br><span class="line">&#125; IMAGE_IMPORT_BY_NAME</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>Hint：本函数在其所驻留的DLL中输出表的序号，但该值不是必须的，一些链接器直接将其置为0</li>
+<li>Name：输入函数函数名的变长数组，以0结尾</li>
+</ul>
+<h3 id="输入表如何工作">输入表如何工作</h3>
+<h4 id="原理">原理</h4>
+<p>我们之前提到IAT表承担了将函数名转换成实际地址的功能，其实这就是输入表的主要功能，即载入时替换IAT表中的内容，一旦替换工作完成，那么整个输入表的替他部分就不关键了，程序依靠IAT表中的内容就可以正常运行</p>
+<p>我们现在来看PE文件载入内存后输入表的结构，我们可以发现IAT此时不再指向IMAGE_IMPORT_BY_NAME表，其中的内容被填入了函数的实际地址
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-载入后输入表.png" /></p>
+<p>具体的工作流程是</p>
+<ul>
+<li>①PE装载器先通过INT表找出每个IMAGE_IMPORT_BY_NAME结构指向的函数地址</li>
+<li>②装载器用函数真正的入口地址来替代IAT中的值</li>
+</ul>
+<p>也就是说在实际的程序中，当我们调用一个DLL中的函数，其采用了一种间接调用的形式call
+dword ptr
+[xxxxxxx]，这个xxxxx就是IAT表的地址，当载入内存前，[xxxxxx]指向了IMAGE_IMPORT_BY_NAME中的对应的函数，而载入内存后[xxxxxx]就指向了函数的实际地址，这就是转换工作在程序中的体现</p>
+<h4 id="实例">实例</h4>
+<p>为了解释这一过程，我们通过一个例子来理解其中的转换过程，例如此处我们的程序使用了一个TestDLL.dll中的Plus函数，首先我们在反汇编程序中观察反汇编代码，可以发现我们我们并不是call了一个绝对地址，而是call了ds:[0x402000]内存里的内容，我们在内存窗口里观察到0x402000处的4字节信息为0x10001050
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-反汇编.png" /></p>
+<p>之后我们跟进call中，可以发现来到了Plus函数内部，而地址正是0x10001050，也就是说调用Plus函数是以一种间接调用的形式实现的，且ds:[0x402000]中存了Plus函数载入内存后的实际地址0x10001050
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-DllTest.png" /></p>
+<p>此时程序已经载入内存，而我们需要查看其载入内存前ds:[0x402000]的内容，因为该程序的ImageBase为0x400000，那么RVA
+=
+0x2000，将其转换为FOA即是0x1200，现在我们打开16进制编辑器，找到此处观察发现里面存了一个RVA偏移值0x2778（指向IMAGE_IMPORT_BY_NAME中的对应的函数）
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus偏移.png" /></p>
+<p>我们将0x2778转换为其对应的FOA，即0x1978，我们来到该处可以看到这里记录了函数的名字
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus具体位置.png"
+alt="2022-03-09-Plus具体位置" /></p>
+<p>现在我们已经分析完了输入表的整个工作流程，通过PE
+tools我们可以查看完整的输入表信息</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus.png" /></p>
+<p>需要注意的是，我们的程序使用了多少个DLL，就会有多少个输入表，且输入表也是以一个全0的结构作为判空标识的，最后，我们用一个简单的图来回顾整个过程</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-总结.png" /></p>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
     <title>PE文件解析（一）</title>
-    <url>/2023/03/01/2023-03-01-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <url>/2024/07/01/2024-07-01-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/</url>
     <content><![CDATA[<h3 id="基本概念">基本概念</h3>
 <h4 id="什么是pe文件">什么是PE文件</h4>
 <ol type="1">
@@ -4041,128 +1003,355 @@ style="text-align: center;">可执行文件的基址重定位，通常只是DLL�
       </categories>
   </entry>
   <entry>
-    <title>逆向之植物大战僵尸（三）</title>
-    <url>/2022/03/01/2022-3-1-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/</url>
-    <content><![CDATA[<p><a
-href="https://colaxianyu.github.io/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89">上一章</a>我们实现了植物无CD的功能，主要使通过定位CDTimers间接定位到了if判断的位置，并通过使用nop填充jle指令，改变了程序的执行流程，使其总是运行植物不处于CD状态中的代码</p>
-<p>现在我们希望实现另一个功能，即在同一个位置能够重复的放置植物</p>
-<h3 id="同一格重复放置植物">同一格重复放置植物</h3>
+    <title>逆向之植物大战僵尸（二）</title>
+    <url>/2023/02/24/2023-02-24-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <content><![CDATA[<p>回顾一下<a
+href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89">上一章</a>实现无限阳光的方法，我们首先猜想有一个变量存储了当前阳光的值，即在内存中有一块空间存储了阳光的值，只需要找到该空间，再将期望的阳光数写入该空间即可实现无限阳光的功能，通过CE多次搜索阳光，我们最终通过基址
++ 2次间址的形式定位到了阳光的具体地址</p>
+<h3 id="取消植物放置cd">取消植物放置CD</h3>
 <h4 id="思路">思路</h4>
-<ol type="1">
-<li><p>思路一：我们假设放置植物是通过一个二维数组记录的，当二维数组中记录如-1之类的值时，代表位置空闲，可以放置植物，当数组中记录植物编号时，代表位置被占用，不可放置，该思路需要我们能定位到该二维数组，在放置植物时保证二维数组中的值不变，使该位置为空位置</p></li>
-<li><p>思路二：在我们放置植物时，我们需要一个if判断，用于判断该位置是否可放植物，若可放置，则阳光会减少放置植物所需的cost，即该思路需要我们定位一个cmp指令，即</p></li>
-</ol>
+<p>现在我们实现取消植物放置CD的功能，可以猜想有一个变量存放了某个植物的放置CD，而另一个变量存放了CD计时器，然后通过一个函数判断，当<strong>CD计时器从0开始增长到大于等于CD时</strong>或<strong>CD计时器从CD值开始减少到0时</strong>，可以再次放置植物，即</p>
 <span id="more"></span>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(可以放置植物)&#123;</span><br><span class="line">    阳光减少</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="3" type="1">
-<li>通过对比我们可以发现思路二更简单，且方法与上一章实现植物无CD相同，同时，阳光在内存中的位置，我们在第一章中也已经定位到，因此使用思路二能使我们更快的定位到CMP位置，</li>
-</ol>
-<h4 id="定位是否可以放置跳转">定位是否可以放置跳转</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> plantCD = xxx</span><br><span class="line"><span class="keyword">int</span> CDTimers = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers增加</span></span><br><span class="line"><span class="keyword">if</span>(CDTimers &gt;= plantCD)&#123;     </span><br><span class="line">     可以放置植物;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  or</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CDTimers减少</span></span><br><span class="line">CDTimers = plantCD</span><br><span class="line"><span class="keyword">if</span>(CDtimer &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">    可以放置植物;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此猜想上我们不难发现两种实现思路：<br />
+1. 方法一是置植物CD为0<br />
+2. 方法二是让if判断能一直成立</p>
+<p>对于方法一，因为每个植物都有其独立的CD，要搜索每一个植物的CD值工作量相对较大，且我们并不知道植物CD的具体数值，在搜索中也较为困难，且在搜索到植物CD后还需要再定位其静态基址</p>
+<p>对于方法二，无论植物CD是多少，能否放置植物都依赖于函数的判断，如果我们能定位到该if判断的位置，那么我们就能通过修改程序执行的流程，使其无条件的执行可以放置植物的代码</p>
+<p>因此我们的思路就是：
+首先找到CDTimers，然后定位if判断的位置，修改程序执行的流程</p>
+<h4 id="寻找cdtimers">寻找CDTimers</h4>
 <ol type="1">
-<li>我们已经知道，若在一个空位置放置植物，阳光会减少相应的cost，因此我们在阳光的内存处下一个内存写入断点，之后在一个空位放置向日葵，可以发现CE显示了一条指令，我们双击该指令观察esi的值，发现其中的值正是放置向日葵后的阳光数</li>
+<li>因为我们无法确定CDTimers的初始值，所以在CE的搜索方式中我们选择未知初始值，并点击First
+Scan</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-植物cost.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-搜索.png" /></p>
 <ol start="2" type="1">
-<li>我们记下该指令的地址，用x64Dbg附加游戏，找到该指令并在此处下一个断点，在游戏中再放一个向日葵，使游戏执行到该处，我们可以看到该指令之后将会返回至另一个位置，在堆栈窗口中，我们可以看到其返回的具体地址</li>
+<li>我们以向日葵作为对象，此时放置向日葵，并选择changed
+value，然后再次搜索</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-堆栈中.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次搜索.png" /></p>
 <ol start="3" type="1">
-<li>跟进到返回后的位置，我们将该call假设为阳光减少call，我们发现该call周围有大量的跳转指令，且整个代码段中都有大量跳转指令，因此我们无法判断代码段中的哪个跳转指令，此时我们需要一个方法来筛选哪些跳转指令是我们需要关注的</li>
+<li>我们发现CE得到了非常多的搜索结果，此时游戏处于暂停阶段，CDTimers并未改变，所以我们可以在CE中选择unchanged
+value，并多次搜索过滤大量无关数据</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-阳光call.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-多次搜索过滤.png" /></p>
 <ol start="4" type="1">
-<li>一个可行的方法是，我们向上找到该代码段的起始位置，并下一个断点，在游戏中我们先在空闲位置放置一个向日葵，此时程序会断在代码段起始位置，我们单步调试，在每一个跳转指令处记录其是否跳转，以0标记不跳转，1标记跳转，直至该代码段结束</li>
+<li>此时搜索结果减少的量已经很少了，此时我们让游戏继续一段时间，此时CDTimers的值改变，因此再CE中再次选择changed
+value并搜索</li>
 </ol>
-<figure>
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-空闲跳.png"
-alt="2022-03-01-空闲跳" />
-<figcaption aria-hidden="true">2022-03-01-空闲跳</figcaption>
-</figure>
-<p>之后我们返回游戏，选择向日葵，将其放置在一个有植物的位置，再次单步调试跟进每一个跳转指令，寻找发生变化的跳转指令，之后我们定位到该跳转指令发生了变化</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-非空闲跳转.png" /></p>
-<ol type="1">
-<li>为了印证该跳转是不是决定了该位置为空位置，我们先在此处下个断点，然后修改其执行流程，因为此次放置非空位置，若修改后可以在同一位置重复放置植物，则成功，若不能重复放置，方便我们从此处再对后续的跳转指令进行对比，这里我们将ZF标志位置为1，je指令从不跳转变为跳转</li>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次精准搜索.png" /></p>
+<ol start="5" type="1">
+<li>我们重复步骤3和4，直至搜索到少量结果（向日葵CD结束可再放置一次重复搜索）</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改ZF.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-最终结果.png" /></p>
 <ol start="6" type="1">
-<li>运行游戏，此时我们发现向日葵重复放置在了同一位置，因此该跳转使得我们可以实现重复放置的功能，即跳转则可放，不跳转则不可放，且通过分析反汇编我们不难得出，跳转指令之前的call实现了判断位置是否为空的功能</li>
+<li>我们发现最后一个结果的值172比较符合我们的猜想，并发现在游戏进行时，该值不断增大，此时向日葵处于不可放置的状态，那么该值是否会增大到某一个界限后导致向日葵可以重新安放呢，为印证猜想，我们在此处将该值改为1000</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-判空.png" /></p>
-<ol start="7" type="1">
-<li>如果要让跳转指令一直跳转，我们可以将其改为jmp无条件跳转指令，此时回到游戏我们就已经实现了重复种植的功能</li>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-修改可疑值.png" /></p>
+<p>我们发现此时向日葵恢复了可放置的状态，猜想正确，该值就是CDTimers</p>
+<h4 id="定位if判断的位置">定位If判断的位置</h4>
+<ol type="1">
+<li>我们知道当植物处于不可放置状态时，CDTimers的值会不断增加，因此我们可以得知必定有一条指令像该内存写入了数据，因此我们可以对CDTimer下一个内存写入断点</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改为jmp.png" /></p>
-<h4 id="实现重复放置功能">实现重复放置功能</h4>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// JMP 0x00410754的硬编码，硬编码的操作码部分为偏移地址</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0xE9</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x20</span>;</span><br><span class="line">buffer[<span class="number">2</span>] = <span class="number">0x09</span>;</span><br><span class="line">buffer[<span class="number">3</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">4</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">5</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 填充至原je跳转指令处</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x0040FE2F</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-内存写入断点.png" /></p>
+<ol start="2" type="1">
+<li>此时我们选择show
+disassembler可以看到如下内容，我们发现该值增加后存入了eax寄存器，而之后eax与内存中[edi+0x24]处的值进行了对比，我们猜测该CMP指令就是我们要找的if判断指令，我们记下该CMP指令的地址</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-反汇编.png" /></p>
+<ol start="3" type="1">
+<li>用x64Dbg附加植物大战僵尸进程（若附加失败可关闭CE后再尝试附加），之后我们在x64Dbg中通过地址找到CMP指令，并在该处下断点，是程序运行到CMP指令处</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-调试器.png" /></p>
+<ol start="4" type="1">
+<li>此时我们单步执行一次，发现跳转指令jle执行，而此时向日葵是处于无法安置状态的，如果该CMP就是我们需要的if判断，那么可以推测出，若跳转执行，则植物仍在CD，不可放置；若跳转不执行，则植物没有CD，可以放置</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-jle指令.png" /></p>
+<ol start="5" type="1">
+<li>为验证猜想，我们可以改变程序的执行流程，即让jle指令不跳转，因为jle跳转与否是由标志寄存器（ZF
+== 1 || SF != OF）决定，此时SF !=
+OF，跳转执行，因此我们将SF的值该为0，此时跳转就不会执行，之后我们运行程序，可以观察到植物的CD取消</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-改执行流程.png" /></p>
+<ol start="6" type="1">
+<li>此时我们可以确定该CMP就是我们需要的if判断，而其结果决定了jle指令是否跳转，若我们让jle指令永不跳转，那就实现了植物放置无CD的功能，因此我们在x64Dbg中将jle指令用nop填充并取消断点，回到游戏中，我们发现放置植物之后将不会有CD，功能实现成功</li>
+</ol>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-nop.png" /></p>
+<h4 id="实现取消cd功能">实现取消CD功能</h4>
+<p>其过程就是用代码的形式将jle指令用nop填充 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// nop指令的机器码，保证与原jle指令长度相同</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0x90</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在jle指令地址处，用nop填充</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x00487296</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <categories>
         <category>逆向</category>
       </categories>
   </entry>
   <entry>
-    <title>PE文件解析（二）</title>
-    <url>/2022/03/09/2023-03-03-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
-    <content><![CDATA[<p>之前已经对PE文件的总体结构进行了解析，但PE文件中的很多重要的数据还存放在各类数据表中，因此我们还需要对这些表信息进行解析，这里主要包块输入表与输入地址表、输出表、重定位表、资源表五个部分</p>
-<h3 id="输入表与输入地址表">输入表与输入地址表</h3>
-<h4 id="什么是输入表">什么是输入表</h4>
-<p>可执行文件使用来自其他DLL的代码与数据的行为称为输入，当PE文件载入内存时，Windows加载器的工作之一就是找到这些输入的函数与数据，并让文件可以使用这些代码与数据的正确地址，而这个过程正是通过输入表（Import
-Table）完成的，输入表中保存了输入的函数名和这些函数所在的DLL名称</p>
+    <title>PE文件解析（四）</title>
+    <url>/2024/07/21/2024-07-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="资源表">资源表</h3>
+<p>资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页</p>
+<p>为了便于理解，先给出一张资源表的树形结构图</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源表树形.png" /></p>
 <span id="more"></span>
-<h4 id="什么是输入地址表">什么是输入地址表</h4>
-<p>当我们调用DLL中的函数时，调用者程序无法得知这些函数的实际地址，因为这些函数的实际地址只有当PE文件载入内存中时才得以确定，所以我们采取了一种间接调用的形式，即在内存中仅保留函数名（或序号），通过此方法告知Windows加载器，我们需要这样的一个函数，当PE文件载入内存后，Windows加载器便将相关DLL载入内存，同时将函数名替换成函数实际所处的地址，而记录这些中间函数信息并最终被替换成实际地址的结构即为输入地址表IAT，记住这个转换过程，之后我们会做详细讲解</p>
-<h4 id="输入表的结构">输入表的结构</h4>
-<p>在了解什么是输入表、什么是输入地址表之后，我们了解下它们载入内存前的大致结构
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-输入表.png" /></p>
-<p>我们发现图中一共包含了4张表，分别是输入表IMAGE_IMPORT_DESCRIPTOR、输入名称表（INT）、输入地址表（IAT）、函数表IMAGE_IMPORT_BY_NAME，现在我们分别给出这四个表在winnt.h的具体定义</p>
-<p>输入表 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_IMPORT_DESCRIPTOR</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   Characteristics;            </span><br><span class="line">        DWORD   OriginalFirstThunk;         </span><br><span class="line">    &#125; DUMMYUNIONNAME;                       <span class="comment">// INT表的RVA</span></span><br><span class="line">    DWORD   TimeDateStamp;                  </span><br><span class="line">    DWORD   ForwarderChain;                 </span><br><span class="line">    DWORD   Name;                           <span class="comment">// DLL名字的RVA</span></span><br><span class="line">    DWORD   FirstThunk;                     <span class="comment">// IAT表的RVA</span></span><br><span class="line">&#125; IMAGE_IMPORT_DESCRIPTOR</span><br></pre></td></tr></table></figure></p>
+<h4 id="资源目录结构">资源目录结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;        <span class="comment">//资源属性，但通常为0</span></span><br><span class="line">    DWORD   TimeDateStamp;          <span class="comment">// 资源建立时间</span></span><br><span class="line">    WORD    MajorVersion;           <span class="comment">// 资源的版本，但通常为0</span></span><br><span class="line">    WORD    MinorVersion;           </span><br><span class="line">    WORD    NumberOfNamedEntries;   <span class="comment">// 使用名字的资源条目的个数</span></span><br><span class="line">    WORD    NumberOfIdEntries;      <span class="comment">// 使用ID的资源条目个数</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY</span><br></pre></td></tr></table></figure>
+<p>其中最关键的属性是NumberOfNamedEntries和NumberOfIdEntries，他们指出了本目录种目录项的总和（即资源类型的总个数）</p>
+<h4 id="资源目录入口结构">资源目录入口结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY_ENTRY</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD NameOffset:<span class="number">31</span>;</span><br><span class="line">            DWORD NameIsString:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME;</span><br><span class="line">        DWORD   Name;</span><br><span class="line">        WORD    Id;</span><br><span class="line">    &#125; DUMMYUNIONNAME;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   OffsetToData;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD   OffsetToDirectory:<span class="number">31</span>;</span><br><span class="line">            DWORD   DataIsDirectory:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME2;</span><br><span class="line">    &#125; DUMMYUNIONNAME2;</span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY_ENTRY</span><br></pre></td></tr></table></figure>
+<p>可以看到其中有两个union结构，我们可以简单的理解为，资源目录入口结构包含两个属性Name（ID）、OffsetToData，根据情况的不同，他们有不同的含义</p>
 <ul>
-<li>OriginalFirstThunk：指向输入名称表INT的RVA，INT是一个IMAGE_THUNK_DATA结构的数组，数组以一个全0内容来标识数组的结束</li>
-<li>TimeDateStamp：32位时间标记</li>
-<li>ForwarderChain：当程序使用一个DLL中的API，而该API又使用其他DLL中的API时使用，通常为0</li>
-<li>Name：DLL名字的RVA</li>
-<li>FirstThunk：指向输入地址表IAT的RVA，与INT类似，IAT也是一个IMAGE_THUNK_DATA结构的数组</li>
-</ul>
-<p>IMAGE_THUNK_DATA的结构 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_THUNK_DATA32</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD ForwarderString;      </span><br><span class="line">        DWORD Function;             </span><br><span class="line">        DWORD Ordinal;</span><br><span class="line">        DWORD AddressOfData;        </span><br><span class="line">    &#125; u1;                                   </span><br><span class="line">&#125; IMAGE_THUNK_DATA32;</span><br></pre></td></tr></table></figure>
-每个IMAGE_THUNK_DATA都对应一个输入函数，由于是一个联合结构，所以其本质是一个大小为4字节的数，但该数在不同时刻具有不同含义</p>
+<li>Name（ID）属性：定义了目录项的名称或ID，当最高位（NameIsString）为0时，表示该属性通过ID使用；为1时，表示该属性通过Name使用，且资源名称使用Unicode编码，低31位为Name的Offset，但NameOffset并不直接指向字符串，而是指向一个IMAGE_RESOURCE_DIR_STRING_U结构，该结构如下所示
 <ul>
-<li>当该数的最高位为1时，表示该函数以序号方式输入，此时低31位就是该函数的序号</li>
-<li>当该数的最高位为0时，表示该函数以名称方式输入，此时整个32位就代表一个指向IMAGE_IMPORT_BY_NAME的RVA</li>
+<li>当用于第一层目录时，定义的是资源的类型</li>
+<li>当用于第二层目录时，定义的是资源的名称</li>
+<li>当用于第三层目录时，定义的时代码页的编号</li>
+</ul></li>
 </ul>
-<p>IMAGE_IMPORT_BY_NAME的结构 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_IMPORT_BY_NAME</span> &#123;</span></span><br><span class="line">    WORD    Hint;</span><br><span class="line">    CHAR   Name[<span class="number">1</span>];</span><br><span class="line">&#125; IMAGE_IMPORT_BY_NAME</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIR_STRING_U</span> &#123;</span></span><br><span class="line">    WORD    Length;             <span class="comment">// 字符串的长度（不一定以0结尾，所以该属性很重要）</span></span><br><span class="line">    WCHAR   NameString[ <span class="number">1</span> ];    <span class="comment">// 具体的Unicode字符串</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIR_STRING_U</span><br></pre></td></tr></table></figure>
 <ul>
-<li>Hint：本函数在其所驻留的DLL中输出表的序号，但该值不是必须的，一些链接器直接将其置为0</li>
-<li>Name：输入函数函数名的变长数组，以0结尾</li>
+<li>OffsetToData属性：一个指针，当最高位为1时，低31位指向下一层IMAGE_RESOURCE_DIRECTORY的起始地址；当最高位为0时，指向IMAGE_RESOURCE_DATA_ENTRY结构</li>
 </ul>
-<h3 id="输入表如何工作">输入表如何工作</h3>
-<h4 id="原理">原理</h4>
-<p>我们之前提到IAT表承担了将函数名转换成实际地址的功能，其实这就是输入表的主要功能，即载入时替换IAT表中的内容，一旦替换工作完成，那么整个输入表的替他部分就不关键了，程序依靠IAT表中的内容就可以正常运行</p>
-<p>我们现在来看PE文件载入内存后输入表的结构，我们可以发现IAT此时不再指向IMAGE_IMPORT_BY_NAME表，其中的内容被填入了函数的实际地址
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-载入后输入表.png" /></p>
-<p>具体的工作流程是</p>
+<p><strong>当NameOffset和OffsetToData作为Offset使用时，该指针从资源区块的开始处计算偏移，即它们并不是RVA</strong></p>
+<p><strong>当IMAGE_RESOURCE_DIRECTORY_ENTRY用在第一层的目录时，其Name（ID）属性用于标记资源类型，而Windows有14种预定义的类型，且用ID标识，ID的数值在1到16之间</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">ID值</th>
+<th style="text-align: center;">资源类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">01h</td>
+<td style="text-align: center;">光标（Cursor）</td>
+</tr>
+<tr>
+<td style="text-align: center;">02h</td>
+<td style="text-align: center;">位图（Bitmap）</td>
+</tr>
+<tr>
+<td style="text-align: center;">03h</td>
+<td style="text-align: center;">图标（Icon）</td>
+</tr>
+<tr>
+<td style="text-align: center;">04h</td>
+<td style="text-align: center;">菜单（Menu）</td>
+</tr>
+<tr>
+<td style="text-align: center;">05h</td>
+<td style="text-align: center;">对话框（Dialog）</td>
+</tr>
+<tr>
+<td style="text-align: center;">06h</td>
+<td style="text-align: center;">字符串（String）</td>
+</tr>
+<tr>
+<td style="text-align: center;">07h</td>
+<td style="text-align: center;">字体目录（Front Directory）</td>
+</tr>
+<tr>
+<td style="text-align: center;">08h</td>
+<td style="text-align: center;">字体（Front）</td>
+</tr>
+<tr>
+<td style="text-align: center;">09h</td>
+<td style="text-align: center;">快捷键（Accelerators）</td>
+</tr>
+<tr>
+<td style="text-align: center;">0Ah</td>
+<td style="text-align: center;">未格式化资源（Unformatted）</td>
+</tr>
+<tr>
+<td style="text-align: center;">0Bh</td>
+<td style="text-align: center;">消息表（Message Table）</td>
+</tr>
+<tr>
+<td style="text-align: center;">0Ch</td>
+<td style="text-align: center;">光标组（Group Cursor）</td>
+</tr>
+<tr>
+<td style="text-align: center;">0Eh</td>
+<td style="text-align: center;">图标组（Group Icon）</td>
+</tr>
+<tr>
+<td style="text-align: center;">10h</td>
+<td style="text-align: center;">版本信息（Version Information）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="资源数据入口结构">资源数据入口结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DATA_ENTRY</span> &#123;</span></span><br><span class="line">    DWORD   OffsetToData;       <span class="comment">// 资源数据的RVA</span></span><br><span class="line">    DWORD   Size;               <span class="comment">// 资源数据的长度</span></span><br><span class="line">    DWORD   CodePage;           <span class="comment">// 代码页，一般为0</span></span><br><span class="line">    DWORD   Reserved;           <span class="comment">// 保留字段</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DATA_ENTRY</span><br></pre></td></tr></table></figure>
+<p>该结构就是真正的资源数据的结构了，其中OffsetToData是RVA，而不是相对于资源块起始位置的Offset</p>
+<h3 id="实例">实例</h3>
+<p>我这里用一个Win32程序为实例，先用PE Tools查看其资源表内容</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-示例资源表.png" /></p>
+<h4 id="根目录">根目录</h4>
+<p>可以看到其中共有7种不同的资源类（24好像是清单类型，暂时每找到相关文档信息），首先在16进制编辑器中观察其根目录</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-根目录.png" /></p>
 <ul>
-<li>①PE装载器先通过INT表找出每个IMAGE_IMPORT_BY_NAME结构指向的函数地址</li>
-<li>②装载器用函数真正的入口地址来替代IAT中的值</li>
+<li>4字节Characteristics，此时为0</li>
+<li>4字节TimeDateStamp，为0</li>
+<li>2字节MajorVersion，为0</li>
+<li>2字节MinorVersion，为0</li>
+<li>2字节NumberOfNamedEntries，为0</li>
+<li>2字节NumberOfIdEntries，为7</li>
 </ul>
-<p>也就是说在实际的程序中，当我们调用一个DLL中的函数，其采用了一种间接调用的形式call
-dword ptr
-[xxxxxxx]，这个xxxxx就是IAT表的地址，当载入内存前，[xxxxxx]指向了IMAGE_IMPORT_BY_NAME中的对应的函数，而载入内存后[xxxxxx]就指向了函数的实际地址，这就是转换工作在程序中的体现</p>
+<h4
+id="根目录下的image_resource_directory_entry">根目录下的IMAGE_RESOURCE_DIRECTORY_ENTRY</h4>
+<p>我们以Menu作为分析对象，它是第二个IMAGE_RESOURCE_DIRECTORY_ENTRY结构，因为该结构大小位8字节，所以它的位置应该是2400h
++ 8 = 2408h，我们在16进制编辑器中可以看到如下内容</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第一层Entry.png" /></p>
+<p>可以看到其Name（ID）属性值为：0x00000004，其OffsetToData属性值为0x800000E8，我们进一步解析</p>
+<ul>
+<li>Name（ID）属性的最高位为0，表示它通过ID标识，由于是第一层目录中，它代表一个预定义的资源，查表我们发现04h是Menu</li>
+<li>OffsetToData属性的最高位为1，表示它指向下一层目录，其Offset是E8h，那么下一层目录的地址为2400h
++ E8h = 24E8h</li>
+</ul>
+<h4
+id="第二层目录的image_resource_directory">第二层目录的IMAGE_RESOURCE_DIRECTORY</h4>
+<p>第二层目录如下所示</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第二层目录.png" /></p>
+<p>可以知道其NumberOfIdEntries为1，表示Menu资源下只有一个该类资源</p>
+<p>紧跟其后的8字节就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构，可以看到其Name（ID）属性值为：0x0000006D，其OffsetToData属性值为0x80003030</p>
+<ul>
+<li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为6Dh，即十进制的109</li>
+<li>OffsetToData属性的最高位为1，表示它指向下一层目录，其Offset是330h，那么下一层目录的地址为2400h
++ 330h = 2730h</li>
+</ul>
+<h4
+id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE_DIRECTORY</h4>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层目录.png" /></p>
+<p>可以知道其NumberOfIdEntries为1，表示该资源代码页只有一项</p>
+<p>紧跟其后就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层Entry.png" /></p>
+<p>可以看到其Name（ID）属性值为：0x00000804，其OffsetToData属性值为0x000004F8</p>
+<ul>
+<li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为804h</li>
+<li>OffsetToData属性的最高位为0，表示它指向IMAGE_RESOURCE_DATA_ENTRY结构，其Offset是4F8h，那么该结构的地址为2400h
++ 4F8h = 28F8h</li>
+</ul>
+<h4 id="image_resource_data_entry">IMAGE_RESOURCE_DATA_ENTRY</h4>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源data.png" /></p>
+<ul>
+<li>OffsetToData为01AE90h</li>
+<li>Size为50h</li>
+<li>CodePage为0<br />
+</li>
+<li>Reserved为0</li>
+</ul>
+<h4 id="image_resource_dir_string_u">IMAGE_RESOURCE_DIR_STRING_U</h4>
+<p>因为示例程序比较简单，没有用到这个结构，所以这里单独找一个比较复杂的程序用来展示</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂程序.png" /></p>
+<p>可以看到根目录下第一类资源是用Name标识的，其名字为"AFX_DIALOG_LAYOUT"，我们在16进制中观察其IMAGE_RESOURCE_DIRECTORY_ENTRY</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂entry.png" /></p>
+<p>可以看到其Name（ID）属性值为：0x8000CB2E，其OffsetToData属性值为0x800000B0</p>
+<ul>
+<li>Name（ID）属性的最高位为1，表示它通过Name标识，且Name的Offset为CB2Eh，那么IMAGE_RESOURCE_DIR_STRING_U结构的地址为630000h
++ CB2Eh = 63CB2Eh</li>
+<li>OffsetToData属性的最高位为1，表示它指向下一层目录</li>
+</ul>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-名字结构.png" /></p>
+<p>可以看到IMAGE_RESOURCE_DIR_STRING_U结构中Length为11h，而NameString为Unicode表示的"AFX_DIALOG_LAYOUT"（可以注意到字符串并没有以0结尾，所以Length属性很重要）</p>
+]]></content>
+      <categories>
+        <category>逆向</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>PE文件解析（三）</title>
+    <url>/2024/07/15/2024-07-15-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89/</url>
+    <content><![CDATA[<p>之前讲解了输入表与输入地址表以及他们的工作原理，现在我们开始分析输出表与重定位表</p>
+<h3 id="输出表">输出表</h3>
+<p>创建一个DLL时，实际上创建了一组能让exe或其他DLL调用的函数，而PE装载器将根据DLL文件中的输出信息修正正被执行文件中的IAT。通常exe文件中不存在输出表（并不绝对），而大部分DLL文件中则存在输出表</p>
+<h4 id="输出表的结构">输出表的结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_EXPORT_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;            <span class="comment">// 旗标，未使用，总是为0</span></span><br><span class="line">    DWORD   TimeDateStamp;</span><br><span class="line">    WORD    MajorVersion;               <span class="comment">// 主版本号，一般为0</span></span><br><span class="line">    WORD    MinorVersion;               <span class="comment">// 次版本号，一般为0</span></span><br><span class="line">    DWORD   Name;</span><br><span class="line">    DWORD   Base;</span><br><span class="line">    DWORD   NumberOfFunctions;</span><br><span class="line">    DWORD   NumberOfNames;</span><br><span class="line">    DWORD   AddressOfFunctions;     </span><br><span class="line">    DWORD   AddressOfNames;         </span><br><span class="line">    DWORD   AddressOfNameOrdinals;  </span><br><span class="line">&#125; IMAGE_EXPORT_DIRECTORY</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>现在对一些重要属性做出解释</p>
+<ul>
+<li>TimeDateStamp：输出表的创建时间（GMT时间）</li>
+<li>Name：指向一个ASCII字符串的RVA，即DLL的名字</li>
+<li>Base：一个初始序号值，当通过序号查询输出的函数时，实际数值 =
+查询数值 - Base，实际数值即为输出函数地址表（EAT）的索引</li>
+<li>NumberOfFunctions：输出函数地址表中条目的数量</li>
+<li>NumberOfNames：输出函数名称表（ENT）和输出函数序号表中条目的数量</li>
+<li>AddressOfFunctions：输出函数地址表的RVA，是一个RVA数组</li>
+<li>AddressOfNames：输出函数名称表的RVA，也是一个RVA数组，<strong>该表会排序</strong></li>
+<li>AddressOfNameOrdinals：输出序号表的RVA，指向输出序号的数组，即一个WORD大小的数组</li>
+</ul>
+<p>我们看到结构中提到了3张表，分别是输出函数地址表EAT、输出函数名称表ENT、输出函数序号表，那么他们之间有什么联系呢？且DLL中的函数既可以通过名称导出，也可以通过序号导出，那么两种不同的导出方式，又要如何定位函数的地址呢？</p>
+<ul>
+<li>函数通过名称导出时，如何建立名称到地址的映射关系就成了关键，而输出函数序号表就是承担中转工作的，我们之前提到这三张表都是数组，假设我们有一个名称A的函数，通过查询ENT表得到其索引为3，那么函数A的序号在函数序号表的索引也是3，我们从序号表中取出该函数的序号，这个序号就是函数A在EAT表中的索引</li>
+<li>函数通过序号导出时，导出序号 - base = EAT表索引</li>
+</ul>
 <h4 id="实例">实例</h4>
-<p>为了解释这一过程，我们通过一个例子来理解其中的转换过程，例如此处我们的程序使用了一个TestDLL.dll中的Plus函数，首先我们在反汇编程序中观察反汇编代码，可以发现我们我们并不是call了一个绝对地址，而是call了ds:[0x402000]内存里的内容，我们在内存窗口里观察到0x402000处的4字节信息为0x10001050
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-反汇编.png" /></p>
-<p>之后我们跟进call中，可以发现来到了Plus函数内部，而地址正是0x10001050，也就是说调用Plus函数是以一种间接调用的形式实现的，且ds:[0x402000]中存了Plus函数载入内存后的实际地址0x10001050
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-DllTest.png" /></p>
-<p>此时程序已经载入内存，而我们需要查看其载入内存前ds:[0x402000]的内容，因为该程序的ImageBase为0x400000，那么RVA
-=
-0x2000，将其转换为FOA即是0x1200，现在我们打开16进制编辑器，找到此处观察发现里面存了一个RVA偏移值0x2778（指向IMAGE_IMPORT_BY_NAME中的对应的函数）
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus偏移.png" /></p>
-<p>我们将0x2778转换为其对应的FOA，即0x1978，我们来到该处可以看到这里记录了函数的名字
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus具体位置.png"
-alt="2022-03-09-Plus具体位置" /></p>
-<p>现在我们已经分析完了输入表的整个工作流程，通过PE
-tools我们可以查看完整的输入表信息</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus.png" /></p>
-<p>需要注意的是，我们的程序使用了多少个DLL，就会有多少个输入表，且输入表也是以一个全0的结构作为判空标识的，最后，我们用一个简单的图来回顾整个过程</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-总结.png" /></p>
+<p>为了便于理解，假设我们有DLLTest.dll文件，其中定义了4个函数Plus、Sub、Mul和Div，其中Plus、Sub、和Div以函数名导出，并将其导出序号分别设置为1、5、9，而Mul以序号导出，其序号为为7，具体如下</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-def.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-Petools.png" /></p>
+<p>此时我们画一张导出表的示意图来进行细致的解释</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-图解.png" /></p>
+<ul>
+<li>对于名称导出方式，以Sub函数为例，我们可以看到它在ENT表中的索引为2，那么我们到序号表中查询索引为2的序号值，其结果为4，这意味着Sub函数的RVA地址存放在EAT表中的索引为4的地方，此时我们再查看EAT表就可以得到Sub函数的RVA为0x1060</li>
+<li>对于序号导出方式，我们将Mul以序号7将其导出，此时Base =
+1，那么Mul的RVA地址在EAT表中的索引就是7 - 1 =
+6，通过查EAT表我们得到了Mul的RVA为0x1070</li>
+</ul>
+<h3 id="重定位表">重定位表</h3>
+<p>首先，为什么会有重定位表，我们都知道在可选映像头中有一个ImageBase属性，这个属性标识了PE文件默认的载入基地址，但是一个exe文件可能同时包含了多个DLL，而这些DLL的ImageBase又都是0x10000000，为了避免冲突现象，我们只能将没抢占到0x10000000这个位置的DLL放入内存中的其他位置，此时就产生了一个问题，DLL中某些数据的地址写的是直接地址（ImageBase
++
+RVA），此时换了一个新的基地址，我们要如何取到正确的取得这些数据呢，这就是重定位表的作用，标识出那些需要修正的位置</p>
+<h4 id="重定位表的结构">重定位表的结构</h4>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_BASE_RELOCATION</span> &#123;</span></span><br><span class="line">    DWORD   VirtualAddress;</span><br><span class="line">    DWORD   SizeOfBlock;</span><br><span class="line"><span class="comment">//  WORD    TypeOffset[1];</span></span><br><span class="line">&#125; IMAGE_BASE_RELOCATION;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>VirtualAddress：重定位数据开始的RVA地址</li>
+<li>SizeOfBlock：重定位块的大小</li>
+</ul>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表图.png" /></p>
+<ul>
+<li>首先需要注意的是IMAGE_BASE_RELOCATION并不是孤立的一张表，在结构体后紧跟是一个WORD类型（2字节）的数组，数组长度为（SizeOfBlock
+- 8）/ 2</li>
+<li>其次，这些数据是高4位+低12位的结构，其中高4位为修改标记，若其为0011（即十进制的3），则表示该数据需要修改，低12位是一个Offset，需要用重定位表中的VirtualAddress
++
+Offset才是需要修改的数据的RVA；若高4位为0，则不需要修改，作为对齐用</li>
+<li>每一张重定位表，都会记录一个4KB大小的数据块中需要修改的数据</li>
+<li>最后，重定位表最终以一个8字节大小的全0结构作为结束的标志</li>
+</ul>
+<p>最后，可能有人会有疑问，对于一个寻址能力为32位的操作系统，为什么Offset是一个2个字节大小的结构，内存地址不是需要4字节才能完整表示吗？</p>
+<p>这是因为重定位表采用VirtualAddress +
+Offset表示RVA造成的，我们先来看看这么做的好处，假设我们有一个16KB大小的数据块，其中有1000个需要重定位的数据</p>
+<ul>
+<li>如果我们采用直接记录RVA的方式，那么只需要一张重定位表，其大小为1000
+* 4 = 4000字节（如果需要SizeOfBlock记录大小，则至少为4004字节）</li>
+<li>如果我们采用VirtualAddress +
+Offset的方式，那么按实际的重定位表结构，我们将会有4张重定位表（每个重定位表只记录4KB大小的数据块），假设这1000个数据均匀分布在这4张表中，那么每张重定位表的大小为
+8 + 250 * 2 =
+508字节，那么4张重定位表总共2032字节，我们可以发现这样的设计大大缩小了重定位表的大小</li>
+</ul>
+<p>在理解了这样设计的好处之后，现在我们来回答，为什么Offset只需要两字节</p>
+<p>从原理的角度：一张重定位表记录一个4BK大小的数据块（即0x0000 ~
+0x0FFF），也就是说，我们的Offset只要能表示这个范围内的地址即可，因此Offset只需要12位即可表示（即重定位表中数据的低12位），处于对齐和功能性，我们将其设计为16位，即2字节，那么高4位就用来记录是否需要修改这一信息，所以VirtualAddress大小为4字节，可以记录任意数据块的在内存中的起始地址RVA，而Offset只需要2字节就可表示块内的任意Offset</p>
+<h4 id="实例-1">实例</h4>
+<p>还是以之前DLLTest.dll为例，我们在PE
+Tools中可以看到，该文件共有两张重定位表，标识了不同区块中需要修正的数据，其中.text中共有140个可能需要重定位的数据，而.data中有16个</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表.png" /></p>
+<p>我们以.text中的第一个、第三个需要修改的数据为例，首先分析下他们的RVA
+0x1012和0x101E是怎么得到的，我们在16进制编辑器中找到重定位表，红框圈中的即为第一项数据0x3012和第三项数据0x301E，我们将其转换为二进制分别为0011
+0000 0001 0010和0011 0000 0001
+1110，可以发现他们的高4位都为0011，即需要修改，那么他们的低12位为Offset，分别是0x12和0x1E，那么需要修改的数据的RVA分别为VirtualAddress
++ Offset，即0x1012和0x101E</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-16进制重定位.png" /></p>
+<p>此时DLLTest.dll的ImageBase为0x10000000，我们用另一个程序调用DLLTest.dll，并用x64Dbg打开该程序，找到0x10001012处，可以发现其中一个是Push指令，而另一个是call指令（因为Push指令的操作码为0x68，需要占用一个字节，所以指令开始的地址是0x0x10001011，而0x10001012才是实际需要修改的数据的起始地址，call指令同理），那么当DLLTest.dll发生重定位时，这两个部分的数据就需要修改，此时记下他们：①0x100020A4；②0x10002030</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位汇编.png" /></p>
+<p>现在我们让DLL不从ImageBase载入，但不修改ImageBase中的值，我们在VS中将随机基址的打开，然后重新编译我们的DLL和调用该DLL的程序，现在虽然DLL的ImageBase还是0x10000000，但实际载入内存时DLL并不会从ImageBase载入
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-修改基址.png" /></p>
+<p>我们在x64Dbg中重新定位，可以发现此时我们的DLL已经被放到了内存中的其他位置，且载入的基地址为0x78590000，此时我们看到RVA为0x1012处的数据被改成了0x785920A4，而RVA为0x101E处的数据被改为了0x78592030</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-新地址.png" /></p>
+<p>我们不难看出这两个值是如何计算得到的</p>
+<ul>
+<li>0x785920A4 = 0x100020A4 - 默认基地址0x10000000 +
+新基地址0x78590000</li>
+<li>0x78592030 = 0x10002030 - 默认基地址0x10000000 +
+新基地址0x78590000</li>
+</ul>
 ]]></content>
       <categories>
         <category>逆向</category>
