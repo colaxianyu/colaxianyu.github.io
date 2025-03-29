@@ -28,7 +28,7 @@
 <meta property="og:description" content="资源表 资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页 为了便于理解，先给出一张资源表的树形结构图">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-07-21T07:19:09.000Z">
-<meta property="article:modified_time" content="2025-03-23T14:54:44.176Z">
+<meta property="article:modified_time" content="2025-03-29T09:52:36.802Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
@@ -233,7 +233,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-23 22:54:44" itemprop="dateModified" datetime="2025-03-23T22:54:44+08:00">2025-03-23</time>
+      <time title="修改时间：2025-03-29 17:52:36" itemprop="dateModified" datetime="2025-03-29T17:52:36+08:00">2025-03-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -257,7 +257,7 @@
     <div class="post-body" itemprop="articleBody"><h3 id="资源表">资源表</h3>
 <p>资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页</p>
 <p>为了便于理解，先给出一张资源表的树形结构图</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源表树形.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-资源表树形.png" /></p>
 <span id="more"></span>
 <h4 id="资源目录结构">资源目录结构</h4>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;        <span class="comment">//资源属性，但通常为0</span></span><br><span class="line">    DWORD   TimeDateStamp;          <span class="comment">// 资源建立时间</span></span><br><span class="line">    WORD    MajorVersion;           <span class="comment">// 资源的版本，但通常为0</span></span><br><span class="line">    WORD    MinorVersion;           </span><br><span class="line">    WORD    NumberOfNamedEntries;   <span class="comment">// 使用名字的资源条目的个数</span></span><br><span class="line">    WORD    NumberOfIdEntries;      <span class="comment">// 使用ID的资源条目个数</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY</span><br></pre></td></tr></table></figure>
@@ -350,10 +350,10 @@
 <p>该结构就是真正的资源数据的结构了，其中OffsetToData是RVA，而不是相对于资源块起始位置的Offset</p>
 <h3 id="实例">实例</h3>
 <p>我这里用一个Win32程序为实例，先用PE Tools查看其资源表内容</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-示例资源表.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-示例资源表.png" /></p>
 <h4 id="根目录">根目录</h4>
 <p>可以看到其中共有7种不同的资源类（24好像是清单类型，暂时每找到相关文档信息），首先在16进制编辑器中观察其根目录</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-根目录.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-根目录.png" /></p>
 <ul>
 <li>4字节Characteristics，此时为0</li>
 <li>4字节TimeDateStamp，为0</li>
@@ -366,7 +366,7 @@
 id="根目录下的image_resource_directory_entry">根目录下的IMAGE_RESOURCE_DIRECTORY_ENTRY</h4>
 <p>我们以Menu作为分析对象，它是第二个IMAGE_RESOURCE_DIRECTORY_ENTRY结构，因为该结构大小位8字节，所以它的位置应该是2400h
 + 8 = 2408h，我们在16进制编辑器中可以看到如下内容</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第一层Entry.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-第一层Entry.png" /></p>
 <p>可以看到其Name（ID）属性值为：0x00000004，其OffsetToData属性值为0x800000E8，我们进一步解析</p>
 <ul>
 <li>Name（ID）属性的最高位为0，表示它通过ID标识，由于是第一层目录中，它代表一个预定义的资源，查表我们发现04h是Menu</li>
@@ -376,7 +376,7 @@ id="根目录下的image_resource_directory_entry">根目录下的IMAGE_RESOURCE
 <h4
 id="第二层目录的image_resource_directory">第二层目录的IMAGE_RESOURCE_DIRECTORY</h4>
 <p>第二层目录如下所示</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第二层目录.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-第二层目录.png" /></p>
 <p>可以知道其NumberOfIdEntries为1，表示Menu资源下只有一个该类资源</p>
 <p>紧跟其后的8字节就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构，可以看到其Name（ID）属性值为：0x0000006D，其OffsetToData属性值为0x80003030</p>
 <ul>
@@ -386,10 +386,10 @@ id="第二层目录的image_resource_directory">第二层目录的IMAGE_RESOURCE
 </ul>
 <h4
 id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE_DIRECTORY</h4>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层目录.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-第三层目录.png" /></p>
 <p>可以知道其NumberOfIdEntries为1，表示该资源代码页只有一项</p>
 <p>紧跟其后就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层Entry.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-第三层Entry.png" /></p>
 <p>可以看到其Name（ID）属性值为：0x00000804，其OffsetToData属性值为0x000004F8</p>
 <ul>
 <li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为804h</li>
@@ -397,7 +397,7 @@ id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE
 + 4F8h = 28F8h</li>
 </ul>
 <h4 id="image_resource_data_entry">IMAGE_RESOURCE_DATA_ENTRY</h4>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源data.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-资源data.png" /></p>
 <ul>
 <li>OffsetToData为01AE90h</li>
 <li>Size为50h</li>
@@ -407,16 +407,16 @@ id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE
 </ul>
 <h4 id="image_resource_dir_string_u">IMAGE_RESOURCE_DIR_STRING_U</h4>
 <p>因为示例程序比较简单，没有用到这个结构，所以这里单独找一个比较复杂的程序用来展示</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂程序.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-复杂程序.png" /></p>
 <p>可以看到根目录下第一类资源是用Name标识的，其名字为"AFX_DIALOG_LAYOUT"，我们在16进制中观察其IMAGE_RESOURCE_DIRECTORY_ENTRY</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂entry.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-复杂entry.png" /></p>
 <p>可以看到其Name（ID）属性值为：0x8000CB2E，其OffsetToData属性值为0x800000B0</p>
 <ul>
 <li>Name（ID）属性的最高位为1，表示它通过Name标识，且Name的Offset为CB2Eh，那么IMAGE_RESOURCE_DIR_STRING_U结构的地址为630000h
 + CB2Eh = 63CB2Eh</li>
 <li>OffsetToData属性的最高位为1，表示它指向下一层目录</li>
 </ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-名字结构.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-名字结构.png" /></p>
 <p>可以看到IMAGE_RESOURCE_DIR_STRING_U结构中Length为11h，而NameString为Unicode表示的"AFX_DIALOG_LAYOUT"（可以注意到字符串并没有以0结尾，所以Length属性很重要）</p>
 
     </div>

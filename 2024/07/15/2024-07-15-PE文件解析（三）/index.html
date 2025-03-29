@@ -28,7 +28,7 @@
 <meta property="og:description" content="之前讲解了输入表与输入地址表以及他们的工作原理，现在我们开始分析输出表与重定位表 输出表 创建一个DLL时，实际上创建了一组能让exe或其他DLL调用的函数，而PE装载器将根据DLL文件中的输出信息修正正被执行文件中的IAT。通常exe文件中不存在输出表（并不绝对），而大部分DLL文件中则存在输出表 输出表的结构 12345678910111213typedef struct _IMAGE">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-07-15T14:12:54.000Z">
-<meta property="article:modified_time" content="2025-03-23T14:54:37.782Z">
+<meta property="article:modified_time" content="2025-03-29T09:50:01.522Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
@@ -233,7 +233,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-23 22:54:37" itemprop="dateModified" datetime="2025-03-23T22:54:37+08:00">2025-03-23</time>
+      <time title="修改时间：2025-03-29 17:50:01" itemprop="dateModified" datetime="2025-03-29T17:50:01+08:00">2025-03-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -279,10 +279,10 @@
 </ul>
 <h4 id="实例">实例</h4>
 <p>为了便于理解，假设我们有DLLTest.dll文件，其中定义了4个函数Plus、Sub、Mul和Div，其中Plus、Sub、和Div以函数名导出，并将其导出序号分别设置为1、5、9，而Mul以序号导出，其序号为为7，具体如下</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-def.png" /></p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-Petools.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-def.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-Petools.png" /></p>
 <p>此时我们画一张导出表的示意图来进行细致的解释</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-图解.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-图解.png" /></p>
 <ul>
 <li>对于名称导出方式，以Sub函数为例，我们可以看到它在ENT表中的索引为2，那么我们到序号表中查询索引为2的序号值，其结果为4，这意味着Sub函数的RVA地址存放在EAT表中的索引为4的地方，此时我们再查看EAT表就可以得到Sub函数的RVA为0x1060</li>
 <li>对于序号导出方式，我们将Mul以序号7将其导出，此时Base =
@@ -299,7 +299,7 @@ RVA），此时换了一个新的基地址，我们要如何取到正确的取�
 <li>VirtualAddress：重定位数据开始的RVA地址</li>
 <li>SizeOfBlock：重定位块的大小</li>
 </ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表图.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-重定位表图.png" /></p>
 <ul>
 <li>首先需要注意的是IMAGE_BASE_RELOCATION并不是孤立的一张表，在结构体后紧跟是一个WORD类型（2字节）的数组，数组长度为（SizeOfBlock
 - 8）/ 2</li>
@@ -326,19 +326,19 @@ Offset的方式，那么按实际的重定位表结构，我们将会有4张重�
 <h4 id="实例-1">实例</h4>
 <p>还是以之前DLLTest.dll为例，我们在PE
 Tools中可以看到，该文件共有两张重定位表，标识了不同区块中需要修正的数据，其中.text中共有140个可能需要重定位的数据，而.data中有16个</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-重定位表.png" /></p>
 <p>我们以.text中的第一个、第三个需要修改的数据为例，首先分析下他们的RVA
 0x1012和0x101E是怎么得到的，我们在16进制编辑器中找到重定位表，红框圈中的即为第一项数据0x3012和第三项数据0x301E，我们将其转换为二进制分别为0011
 0000 0001 0010和0011 0000 0001
 1110，可以发现他们的高4位都为0011，即需要修改，那么他们的低12位为Offset，分别是0x12和0x1E，那么需要修改的数据的RVA分别为VirtualAddress
 + Offset，即0x1012和0x101E</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-16进制重定位.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-16进制重定位.png" /></p>
 <p>此时DLLTest.dll的ImageBase为0x10000000，我们用另一个程序调用DLLTest.dll，并用x64Dbg打开该程序，找到0x10001012处，可以发现其中一个是Push指令，而另一个是call指令（因为Push指令的操作码为0x68，需要占用一个字节，所以指令开始的地址是0x0x10001011，而0x10001012才是实际需要修改的数据的起始地址，call指令同理），那么当DLLTest.dll发生重定位时，这两个部分的数据就需要修改，此时记下他们：①0x100020A4；②0x10002030</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位汇编.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-重定位汇编.png" /></p>
 <p>现在我们让DLL不从ImageBase载入，但不修改ImageBase中的值，我们在VS中将随机基址的打开，然后重新编译我们的DLL和调用该DLL的程序，现在虽然DLL的ImageBase还是0x10000000，但实际载入内存时DLL并不会从ImageBase载入
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-修改基址.png" /></p>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-修改基址.png" /></p>
 <p>我们在x64Dbg中重新定位，可以发现此时我们的DLL已经被放到了内存中的其他位置，且载入的基地址为0x78590000，此时我们看到RVA为0x1012处的数据被改成了0x785920A4，而RVA为0x101E处的数据被改为了0x78592030</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-新地址.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-新地址.png" /></p>
 <p>我们不难看出这两个值是如何计算得到的</p>
 <ul>
 <li>0x785920A4 = 0x100020A4 - 默认基地址0x10000000 +

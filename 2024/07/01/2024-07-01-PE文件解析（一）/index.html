@@ -28,7 +28,7 @@
 <meta property="og:description" content="基本概念 什么是PE文件  PE文件的全程：Portable Executable，即可移植的可执行文件 常见的PE文件：EXE文件、DLL文件、OCX文件、SYS文件、COM文件 PE文件通常是指32位的，而64位的PE文件通常称为PE32+、PE+、PE64  文件偏移地址、虚拟地址与相对虚拟地址  文件偏移地址：PE文件存储在磁盘中时，某个数据的位置相对于文件头部的偏移量，">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-07-01T13:49:34.000Z">
-<meta property="article:modified_time" content="2025-03-23T14:54:15.108Z">
+<meta property="article:modified_time" content="2025-03-29T09:44:00.399Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
@@ -233,7 +233,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-23 22:54:15" itemprop="dateModified" datetime="2025-03-23T22:54:15+08:00">2025-03-23</time>
+      <time title="修改时间：2025-03-29 17:44:00" itemprop="dateModified" datetime="2025-03-29T17:44:00+08:00">2025-03-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -275,9 +275,9 @@ Virtual Address），虚拟地址与相对虚拟地址存在如下关系：虚�
 <span id="more"></span>
 <h4 id="pe结构图">PE结构图</h4>
 <ol type="1">
-<li><p>PE文件框架结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE框架结构.png" /></p></li>
-<li><p>PE文件的详细结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-详细结构.PNG" /></p></li>
-<li><p>PE文件磁盘结构与内存结构（对齐原因） <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE内存映像.png" /></p></li>
+<li><p>PE文件框架结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-PE框架结构.png" /></p></li>
+<li><p>PE文件的详细结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-详细结构.PNG" /></p></li>
+<li><p>PE文件磁盘结构与内存结构（对齐原因） <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-PE内存映像.png" /></p></li>
 </ol>
 <h3 id="pe-headers解析">PE Headers解析</h3>
 <p>首先需要明确的是，严格意义上的PE文件头是指<strong>IMAGE_NT_HEADERS</strong>，但为了方便解析，此处将</p>
@@ -296,7 +296,7 @@ Virtual Address），虚拟地址与相对虚拟地址存在如下关系：虚�
 <p>其中比较重要的两个字段分别是e_magic与e_lfanew，前者的作用已经解释过，而e_lfanew是真正的PE文件头IMAGE_NT_HEADERS的相对偏移(lfanew
 = long file address of new exe)</p>
 <p>用十六进制编辑器打开exe文件可以发现，起始位置e_magic字段的值为"MZ"，而e_lfanew的值为"0x000000F0"，在相对文件起始位置0x000000F0的位置我们可以找到真正的PE文件头标记"PE00"</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-dos头.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-dos头.png" /></p>
 <p>我们可以观察到在e_lfanew和真正的PE头之间还有一些数据，这部分数据被称为DOS
 stub（即DOS块），DOS
 stub实际上是一个有效的exe，在不支持PE文件格式的操作系统中，它将显示一个错误提示，即"This
@@ -308,7 +308,7 @@ stub合称为DOS文件头</p>
 stub的就是真正的PE文件头了，这部分也被称为NT映像头，在一个有效PE文件中，其Signature字段被置为0x00004550（即ASCII的"PE00"，该值对应于winnt.h文件中的一个宏定义，IMAGE_NT_SIGNATURE），而紧跟在Signature字段之后的就是IMAGE_FILE_HEADER映像文件头，在此之后紧跟的是IMAGE_OPTIONAL_HEADER可选映像头</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_NT_HEADERS</span> &#123;</span></span><br><span class="line">    DWORD Signature;                                  <span class="comment">// PE文件标识</span></span><br><span class="line">    IMAGE_FILE_HEADER FileHeader;                     </span><br><span class="line">    IMAGE_OPTIONAL_HEADER32 OptionalHeader;           </span><br><span class="line">&#125; IMAGE_NT_HEADERS32</span><br></pre></td></tr></table></figure>
 <p>在十六进制编辑器中，NT影响头的结构如下图所示，首个字段即为"PE00"标记，紧跟其后红色框所示部分就是映像文件头，紧跟映像文件头之后的蓝色框所示的部分就是可选映像头</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-NT头.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-NT头.png" /></p>
 <h4 id="image_file_header">IMAGE_FILE_HEADER</h4>
 <p>映像文件头中包含PE文件的一些基本信息，大小为20字节，其中较为重要的两个字段为NumberOfSections字段与SizeOfOptionalHeader字段，前者指出了区块Section的数量（同时也指明了IMAGE_SECTION_HEADER区块表的数量，因为每一个区块表记录了对应区块的相关信息），后者指出了IMAGE_OPTIONAL_HEADER可选映像头的大小</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_FILE_HEADER</span> &#123;</span></span><br><span class="line">    WORD    Machine;                          <span class="comment">// 运行平台</span></span><br><span class="line">    WORD    NumberOfSections;                 <span class="comment">// 区块数</span></span><br><span class="line">    DWORD   TimeDateStamp;                    <span class="comment">// 文件创建的日期和时间</span></span><br><span class="line">    DWORD   PointerToSymbolTable;             <span class="comment">// 指向符号表（用于调试）</span></span><br><span class="line">    DWORD   NumberOfSymbols;                  <span class="comment">// 符号表中的符号的个数（用于调试）</span></span><br><span class="line">    WORD    SizeOfOptionalHeader;             <span class="comment">// 可选映像头的大小</span></span><br><span class="line">    WORD    Characteristics;                  <span class="comment">// 文件属性</span></span><br><span class="line">&#125; IMAGE_FILE_HEADER</span><br></pre></td></tr></table></figure>
@@ -462,7 +462,7 @@ IMAGE_OPTIONAL_HEADER 之后，每个区块表大小都是40字节</p>
 <li>.data</li>
 <li>.rsrc</li>
 </ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-区块表.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-区块表.png" /></p>
 <h3 id="区块解析">区块解析</h3>
 <p>首先需要注意的是，区块名称只是为了方便辨识，但对于操作系统来说是无关紧要的，如当寻找输出表、输入表信息时，不应该默认到.text和.rdata区块中寻找，而是要严格依据数据目录数组DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES]中的信息进行查找，常见区块如下</p>
 <table>

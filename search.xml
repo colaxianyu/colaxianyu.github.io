@@ -182,14 +182,14 @@ right</strong>与<strong>左闭右开的[left，right)形式</strong>组合</li>
 value来进行搜索，首次搜索会得到很多相关的结果</li>
 </ol>
 <figure>
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光1.png"
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光1.png"
 alt="1" />
 <figcaption aria-hidden="true">1</figcaption>
 </figure>
 <ol start="2" type="1">
 <li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-%E9%98%B3%E5%85%892.png" />
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光2.png" />
 为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
 <p>如何判断这个地址是否是静态基址，若CE标识的地址为绿色，则该地址为静态基址，而此处的地址并不是绿色的，所以这是个动态地址，因此我们需要寻找基址</p>
 <h4 id="寻找基址">寻找基址</h4>
@@ -197,22 +197,22 @@ alt="1" />
 <li>我们已经找到了阳光的动态地址，那么如何寻找基址，思路是，阳光每次变动就意味着一定有一条指令修改了这个地址中的值，那么我们可以下一个内存写入断点，看看哪条指令写入了这个地址，所以我们再CE中选中这个地址，右键找到find
 out what writes to this address</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光3.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光3.png" /></p>
 <p>之后我们收集一个阳光，发现得到了一条指令，我们双击打开</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光4.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光4.png" /></p>
 <p>此时我们可以知道，ecx的值0x19，也就是25，写入了阳光地址标识的内存中，因此阳光的地址
 = eax + 0x5560，该地址内存放了当前阳光的具体数值，其中eax =
 0x17326B58，而0x5560为偏移地址</p>
 <ol start="2" type="1">
 <li>此时我们猜想，内存中有没有一个位置存放了0x17326B58这个值，因此我们可以使用CE，并以16进制搜索0x17326B58，发现很多搜索结果，首先可以排除地址在0x00400000以下的内容，这部分是不进行映射的，以便捕获异常的空指针引用，因此我们找到第一个大于0x00400000的地址，这个值通常是我们需要的，即0x0290A938</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光5.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光5.png" /></p>
 <p>此时我们可以知道0x0290A938这个地址内保存了0x17326B58这个值，但是0x0290A938这个地址仍是个动态地址，所以我们还需要进一步寻找基址</p>
 <p>此时我们用CE下个内存访问断点，查看哪条指令访问了0x0290A938这个地址内的值，可以看到4个结果，我们点进第一个指令发现0x0290A938
 = edi + 0x768，其中edi = 0290A1D0，0x768也是偏移地址</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光6.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光6.png" /></p>
 <p>那么同理我们可以看看内存中哪里存放了0290A1D0，得到如下结果</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光7.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光7.png" /></p>
 <p>这时我们看到几个绿色的地址，这就代表这些地址就是静态基址，我们选择第一个，可以看到其地址为0x6A9EC0，这就是我们需要的静态基址，那么如何通过静态基址找到最后的阳光地址呢</p>
 <ol type="1">
 <li>现在梳理一下这个过程
@@ -227,12 +227,12 @@ out what writes to this address</li>
 </ul></li>
 </ol>
 <p>之后我们在CE中验证我们的结果，选择add address manually</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光8.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光8.png" /></p>
 <p>之后选择Point，因为此处包含两个偏移地址，因此再点击add
 offset，然后填入我们找到的基址与偏移地址</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光9.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光9.png" /></p>
 <p>最终我们可以看到，这个地址内，存的就是当前阳光的数值，修改后，游戏内的阳光也随之改变，且重启游戏后，该地址仍然存的是阳光的数值</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-21-阳光10.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光10.png" /></p>
 <h4 id="实现无限阳光的功能">实现无限阳光的功能</h4>
 <p>的到进程空间中阳光的地址，并向阳光地址处写入所需阳光数，即可实现无限阳光的功能，具体实现细节就不做赘述，给出核心代码</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将寻找地址功能封装成GetThirdLevelAddress()函数，方便后续寻找金币地址</span></span><br><span class="line">DWORD sunAddress = <span class="built_in">GetThirdLevelAddress</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义阳光数量</span></span><br><span class="line">DWORD dwSun = <span class="number">9999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入             </span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess, (LPVOID)sunAddress, (LPCVOID)&amp;dwSun, <span class="built_in"><span class="keyword">sizeof</span></span>(DWORD), &amp;pid)          </span><br></pre></td></tr></table></figure>
@@ -263,37 +263,37 @@ href="https://colaxianyu.github.io/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9
 <ol type="1">
 <li>我们已经知道，若在一个空位置放置植物，阳光会减少相应的cost，因此我们在阳光的内存处下一个内存写入断点，之后在一个空位放置向日葵，可以发现CE显示了一条指令，我们双击该指令观察esi的值，发现其中的值正是放置向日葵后的阳光数</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-植物cost.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-03-01-植物cost.png" /></p>
 <ol start="2" type="1">
 <li>我们记下该指令的地址，用x64Dbg附加游戏，找到该指令并在此处下一个断点，在游戏中再放一个向日葵，使游戏执行到该处，我们可以看到该指令之后将会返回至另一个位置，在堆栈窗口中，我们可以看到其返回的具体地址</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-堆栈中.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-03-01-堆栈中.png" /></p>
 <ol start="3" type="1">
 <li>跟进到返回后的位置，我们将该call假设为阳光减少call，我们发现该call周围有大量的跳转指令，且整个代码段中都有大量跳转指令，因此我们无法判断代码段中的哪个跳转指令，此时我们需要一个方法来筛选哪些跳转指令是我们需要关注的</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-阳光call.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-03-01-阳光call.png" /></p>
 <ol start="4" type="1">
 <li>一个可行的方法是，我们向上找到该代码段的起始位置，并下一个断点，在游戏中我们先在空闲位置放置一个向日葵，此时程序会断在代码段起始位置，我们单步调试，在每一个跳转指令处记录其是否跳转，以0标记不跳转，1标记跳转，直至该代码段结束</li>
 </ol>
 <figure>
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-空闲跳.png"
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-03-01-空闲跳.png"
 alt="2022-03-01-空闲跳" />
 <figcaption aria-hidden="true">2022-03-01-空闲跳</figcaption>
 </figure>
 <p>之后我们返回游戏，选择向日葵，将其放置在一个有植物的位置，再次单步调试跟进每一个跳转指令，寻找发生变化的跳转指令，之后我们定位到该跳转指令发生了变化</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-非空闲跳转.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-03-01-非空闲跳转.png" /></p>
 <ol type="1">
 <li>为了印证该跳转是不是决定了该位置为空位置，我们先在此处下个断点，然后修改其执行流程，因为此次放置非空位置，若修改后可以在同一位置重复放置植物，则成功，若不能重复放置，方便我们从此处再对后续的跳转指令进行对比，这里我们将ZF标志位置为1，je指令从不跳转变为跳转</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改ZF.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-03-01-改ZF.png" /></p>
 <ol start="6" type="1">
 <li>运行游戏，此时我们发现向日葵重复放置在了同一位置，因此该跳转使得我们可以实现重复放置的功能，即跳转则可放，不跳转则不可放，且通过分析反汇编我们不难得出，跳转指令之前的call实现了判断位置是否为空的功能</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-判空.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-03-01-判空.png" /></p>
 <ol start="7" type="1">
 <li>如果要让跳转指令一直跳转，我们可以将其改为jmp无条件跳转指令，此时回到游戏我们就已经实现了重复种植的功能</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-01-改为jmp.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-03-01-改为jmp.png" /></p>
 <h4 id="实现重复放置功能">实现重复放置功能</h4>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// JMP 0x00410754的硬编码，硬编码的操作码部分为偏移地址</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0xE9</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x20</span>;</span><br><span class="line">buffer[<span class="number">2</span>] = <span class="number">0x09</span>;</span><br><span class="line">buffer[<span class="number">3</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">4</span>] = <span class="number">0x00</span>;</span><br><span class="line">buffer[<span class="number">5</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 填充至原je跳转指令处</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x0040FE2F</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure>
 ]]></content>
@@ -325,9 +325,9 @@ Virtual Address），虚拟地址与相对虚拟地址存在如下关系：虚�
 <span id="more"></span>
 <h4 id="pe结构图">PE结构图</h4>
 <ol type="1">
-<li><p>PE文件框架结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE框架结构.png" /></p></li>
-<li><p>PE文件的详细结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-详细结构.PNG" /></p></li>
-<li><p>PE文件磁盘结构与内存结构（对齐原因） <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-PE内存映像.png" /></p></li>
+<li><p>PE文件框架结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-PE框架结构.png" /></p></li>
+<li><p>PE文件的详细结构 <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-详细结构.PNG" /></p></li>
+<li><p>PE文件磁盘结构与内存结构（对齐原因） <img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-PE内存映像.png" /></p></li>
 </ol>
 <h3 id="pe-headers解析">PE Headers解析</h3>
 <p>首先需要明确的是，严格意义上的PE文件头是指<strong>IMAGE_NT_HEADERS</strong>，但为了方便解析，此处将</p>
@@ -346,7 +346,7 @@ Virtual Address），虚拟地址与相对虚拟地址存在如下关系：虚�
 <p>其中比较重要的两个字段分别是e_magic与e_lfanew，前者的作用已经解释过，而e_lfanew是真正的PE文件头IMAGE_NT_HEADERS的相对偏移(lfanew
 = long file address of new exe)</p>
 <p>用十六进制编辑器打开exe文件可以发现，起始位置e_magic字段的值为"MZ"，而e_lfanew的值为"0x000000F0"，在相对文件起始位置0x000000F0的位置我们可以找到真正的PE文件头标记"PE00"</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-dos头.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-dos头.png" /></p>
 <p>我们可以观察到在e_lfanew和真正的PE头之间还有一些数据，这部分数据被称为DOS
 stub（即DOS块），DOS
 stub实际上是一个有效的exe，在不支持PE文件格式的操作系统中，它将显示一个错误提示，即"This
@@ -358,7 +358,7 @@ stub合称为DOS文件头</p>
 stub的就是真正的PE文件头了，这部分也被称为NT映像头，在一个有效PE文件中，其Signature字段被置为0x00004550（即ASCII的"PE00"，该值对应于winnt.h文件中的一个宏定义，IMAGE_NT_SIGNATURE），而紧跟在Signature字段之后的就是IMAGE_FILE_HEADER映像文件头，在此之后紧跟的是IMAGE_OPTIONAL_HEADER可选映像头</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_NT_HEADERS</span> &#123;</span></span><br><span class="line">    DWORD Signature;                                  <span class="comment">// PE文件标识</span></span><br><span class="line">    IMAGE_FILE_HEADER FileHeader;                     </span><br><span class="line">    IMAGE_OPTIONAL_HEADER32 OptionalHeader;           </span><br><span class="line">&#125; IMAGE_NT_HEADERS32</span><br></pre></td></tr></table></figure>
 <p>在十六进制编辑器中，NT影响头的结构如下图所示，首个字段即为"PE00"标记，紧跟其后红色框所示部分就是映像文件头，紧跟映像文件头之后的蓝色框所示的部分就是可选映像头</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-NT头.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-NT头.png" /></p>
 <h4 id="image_file_header">IMAGE_FILE_HEADER</h4>
 <p>映像文件头中包含PE文件的一些基本信息，大小为20字节，其中较为重要的两个字段为NumberOfSections字段与SizeOfOptionalHeader字段，前者指出了区块Section的数量（同时也指明了IMAGE_SECTION_HEADER区块表的数量，因为每一个区块表记录了对应区块的相关信息），后者指出了IMAGE_OPTIONAL_HEADER可选映像头的大小</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_FILE_HEADER</span> &#123;</span></span><br><span class="line">    WORD    Machine;                          <span class="comment">// 运行平台</span></span><br><span class="line">    WORD    NumberOfSections;                 <span class="comment">// 区块数</span></span><br><span class="line">    DWORD   TimeDateStamp;                    <span class="comment">// 文件创建的日期和时间</span></span><br><span class="line">    DWORD   PointerToSymbolTable;             <span class="comment">// 指向符号表（用于调试）</span></span><br><span class="line">    DWORD   NumberOfSymbols;                  <span class="comment">// 符号表中的符号的个数（用于调试）</span></span><br><span class="line">    WORD    SizeOfOptionalHeader;             <span class="comment">// 可选映像头的大小</span></span><br><span class="line">    WORD    Characteristics;                  <span class="comment">// 文件属性</span></span><br><span class="line">&#125; IMAGE_FILE_HEADER</span><br></pre></td></tr></table></figure>
@@ -512,7 +512,7 @@ IMAGE_OPTIONAL_HEADER 之后，每个区块表大小都是40字节</p>
 <li>.data</li>
 <li>.rsrc</li>
 </ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-05-区块表.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-01-区块表.png" /></p>
 <h3 id="区块解析">区块解析</h3>
 <p>首先需要注意的是，区块名称只是为了方便辨识，但对于操作系统来说是无关紧要的，如当寻找输出表、输入表信息时，不应该默认到.text和.rdata区块中寻找，而是要严格依据数据目录数组DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES]中的信息进行查找，常见区块如下</p>
 <table>
@@ -592,59 +592,59 @@ href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9
 <li>因为我们无法确定CDTimers的初始值，所以在CE的搜索方式中我们选择未知初始值，并点击First
 Scan</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-搜索.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-搜索.png" /></p>
 <ol start="2" type="1">
 <li>我们以向日葵作为对象，此时放置向日葵，并选择changed
 value，然后再次搜索</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次搜索.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-再次搜索.png" /></p>
 <ol start="3" type="1">
 <li>我们发现CE得到了非常多的搜索结果，此时游戏处于暂停阶段，CDTimers并未改变，所以我们可以在CE中选择unchanged
 value，并多次搜索过滤大量无关数据</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-多次搜索过滤.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-多次搜索过滤.png" /></p>
 <ol start="4" type="1">
 <li>此时搜索结果减少的量已经很少了，此时我们让游戏继续一段时间，此时CDTimers的值改变，因此再CE中再次选择changed
 value并搜索</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-再次精准搜索.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-再次精准搜索.png" /></p>
 <ol start="5" type="1">
 <li>我们重复步骤3和4，直至搜索到少量结果（向日葵CD结束可再放置一次重复搜索）</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-最终结果.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-最终结果.png" /></p>
 <ol start="6" type="1">
 <li>我们发现最后一个结果的值172比较符合我们的猜想，并发现在游戏进行时，该值不断增大，此时向日葵处于不可放置的状态，那么该值是否会增大到某一个界限后导致向日葵可以重新安放呢，为印证猜想，我们在此处将该值改为1000</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-修改可疑值.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-修改可疑值.png" /></p>
 <p>我们发现此时向日葵恢复了可放置的状态，猜想正确，该值就是CDTimers</p>
 <h4 id="定位if判断的位置">定位If判断的位置</h4>
 <ol type="1">
 <li>我们知道当植物处于不可放置状态时，CDTimers的值会不断增加，因此我们可以得知必定有一条指令像该内存写入了数据，因此我们可以对CDTimer下一个内存写入断点</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-内存写入断点.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-内存写入断点.png" /></p>
 <ol start="2" type="1">
 <li>此时我们选择show
 disassembler可以看到如下内容，我们发现该值增加后存入了eax寄存器，而之后eax与内存中[edi+0x24]处的值进行了对比，我们猜测该CMP指令就是我们要找的if判断指令，我们记下该CMP指令的地址</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-反汇编.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-反汇编.png" /></p>
 <ol start="3" type="1">
 <li>用x64Dbg附加植物大战僵尸进程（若附加失败可关闭CE后再尝试附加），之后我们在x64Dbg中通过地址找到CMP指令，并在该处下断点，是程序运行到CMP指令处</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-调试器.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-调试器.png" /></p>
 <ol start="4" type="1">
 <li>此时我们单步执行一次，发现跳转指令jle执行，而此时向日葵是处于无法安置状态的，如果该CMP就是我们需要的if判断，那么可以推测出，若跳转执行，则植物仍在CD，不可放置；若跳转不执行，则植物没有CD，可以放置</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-jle指令.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-jle指令.png" /></p>
 <ol start="5" type="1">
 <li>为验证猜想，我们可以改变程序的执行流程，即让jle指令不跳转，因为jle跳转与否是由标志寄存器（ZF
 == 1 || SF != OF）决定，此时SF !=
 OF，跳转执行，因此我们将SF的值该为0，此时跳转就不会执行，之后我们运行程序，可以观察到植物的CD取消</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-改执行流程.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-改执行流程.png" /></p>
 <ol start="6" type="1">
 <li>此时我们可以确定该CMP就是我们需要的if判断，而其结果决定了jle指令是否跳转，若我们让jle指令永不跳转，那就实现了植物放置无CD的功能，因此我们在x64Dbg中将jle指令用nop填充并取消断点，回到游戏中，我们发现放置植物之后将不会有CD，功能实现成功</li>
 </ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-02-26-nop.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-26-nop.png" /></p>
 <h4 id="实现取消cd功能">实现取消CD功能</h4>
 <p>其过程就是用代码的形式将jle指令用nop填充 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// nop指令的机器码，保证与原jle指令长度相同</span></span><br><span class="line">buffer[<span class="number">0</span>] = <span class="number">0x90</span>;</span><br><span class="line">buffer[<span class="number">1</span>] = <span class="number">0x90</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在jle指令地址处，用nop填充</span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess_, (LPVOID)<span class="number">0x00487296</span>, (LPCVOID)buffer, <span class="built_in"><span class="keyword">sizeof</span></span>(buffer), &amp;pid_)</span><br></pre></td></tr></table></figure></p>
 ]]></content>
@@ -665,7 +665,7 @@ Table）完成的，输入表中保存了输入的函数名和这些函数所在
 <p>当我们调用DLL中的函数时，调用者程序无法得知这些函数的实际地址，因为这些函数的实际地址只有当PE文件载入内存中时才得以确定，所以我们采取了一种间接调用的形式，即在内存中仅保留函数名（或序号），通过此方法告知Windows加载器，我们需要这样的一个函数，当PE文件载入内存后，Windows加载器便将相关DLL载入内存，同时将函数名替换成函数实际所处的地址，而记录这些中间函数信息并最终被替换成实际地址的结构即为输入地址表IAT，记住这个转换过程，之后我们会做详细讲解</p>
 <h4 id="输入表的结构">输入表的结构</h4>
 <p>在了解什么是输入表、什么是输入地址表之后，我们了解下它们载入内存前的大致结构
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-输入表.png" /></p>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-03-输入表.png" /></p>
 <p>我们发现图中一共包含了4张表，分别是输入表IMAGE_IMPORT_DESCRIPTOR、输入名称表（INT）、输入地址表（IAT）、函数表IMAGE_IMPORT_BY_NAME，现在我们分别给出这四个表在winnt.h的具体定义</p>
 <p>输入表 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_IMPORT_DESCRIPTOR</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   Characteristics;            </span><br><span class="line">        DWORD   OriginalFirstThunk;         </span><br><span class="line">    &#125; DUMMYUNIONNAME;                       <span class="comment">// INT表的RVA</span></span><br><span class="line">    DWORD   TimeDateStamp;                  </span><br><span class="line">    DWORD   ForwarderChain;                 </span><br><span class="line">    DWORD   Name;                           <span class="comment">// DLL名字的RVA</span></span><br><span class="line">    DWORD   FirstThunk;                     <span class="comment">// IAT表的RVA</span></span><br><span class="line">&#125; IMAGE_IMPORT_DESCRIPTOR</span><br></pre></td></tr></table></figure></p>
 <ul>
@@ -690,7 +690,7 @@ Table）完成的，输入表中保存了输入的函数名和这些函数所在
 <h4 id="原理">原理</h4>
 <p>我们之前提到IAT表承担了将函数名转换成实际地址的功能，其实这就是输入表的主要功能，即载入时替换IAT表中的内容，一旦替换工作完成，那么整个输入表的替他部分就不关键了，程序依靠IAT表中的内容就可以正常运行</p>
 <p>我们现在来看PE文件载入内存后输入表的结构，我们可以发现IAT此时不再指向IMAGE_IMPORT_BY_NAME表，其中的内容被填入了函数的实际地址
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-载入后输入表.png" /></p>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-03-载入后输入表.png" /></p>
 <p>具体的工作流程是</p>
 <ul>
 <li>①PE装载器先通过INT表找出每个IMAGE_IMPORT_BY_NAME结构指向的函数地址</li>
@@ -701,21 +701,21 @@ dword ptr
 [xxxxxxx]，这个xxxxx就是IAT表的地址，当载入内存前，[xxxxxx]指向了IMAGE_IMPORT_BY_NAME中的对应的函数，而载入内存后[xxxxxx]就指向了函数的实际地址，这就是转换工作在程序中的体现</p>
 <h4 id="实例">实例</h4>
 <p>为了解释这一过程，我们通过一个例子来理解其中的转换过程，例如此处我们的程序使用了一个TestDLL.dll中的Plus函数，首先我们在反汇编程序中观察反汇编代码，可以发现我们我们并不是call了一个绝对地址，而是call了ds:[0x402000]内存里的内容，我们在内存窗口里观察到0x402000处的4字节信息为0x10001050
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-反汇编.png" /></p>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-03-反汇编.png" /></p>
 <p>之后我们跟进call中，可以发现来到了Plus函数内部，而地址正是0x10001050，也就是说调用Plus函数是以一种间接调用的形式实现的，且ds:[0x402000]中存了Plus函数载入内存后的实际地址0x10001050
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-DllTest.png" /></p>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-03-DllTest.png" /></p>
 <p>此时程序已经载入内存，而我们需要查看其载入内存前ds:[0x402000]的内容，因为该程序的ImageBase为0x400000，那么RVA
 =
 0x2000，将其转换为FOA即是0x1200，现在我们打开16进制编辑器，找到此处观察发现里面存了一个RVA偏移值0x2778（指向IMAGE_IMPORT_BY_NAME中的对应的函数）
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus偏移.png" /></p>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-03-Plus偏移.png" /></p>
 <p>我们将0x2778转换为其对应的FOA，即0x1978，我们来到该处可以看到这里记录了函数的名字
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus具体位置.png"
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-03-Plus具体位置.png"
 alt="2022-03-09-Plus具体位置" /></p>
 <p>现在我们已经分析完了输入表的整个工作流程，通过PE
 tools我们可以查看完整的输入表信息</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-Plus.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-03-Plus.png" /></p>
 <p>需要注意的是，我们的程序使用了多少个DLL，就会有多少个输入表，且输入表也是以一个全0的结构作为判空标识的，最后，我们用一个简单的图来回顾整个过程</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-09-总结.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-03-总结.png" /></p>
 ]]></content>
       <categories>
         <category>逆向</category>
@@ -749,10 +749,10 @@ tools我们可以查看完整的输入表信息</p>
 </ul>
 <h4 id="实例">实例</h4>
 <p>为了便于理解，假设我们有DLLTest.dll文件，其中定义了4个函数Plus、Sub、Mul和Div，其中Plus、Sub、和Div以函数名导出，并将其导出序号分别设置为1、5、9，而Mul以序号导出，其序号为为7，具体如下</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-def.png" /></p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-Petools.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-def.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-Petools.png" /></p>
 <p>此时我们画一张导出表的示意图来进行细致的解释</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-图解.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-图解.png" /></p>
 <ul>
 <li>对于名称导出方式，以Sub函数为例，我们可以看到它在ENT表中的索引为2，那么我们到序号表中查询索引为2的序号值，其结果为4，这意味着Sub函数的RVA地址存放在EAT表中的索引为4的地方，此时我们再查看EAT表就可以得到Sub函数的RVA为0x1060</li>
 <li>对于序号导出方式，我们将Mul以序号7将其导出，此时Base =
@@ -769,7 +769,7 @@ RVA），此时换了一个新的基地址，我们要如何取到正确的取�
 <li>VirtualAddress：重定位数据开始的RVA地址</li>
 <li>SizeOfBlock：重定位块的大小</li>
 </ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表图.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-重定位表图.png" /></p>
 <ul>
 <li>首先需要注意的是IMAGE_BASE_RELOCATION并不是孤立的一张表，在结构体后紧跟是一个WORD类型（2字节）的数组，数组长度为（SizeOfBlock
 - 8）/ 2</li>
@@ -796,19 +796,19 @@ Offset的方式，那么按实际的重定位表结构，我们将会有4张重�
 <h4 id="实例-1">实例</h4>
 <p>还是以之前DLLTest.dll为例，我们在PE
 Tools中可以看到，该文件共有两张重定位表，标识了不同区块中需要修正的数据，其中.text中共有140个可能需要重定位的数据，而.data中有16个</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位表.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-重定位表.png" /></p>
 <p>我们以.text中的第一个、第三个需要修改的数据为例，首先分析下他们的RVA
 0x1012和0x101E是怎么得到的，我们在16进制编辑器中找到重定位表，红框圈中的即为第一项数据0x3012和第三项数据0x301E，我们将其转换为二进制分别为0011
 0000 0001 0010和0011 0000 0001
 1110，可以发现他们的高4位都为0011，即需要修改，那么他们的低12位为Offset，分别是0x12和0x1E，那么需要修改的数据的RVA分别为VirtualAddress
 + Offset，即0x1012和0x101E</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-16进制重定位.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-16进制重定位.png" /></p>
 <p>此时DLLTest.dll的ImageBase为0x10000000，我们用另一个程序调用DLLTest.dll，并用x64Dbg打开该程序，找到0x10001012处，可以发现其中一个是Push指令，而另一个是call指令（因为Push指令的操作码为0x68，需要占用一个字节，所以指令开始的地址是0x0x10001011，而0x10001012才是实际需要修改的数据的起始地址，call指令同理），那么当DLLTest.dll发生重定位时，这两个部分的数据就需要修改，此时记下他们：①0x100020A4；②0x10002030</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-重定位汇编.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-重定位汇编.png" /></p>
 <p>现在我们让DLL不从ImageBase载入，但不修改ImageBase中的值，我们在VS中将随机基址的打开，然后重新编译我们的DLL和调用该DLL的程序，现在虽然DLL的ImageBase还是0x10000000，但实际载入内存时DLL并不会从ImageBase载入
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-修改基址.png" /></p>
+<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-修改基址.png" /></p>
 <p>我们在x64Dbg中重新定位，可以发现此时我们的DLL已经被放到了内存中的其他位置，且载入的基地址为0x78590000，此时我们看到RVA为0x1012处的数据被改成了0x785920A4，而RVA为0x101E处的数据被改为了0x78592030</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-15-新地址.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-15-新地址.png" /></p>
 <p>我们不难看出这两个值是如何计算得到的</p>
 <ul>
 <li>0x785920A4 = 0x100020A4 - 默认基地址0x10000000 +
@@ -827,7 +827,7 @@ Tools中可以看到，该文件共有两张重定位表，标识了不同区块
     <content><![CDATA[<h3 id="资源表">资源表</h3>
 <p>资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页</p>
 <p>为了便于理解，先给出一张资源表的树形结构图</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源表树形.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-资源表树形.png" /></p>
 <span id="more"></span>
 <h4 id="资源目录结构">资源目录结构</h4>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;        <span class="comment">//资源属性，但通常为0</span></span><br><span class="line">    DWORD   TimeDateStamp;          <span class="comment">// 资源建立时间</span></span><br><span class="line">    WORD    MajorVersion;           <span class="comment">// 资源的版本，但通常为0</span></span><br><span class="line">    WORD    MinorVersion;           </span><br><span class="line">    WORD    NumberOfNamedEntries;   <span class="comment">// 使用名字的资源条目的个数</span></span><br><span class="line">    WORD    NumberOfIdEntries;      <span class="comment">// 使用ID的资源条目个数</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY</span><br></pre></td></tr></table></figure>
@@ -920,10 +920,10 @@ Tools中可以看到，该文件共有两张重定位表，标识了不同区块
 <p>该结构就是真正的资源数据的结构了，其中OffsetToData是RVA，而不是相对于资源块起始位置的Offset</p>
 <h3 id="实例">实例</h3>
 <p>我这里用一个Win32程序为实例，先用PE Tools查看其资源表内容</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-示例资源表.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-示例资源表.png" /></p>
 <h4 id="根目录">根目录</h4>
 <p>可以看到其中共有7种不同的资源类（24好像是清单类型，暂时每找到相关文档信息），首先在16进制编辑器中观察其根目录</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-根目录.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-根目录.png" /></p>
 <ul>
 <li>4字节Characteristics，此时为0</li>
 <li>4字节TimeDateStamp，为0</li>
@@ -936,7 +936,7 @@ Tools中可以看到，该文件共有两张重定位表，标识了不同区块
 id="根目录下的image_resource_directory_entry">根目录下的IMAGE_RESOURCE_DIRECTORY_ENTRY</h4>
 <p>我们以Menu作为分析对象，它是第二个IMAGE_RESOURCE_DIRECTORY_ENTRY结构，因为该结构大小位8字节，所以它的位置应该是2400h
 + 8 = 2408h，我们在16进制编辑器中可以看到如下内容</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第一层Entry.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-第一层Entry.png" /></p>
 <p>可以看到其Name（ID）属性值为：0x00000004，其OffsetToData属性值为0x800000E8，我们进一步解析</p>
 <ul>
 <li>Name（ID）属性的最高位为0，表示它通过ID标识，由于是第一层目录中，它代表一个预定义的资源，查表我们发现04h是Menu</li>
@@ -946,7 +946,7 @@ id="根目录下的image_resource_directory_entry">根目录下的IMAGE_RESOURCE
 <h4
 id="第二层目录的image_resource_directory">第二层目录的IMAGE_RESOURCE_DIRECTORY</h4>
 <p>第二层目录如下所示</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第二层目录.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-第二层目录.png" /></p>
 <p>可以知道其NumberOfIdEntries为1，表示Menu资源下只有一个该类资源</p>
 <p>紧跟其后的8字节就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构，可以看到其Name（ID）属性值为：0x0000006D，其OffsetToData属性值为0x80003030</p>
 <ul>
@@ -956,10 +956,10 @@ id="第二层目录的image_resource_directory">第二层目录的IMAGE_RESOURCE
 </ul>
 <h4
 id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE_DIRECTORY</h4>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层目录.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-第三层目录.png" /></p>
 <p>可以知道其NumberOfIdEntries为1，表示该资源代码页只有一项</p>
 <p>紧跟其后就是IMAGE_RESOURCE_DIRECTORY_ENTRY结构</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-第三层Entry.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-第三层Entry.png" /></p>
 <p>可以看到其Name（ID）属性值为：0x00000804，其OffsetToData属性值为0x000004F8</p>
 <ul>
 <li>Name（ID）属性的最高位为0，表示它通过ID标识，ID为804h</li>
@@ -967,7 +967,7 @@ id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE
 + 4F8h = 28F8h</li>
 </ul>
 <h4 id="image_resource_data_entry">IMAGE_RESOURCE_DATA_ENTRY</h4>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-资源data.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-资源data.png" /></p>
 <ul>
 <li>OffsetToData为01AE90h</li>
 <li>Size为50h</li>
@@ -977,16 +977,16 @@ id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE
 </ul>
 <h4 id="image_resource_dir_string_u">IMAGE_RESOURCE_DIR_STRING_U</h4>
 <p>因为示例程序比较简单，没有用到这个结构，所以这里单独找一个比较复杂的程序用来展示</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂程序.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-复杂程序.png" /></p>
 <p>可以看到根目录下第一类资源是用Name标识的，其名字为"AFX_DIALOG_LAYOUT"，我们在16进制中观察其IMAGE_RESOURCE_DIRECTORY_ENTRY</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-复杂entry.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-复杂entry.png" /></p>
 <p>可以看到其Name（ID）属性值为：0x8000CB2E，其OffsetToData属性值为0x800000B0</p>
 <ul>
 <li>Name（ID）属性的最高位为1，表示它通过Name标识，且Name的Offset为CB2Eh，那么IMAGE_RESOURCE_DIR_STRING_U结构的地址为630000h
 + CB2Eh = 63CB2Eh</li>
 <li>OffsetToData属性的最高位为1，表示它指向下一层目录</li>
 </ul>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2022-03-21-名字结构.png" /></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-名字结构.png" /></p>
 <p>可以看到IMAGE_RESOURCE_DIR_STRING_U结构中Length为11h，而NameString为Unicode表示的"AFX_DIALOG_LAYOUT"（可以注意到字符串并没有以0结尾，所以Length属性很重要）</p>
 ]]></content>
       <categories>
