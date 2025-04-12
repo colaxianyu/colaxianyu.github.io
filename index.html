@@ -162,7 +162,7 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">1</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -184,6 +184,113 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/04/12/2025-04-12-%E8%8E%B7%E5%8F%96kernel32.dll/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Colaxy's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/04/12/2025-04-12-%E8%8E%B7%E5%8F%96kernel32.dll/" class="post-title-link" itemprop="url">获取kernel32.dll</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-04-12 23:01:39 / 修改时间：22:56:54" itemprop="dateCreated datePublished" datetime="2025-04-12T23:01:39+08:00">2025-04-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="fs寄存器">FS寄存器</h1>
+<p>fs寄存器记录了当前活动线程的TEB结构，具体信息如下 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x000</span> 指向SEH链指针</span><br><span class="line"><span class="number">0x004</span> 线程堆栈顶部</span><br><span class="line"><span class="number">0x008</span> 线程堆栈底部</span><br><span class="line"><span class="number">0x00C</span> SubSystemTib</span><br><span class="line"><span class="number">0x010</span> FiberData</span><br><span class="line"><span class="number">0x014</span> ArbitraryUserPointer</span><br><span class="line"><span class="number">0x018</span> FS段寄存器在内存中的镜像地址</span><br><span class="line"><span class="number">0x020</span> 进程PID</span><br><span class="line"><span class="number">0x024</span> 线程ID</span><br><span class="line"><span class="number">0x02C</span> 指向线程局部存储指针</span><br><span class="line"><span class="number">0x030</span> PEB结构地址（进程结构）</span><br><span class="line"><span class="number">0x034</span> 上个错误号</span><br></pre></td></tr></table></figure></p>
+<p>shellcode中常用的获取kernel32.dll方法如下 1. 通过peb(fs:[30])获取</p>
+<hr />
+<h1 id="通过fs30获取">通过fs:[30]获取</h1>
+<h2 id="pebfs30的结构">peb(fs:[30])的结构</h2>
+<p>win11环境下大部分成员都被命名为Reserved <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">PEB</span> &#123;</span></span><br><span class="line">    +<span class="number">0x000</span> BYTE Reserved1[<span class="number">2</span>];      </span><br><span class="line">    +<span class="number">0x002</span> BYTE BeingDebugged;     </span><br><span class="line">    +<span class="number">0x003</span> BYTE Reserved2[<span class="number">1</span>];      </span><br><span class="line">    +<span class="number">0x004</span> PVOID Reserved3[<span class="number">2</span>];     </span><br><span class="line">    +<span class="number">0x00C</span> PPEB_LDR_DATA Ldr;      </span><br><span class="line">    +<span class="number">0x010</span> PRTL_USER_PROCESS_PARAMETERS ProcessParameters;</span><br><span class="line">    +<span class="number">0x014</span> PVOID Reserved4[<span class="number">3</span>];</span><br><span class="line">    +<span class="number">0x020</span> PVOID AtlThunkSListPtr;</span><br><span class="line">    +<span class="number">0x024</span> PVOID Reserved5;</span><br><span class="line">    +<span class="number">0x028</span> ULONG Reserved6;</span><br><span class="line">    +<span class="number">0x02C</span> PVOID Reserved7;</span><br><span class="line">    +<span class="number">0x030</span> ULONG Reserved8;</span><br><span class="line">    +<span class="number">0x034</span> ULONG AtlThunkSListPtr32;</span><br><span class="line">    +<span class="number">0x038</span> PVOID Reserved9[<span class="number">45</span>];</span><br><span class="line">    +<span class="number">0x0EC</span> BYTE Reserved10[<span class="number">96</span>];</span><br><span class="line">    +<span class="number">0x14C</span> PPS_POST_PROCESS_INIT_ROUTINE PostProcessInitRoutine;</span><br><span class="line">    +<span class="number">0x150</span> BYTE Reserved11[<span class="number">128</span>];</span><br><span class="line">    +<span class="number">0x1D0</span> PVOID Reserved12[<span class="number">1</span>];</span><br><span class="line">    +<span class="number">0x1D4</span> ULONG SessionId;</span><br><span class="line">&#125; PEB, *PPEB;</span><br></pre></td></tr></table></figure></p>
+<p>对照windows xp sp3 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">PEB</span> &#123;</span></span><br><span class="line"> 	+<span class="number">0x000</span>    UCHAR           InheritedAddressSpace;</span><br><span class="line">    +<span class="number">0x001</span>    UCHAR           ReadImageFileExecOptions;</span><br><span class="line">    +<span class="number">0x002</span>    UCHAR           BeingDebugged;              </span><br><span class="line">    +<span class="number">0x003</span>    UCHAR           SpareBool;</span><br><span class="line">    +<span class="number">0x004</span>    HANDLE          Mutant;</span><br><span class="line">    +<span class="number">0x008</span>    HINSTANCE       ImageBaseAddress;           </span><br><span class="line">    +<span class="number">0x00C</span>    <span class="class"><span class="keyword">struct</span> _<span class="title">PEB_LDR_DATA</span>    *<span class="title">Ldr</span>                </span></span><br><span class="line"><span class="class">    +0<span class="title">x010</span>    <span class="keyword">struct</span> _<span class="title">RTL_USER_PROCESS_PARAMETERS</span>  *<span class="title">ProcessParameters</span>;</span></span><br><span class="line">    +<span class="number">0x014</span>    ULONG           SubSystemData;</span><br><span class="line">    +<span class="number">0x018</span>    HANDLE          DefaultHeap;</span><br><span class="line">    +<span class="number">0x01C</span>    KSPIN_LOCK      FastPebLock;</span><br><span class="line">    +<span class="number">0x020</span>    ULONG           FastPebLockRoutine;</span><br><span class="line">    +<span class="number">0x024</span>    ULONG           FastPebUnlockRoutine;</span><br><span class="line">    +<span class="number">0x028</span>    ULONG           EnvironmentUpdateCount;</span><br><span class="line">    +<span class="number">0x02C</span>    ULONG           KernelCallbackTable;</span><br><span class="line">    +<span class="number">0x030</span>    LARGE_INTEGER   SystemReserved;</span><br><span class="line">    +<span class="number">0x038</span>    <span class="class"><span class="keyword">struct</span> _<span class="title">PEB_FREE_BLOCK</span>  *<span class="title">FreeList</span></span></span><br><span class="line"><span class="class">    +0<span class="title">x03C</span>    <span class="title">ULONG</span>           <span class="title">TlsExpansionCounter</span>;</span></span><br><span class="line">    +<span class="number">0x040</span>    ULONG           TlsBitmap;</span><br><span class="line">    +<span class="number">0x044</span>    LARGE_INTEGER   TlsBitmapBits;</span><br><span class="line">    +<span class="number">0x04C</span>    ULONG           ReadOnlySharedMemoryBase;</span><br><span class="line">    +<span class="number">0x050</span>    ULONG           ReadOnlySharedMemoryHeap;</span><br><span class="line">    +<span class="number">0x054</span>    ULONG           ReadOnlyStaticServerData;</span><br><span class="line">    +<span class="number">0x058</span>    ULONG           AnsiCodePageData;</span><br><span class="line">    +<span class="number">0x05C</span>    ULONG           OemCodePageData;</span><br><span class="line">    +<span class="number">0x060</span>    ULONG           UnicodeCaseTableData;</span><br><span class="line">    +<span class="number">0x064</span>    ULONG           NumberOfProcessors;</span><br><span class="line">    +<span class="number">0x068</span>    LARGE_INTEGER   NtGlobalFlag;               ER   CriticalSectionTimeout;</span><br><span class="line">    +<span class="number">0x078</span>    ULONG           HeapSegmentReserve;</span><br><span class="line">    +<span class="number">0x07C</span>    ULONG           HeapSegmentCommit;</span><br><span class="line">    +<span class="number">0x080</span>    ULONG           HeapDeCommitTotalFreeThreshold;</span><br><span class="line">    +<span class="number">0x084</span>    ULONG           HeapDeCommitFreeBlockThreshold;</span><br><span class="line">    +<span class="number">0x088</span>    ULONG           NumberOfHeaps;</span><br><span class="line">    +<span class="number">0x08C</span>    ULONG           MaximumNumberOfHeaps;</span><br><span class="line">    +<span class="number">0x090</span>    ULONG           ProcessHeaps;</span><br><span class="line">    +<span class="number">0x094</span>    ULONG           GdiSharedHandleTable;</span><br><span class="line">    +<span class="number">0x098</span>    ULONG           ProcessStarterHelper;</span><br><span class="line">    +<span class="number">0x09C</span>    ULONG           GdiDCAttributeList;</span><br><span class="line">    +<span class="number">0x0A0</span>    KSPIN_LOCK      LoaderLock;</span><br><span class="line">    +<span class="number">0x0A4</span>    ULONG           OSMajorVersion;</span><br><span class="line">    +<span class="number">0x0A8</span>    ULONG           OSMinorVersion;</span><br><span class="line">    +<span class="number">0x0AC</span>    USHORT          OSBuildNumber;</span><br><span class="line">    +<span class="number">0x0AE</span>    USHORT          OSCSDVersion;</span><br><span class="line">    +<span class="number">0x0B0</span>    ULONG           OSPlatformId;</span><br><span class="line">    +<span class="number">0x0B4</span>    ULONG           ImageSubsystem;</span><br><span class="line">    +<span class="number">0x0B8</span>    ULONG           ImageSubsystemMajorVersion;</span><br><span class="line">    +<span class="number">0x0BC</span>    ULONG           ImageSubsystemMinorVersion;</span><br><span class="line">    +<span class="number">0x0C0</span>    ULONG           ImageProcessAffinityMask;</span><br><span class="line">    +<span class="number">0x0C4</span>    ULONG           GdiHandleBuffer[<span class="number">0x22</span>];</span><br><span class="line">    +<span class="number">0x14C</span>    ULONG           PostProcessInitRoutine;</span><br><span class="line">    +<span class="number">0x150</span>    ULONG           TlsExpansionBitmap;</span><br><span class="line">    +<span class="number">0x154</span>    UCHAR           TlsExpansionBitmapBits[<span class="number">0x80</span>];</span><br><span class="line">    +<span class="number">0x1D4</span>    ULONG           SessionId;</span><br><span class="line">	+<span class="number">0x1d8</span> AppCompatFlags   : _ULARGE_INTEGER</span><br><span class="line">	+<span class="number">0x1e0</span> AppCompatFlagsUser : _ULARGE_INTEGER</span><br><span class="line">	+<span class="number">0x1e8</span> pShimData        : Ptr32 Void</span><br><span class="line">	+<span class="number">0x1ec</span> AppCompatInfo    : Ptr32 Void</span><br><span class="line">	+<span class="number">0x1f0</span> CSDVersion       : _UNICODE_STRING</span><br><span class="line">	+<span class="number">0x1f8</span> ActivationContextData : Ptr32 Void</span><br><span class="line">	+<span class="number">0x1fc</span> ProcessAssemblyStorageMap :Ptr32 Void</span><br><span class="line">	+<span class="number">0x200</span> SystemDefaultActivationContextData : Ptr32 Void</span><br><span class="line">	+<span class="number">0x204</span> SystemAssemblyStorageMap : Ptr32 Void</span><br><span class="line">	+<span class="number">0x208</span> MinimumStackCommit : Uint4B</span><br><span class="line">&#125; PEB, *PPEB;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>通过PEB+0x0C即可获得PEB_LDR_DATA结构，在PEB中较为重要的的几个成员为
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+<span class="number">0x02</span> BeingDebugged    : UChar</span><br><span class="line">+<span class="number">0x08</span> ImageBaseAddress : Ptr32 Void</span><br><span class="line">+<span class="number">0x0C</span> Ldr              : Ptr32 _PEB_LDR_DATA</span><br><span class="line">+<span class="number">0x18</span> ProcessHeap      : Ptr32 Void</span><br><span class="line">+<span class="number">0x68</span> NtGlobalFlag     : Uint4B</span><br></pre></td></tr></table></figure></p>
+<h2 id="peb_ldr_data结构">PEB_LDR_DATA结构</h2>
+<p>win11环境下 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">PEB_LDR_DATA</span> &#123;</span></span><br><span class="line"> +<span class="number">0x00</span> BYTE Reserved1[<span class="number">8</span>];</span><br><span class="line"> +<span class="number">0x08</span> PVOID Reserved2[<span class="number">3</span>];</span><br><span class="line"> +<span class="number">0x14</span> LIST_ENTRY InMemoryOrderModuleList;</span><br><span class="line">&#125; PEB_LDR_DATA, *PPEB_LDR_DATA;</span><br></pre></td></tr></table></figure> windows xp sp3下 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">PEB_LDR_DATA32</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  +<span class="number">0x00</span> ULONG Length;</span><br><span class="line">  +<span class="number">0x04</span> BOOLEAN Initialized;</span><br><span class="line">  +<span class="number">0x08</span> PVOID SsHandle;</span><br><span class="line">  +<span class="number">0x0C</span> LIST_ENTRY InLoadOrderModuleList;</span><br><span class="line">  +<span class="number">0x14</span> LIST_ENTRY InMemoryOrderModuleList;</span><br><span class="line">  +<span class="number">0x1C</span> LIST_ENTRY InInitializationOrderModuleList;</span><br><span class="line">&#125; PEB_LDR_DATA32, * PPEB_LDR_DATA32;</span><br></pre></td></tr></table></figure>
+可以看到在win11下InInitializationOrderModuleList已被弃用，但为了保证兼容性，实际还是可以通过PEB_LDR_DATA+0x1C的方法访问InInitializationOrderModuleList</p>
+<p>其中LIST_ENTRY是一个双向循环链表，Flink指向下一个条目，Blink指向上一个条目，指向的内容为LDR_DATA_TABLE_ENTRY结构体中相应的位置，之后详细解释
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">LIST_ENTRY</span> </span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line"> +<span class="number">0x00</span> <span class="class"><span class="keyword">struct</span> _<span class="title">LIST_ENTRY</span> *<span class="title">Flink</span>;</span> </span><br><span class="line"> +<span class="number">0x04</span> <span class="class"><span class="keyword">struct</span> _<span class="title">LIST_ENTRY</span> *<span class="title">Blink</span>;</span> </span><br><span class="line">&#125; LIST_ENTRY, *PLIST_ENTRY, PRLIST_ENTRY;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ldr_data_table_entry结构">LDR_DATA_TABLE_ENTRY结构</h2>
+<p>win11环境下 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">LDR_DATA_TABLE_ENTRY</span> &#123;</span></span><br><span class="line"> +<span class="number">0x00</span> PVOID Reserved1[<span class="number">2</span>];</span><br><span class="line"> +<span class="number">0x08</span> LIST_ENTRY InMemoryOrderLinks;</span><br><span class="line"> +<span class="number">0x10</span> PVOID Reserved2[<span class="number">2</span>];</span><br><span class="line"> +<span class="number">0x18</span> PVOID DllBase;</span><br><span class="line"> +<span class="number">0x1C</span> PVOID Reserved3[<span class="number">2</span>];</span><br><span class="line"> +<span class="number">0x24</span> UNICODE_STRING FullDllName;</span><br><span class="line"> +<span class="number">0x2C</span> BYTE Reserved4[<span class="number">8</span>];</span><br><span class="line"> +<span class="number">0x34</span> PVOID Reserved5[<span class="number">3</span>];</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> <span class="meta-keyword">warning</span>(push)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> <span class="meta-keyword">warning</span>(disable: 4201) <span class="comment">// we&#x27;ll always use the Microsoft compiler</span></span></span><br><span class="line"> +<span class="number">0x40</span> <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        ULONG CheckSum;</span><br><span class="line">        PVOID Reserved6;</span><br><span class="line">    &#125; DUMMYUNIONNAME;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> <span class="meta-keyword">warning</span>(pop)</span></span><br><span class="line"> +<span class="number">0x48</span> ULONG TimeDateStamp;</span><br><span class="line">&#125; LDR_DATA_TABLE_ENTRY, *PLDR_DATA_TABLE_ENTRY;</span><br></pre></td></tr></table></figure></p>
+<p>windows xp sp3下 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">LDR_DATA_TABLE_ENTRY</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"> +<span class="number">0x00</span> LIST_ENTRY InLoadOrderLinks;               </span><br><span class="line"> +<span class="number">0x08</span> LIST_ENTRY InMemoryOrderLinks;             </span><br><span class="line"> +<span class="number">0x10</span> LIST_ENTRY InInitializationOrderLinks;     </span><br><span class="line"> +<span class="number">0x18</span> PVOID DllBase;                             </span><br><span class="line"> +<span class="number">0x1C</span> PVOID EntryPoint;                          </span><br><span class="line"> +<span class="number">0x20</span> ULONG SizeOfImage;                         </span><br><span class="line"> +<span class="number">0x24</span> UNICODE_STRING FullDllName;                </span><br><span class="line"> +<span class="number">0x2C</span> UNICODE_STRING BaseDllName;                </span><br><span class="line">&#125;LDR_DATA_TABLE_ENTRY, *PLDR_DATA_TABLE_ENTRY;</span><br></pre></td></tr></table></figure> 以windows xp
+sp3为例PEB_LDR_DATA32中的InLoadOrderModuleList-&gt;Flink指向的内容位置就是LDR_DATA_TABLE_ENTRY中InLoadOrderLinks的位置，InMemoryOrderLinks和InInitializationOrderLinks同理</p>
+<p>在win11环境下 使用InLoadOrderLinks查找，模块的顺序为当前进程(xxx.exe)
+-&gt;ntdll.dll -&gt; kernel32.dll
+使用InMemoryOrderLinks查找，模块的顺序为当前进程(xxx.exe) -&gt;
+ntdll.dll -&gt; kernel32.dll
+使用InInitializationOrderLinks查找，模块的顺序为当前进程ntdll.dll -&gt;
+kernelbase.dll -&gt; kernel32.dll</p>
+<p>通过代码可以验证 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">DWORD pebAddr = <span class="number">0</span>;</span><br><span class="line">__asm &#123;</span><br><span class="line">    mov eax, fs: [<span class="number">0x30</span>]</span><br><span class="line">    mov pebAddr, eax</span><br><span class="line">&#125;</span><br><span class="line">PEB* peb = (PEB*)pebAddr;</span><br><span class="line">PEB_LDR_DATA* ldr = peb-&gt;Ldr;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得InLoadOrderLinks的头节点</span></span><br><span class="line">LIST_ENTRY* InLoadOrderHeader = (LIST_ENTRY*)&amp;ldr-&gt;Reserved2[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得InMemoryOrderLinks的头节点</span></span><br><span class="line">LIST_ENTRY* InMemoryOrderHeader= &amp;ldr-&gt;InMemoryOrderModuleList;    </span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得InInitializationOrderLinks的头节点</span></span><br><span class="line">LIST_ENTRY* InInitializationOrderHeader = (LIST_ENTRY*)((DWORD)ldr + <span class="number">0x1C</span>);     </span><br><span class="line"></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;-----------------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;find by InLoadOrderLinks:&quot;</span> &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;-----------------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line"><span class="keyword">for</span> (LIST_ENTRY* first = InLoadOrderHeader-&gt;Flink; first != InLoadOrderHeader; first = first-&gt;Flink) &#123;</span><br><span class="line">    UNICODE_STRING* name = (UNICODE_STRING*)((DWORD)first + <span class="number">0x24</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%S \n&quot;</span>, name-&gt;Buffer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">cout &lt;&lt; endl &lt;&lt; <span class="string">&quot;-----------------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;find by InMemoryOrderLinks:&quot;</span> &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;-----------------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line"><span class="keyword">for</span> (LIST_ENTRY* first = InMemoryOrderHeader-&gt;Flink; first != InMemoryOrderHeader; first = first-&gt;Flink) &#123;</span><br><span class="line">    UNICODE_STRING* name2 = (UNICODE_STRING*)((DWORD)first + <span class="number">0x1C</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%S \n&quot;</span>, name2-&gt;Buffer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">cout &lt;&lt; endl &lt;&lt; <span class="string">&quot;-----------------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;find by InInitializationOrderLinks:&quot;</span> &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;-----------------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line"><span class="keyword">for</span> (LIST_ENTRY* first = InInitializationOrderHeader-&gt;Flink; first != InInitializationOrderHeader; first = first-&gt;Flink) &#123;</span><br><span class="line">    UNICODE_STRING* name3 = (UNICODE_STRING*)((DWORD)first + <span class="number">0x14</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%S \n&quot;</span>, name3-&gt;Buffer);</span><br><span class="line">&#125;</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;-----------------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line"><span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br></pre></td></tr></table></figure></p>
+<p>输出的结果为 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">-----------------------------------</span><br><span class="line">find by InLoadOrderLinks:</span><br><span class="line">-----------------------------------</span><br><span class="line">D:\test.exe</span><br><span class="line">C:\WINDOWS\SYSTEM32\ntdll.dll</span><br><span class="line">C:\WINDOWS\System32\KERNEL32.DLL</span><br><span class="line">C:\WINDOWS\System32\KERNELBASE.dll</span><br><span class="line">C:\WINDOWS\SYSTEM32\ucrtbased.dll</span><br><span class="line">C:\WINDOWS\SYSTEM32\VCRUNTIME140D.dll</span><br><span class="line">C:\WINDOWS\SYSTEM32\MSVCP140D.dll</span><br><span class="line"></span><br><span class="line">-----------------------------------</span><br><span class="line">find by InMemoryOrderLinks:</span><br><span class="line">-----------------------------------</span><br><span class="line">D:\test.exe</span><br><span class="line">C:\WINDOWS\SYSTEM32\ntdll.dll</span><br><span class="line">C:\WINDOWS\System32\KERNEL32.DLL</span><br><span class="line">C:\WINDOWS\System32\KERNELBASE.dll</span><br><span class="line">C:\WINDOWS\SYSTEM32\ucrtbased.dll</span><br><span class="line">C:\WINDOWS\SYSTEM32\VCRUNTIME140D.dll</span><br><span class="line">C:\WINDOWS\SYSTEM32\MSVCP140D.dll</span><br><span class="line"></span><br><span class="line">-----------------------------------</span><br><span class="line">find by InInitializationOrderLinks:</span><br><span class="line">-----------------------------------</span><br><span class="line">C:\WINDOWS\SYSTEM32\ntdll.dll</span><br><span class="line">C:\WINDOWS\System32\KERNELBASE.dll</span><br><span class="line">C:\WINDOWS\System32\KERNEL32.DLL</span><br><span class="line">C:\WINDOWS\SYSTEM32\ucrtbased.dll</span><br><span class="line">C:\WINDOWS\SYSTEM32\VCRUNTIME140D.dll</span><br><span class="line">C:\WINDOWS\SYSTEM32\MSVCP140D.dll</span><br><span class="line">-----------------------------------</span><br></pre></td></tr></table></figure>
+可以发现无论是用哪个Links寻找kernel32.dll都需要3次，因为任意选一个即可，这里使用InLoadOrderLinks寻找
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">__asm &#123;</span><br><span class="line">    mov eax, fs: [<span class="number">0x30</span>]                     <span class="comment">// get peb</span></span><br><span class="line">    mov eax, dword ptr[eax + <span class="number">0xC</span>]           <span class="comment">// get PEB_LDR_DATA</span></span><br><span class="line">    mov esi, dword ptr[eax + <span class="number">0xC</span>]           <span class="comment">// get InLoadOrderModuleList</span></span><br><span class="line">    mov esi, dword ptr[esi]</span><br><span class="line">    lodsd                                   <span class="comment">// get kernel32.dll LDR_DATA_TABLE_ENTRY</span></span><br><span class="line">    lea edx, dword ptr[eax + <span class="number">0x24</span>]          <span class="comment">// get kernel32.dll name address</span></span><br><span class="line">    mov nameAddr, edx</span><br><span class="line">    mov eax, dword ptr[eax + <span class="number">0x18</span>]          <span class="comment">// get kernel32.dll address</span></span><br><span class="line">    mov kernel32Addr, eax</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 输出结果为 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name: C:\WINDOWS\System32\KERNEL32.DLL</span><br><span class="line">kernel32.dll Address is: <span class="number">76760000</span></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1510,105 +1617,6 @@ href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2022/02/16/2022-02-16-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/16/2022-02-16-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" class="post-title-link" itemprop="url">二分查找</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-16 10:56:28" itemprop="dateCreated datePublished" datetime="2022-02-16T10:56:28+08:00">2022-02-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-23 22:52:42" itemprop="dateModified" datetime="2025-03-23T22:52:42+08:00">2025-03-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p><strong>二分查找的思路非常简单，但在实际写算法的过程中发现有很多细节还需要多加理解，比如</strong></p>
-<p>① 为什么有时right = nums.size()，有时却是right = nums.size() -
-1<br />
-② while循环中的条件，为什么有时是&lt;=，有时是&lt;<br />
-③ 在区间划分时，为什么有时left = mid + 1，right = mid - 1; 有时却是left
-= mid + 1,right = mid</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/16/2022-02-16-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
 
 </div>
   </main>
@@ -1669,7 +1677,7 @@ href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
