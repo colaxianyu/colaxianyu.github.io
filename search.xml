@@ -871,11 +871,13 @@ id="导入c函数的关键字是什么c编译时和c有什么不同">导入C函�
 </ol>
 <h2
 id="简述c从代码到可执行二进制文件的过程">简述C++从代码到可执行二进制文件的过程</h2>
-<p>C++从源代码到二进制文件经历的过程包括：<br />
-1. 预处理，展开#include头文件，处理#define宏和#ifdef条件宏，过滤注释 2.
-编译，进行词法/语法分析，语义分析，生成目标代码并优化 3.
-汇编，将目标代码转换为二进制代码 4.
-链接，合并多个目标文件及库，生成可执行文件，链接阶段可以分为静态链接和动态链接，静态链接在链接阶段就把要调用的函数链接到可执行文件中，动态链接是在执行过程中寻找要链接的函数</p>
+<p>C++从源代码到二进制文件经历的过程包括：</p>
+<ol type="1">
+<li>预处理，展开#include头文件，处理#define宏和#ifdef条件宏，过滤注释</li>
+<li>编译，进行词法/语法分析，语义分析，生成目标代码并优化</li>
+<li>汇编，将目标代码转换为二进制代码</li>
+<li>链接，合并多个目标文件及库，生成可执行文件，链接阶段可以分为静态链接和动态链接，静态链接在链接阶段就把要调用的函数链接到可执行文件中，动态链接是在执行过程中寻找要链接的函数</li>
+</ol>
 <h2 id="说说-static关键字的作用">说说 static关键字的作用</h2>
 <ol type="1">
 <li>static关键字的作用主要是控制存储期或控制链接性</li>
@@ -1109,12 +1111,10 @@ id="说说类如何实现只静态分配和只动态分配">说说类如何实�
 <h2
 id="说一说函数查找和重载解析的过程">说一说函数查找和重载解析的过程</h2>
 <ol type="1">
-<li>函数调用可以分为两种形式，一种是非限定调用，即只使用函数名的调用；另一种是限定调用，即作用域运算符（::）和成员访问符(./-&gt;)</li>
+<li>函数调用可以分为两种形式，一种是非限定调用，即只使用函数名的调用；另一种是限定调用，即作用域运算符（::）和成员访问符(.或-&gt;)</li>
 <li>函数的查找的过程也就分为了非限定调用函数的查找和限定调用函数的查找，对于非限定调用函数，会从当前作用域逐层向外查找（局部作用域，外层函数作用域，类作用域，命名空间作用域，全局作用域），并且进行参数依赖查找，即会额外搜索参数类型所属的命名空间或类（基本类型不涉及ADL），优先级关系为当前作用域，ADL扩展的作用域，外层作用域；对于限定函数的查找，只搜索指定作用，不会触发ADL</li>
-<li>重载解析，重载解析的关键在于构建函数调用候选集和匹配决议，首先通过函数查找规则来构建候选集，然后通过优先级规则来匹配具体的函数。优先级最高的是参数精准匹配，其次是参数存在类型提升，然后是参数存在类型转换（标准转换大于用户自定义转换）</li>
-</ol>
-<h2 id="说说volatile的作用">说说volatile的作用</h2>
-<ol type="1">
+<li>重载解析，重载解析的关键在于构建函数调用候选集和匹配决议，首先通过函数查找规则来构建候选集，然后通过优先级规则来匹配具体的函数。优先级顺序为参数精准匹配
+&gt; 类型提升 &gt; 标准转换 &gt; 类类型转换 ## 说说volatile的作用</li>
 <li>volatile主要有三大特性，分别是易变性，不可优化性和顺序性</li>
 <li>易变性是指该值可能被意料之外的因素修改（例如其他线程），要求编译器每次都从内存中读取</li>
 <li>不可优化性是指不让编译器直接对变量进行优化（例如常量传播，无用代码消除等）</li>
@@ -1137,13 +1137,16 @@ id="构造函数和析构函数应不应该抛出异常">构造函数和析构�
 <ol type="1">
 <li>构造函数可以抛出异常，但需要正确处理，因为构造函数抛出异常时，对象构造不完全，不会调用析构函数</li>
 <li>析构函数不应该抛出异常，若析构函数在栈展开（处理异常）过程中抛出异常，C++
-会调用 <code>std::terminate</code>，直接终止程序 # STL ## 请说说 STL
-的基本组成部分</li>
+会调用 std::terminate，直接终止程序</li>
+</ol>
+<h1 id="stl">STL</h1>
+<h2 id="请说说-stl-的基本组成部分">请说说 STL 的基本组成部分</h2>
+<ol type="1">
 <li>STL由6部分组成，分别是容器，算法，迭代器，
 仿函数，适配器，分配器</li>
 <li>容器是一种数据结构，以模板类的形式提供，包括序列容器，关联容器和无序容器</li>
 <li>算法是用于操作容器的模板函数，屏蔽了数据结构与数据类型的区别</li>
-<li>迭代器提供了访问容器中元素的方法，包括输入迭代器，输出迭代器，前向迭代器双向迭代器和随机访问迭代器</li>
+<li>迭代器提供了访问容器中元素的方法，包括输入迭代器、输出迭代器、前向迭代器、双向迭代器和随机访问迭代器</li>
 <li>仿函数是函数对象，行为上类似于函数调用，通过重载括号实现</li>
 <li>适配器是⽤来修饰容器，仿函数或迭代器接⼝的东⻄</li>
 <li>分配器用于管理对象的创建与销毁，内存的分配与释放</li>
@@ -1381,6 +1384,57 @@ MSL，为什么客户端连接要等待2MSL的时间才能完全关闭</h2>
 <li>流量控制是涉及通信双方的，拥塞控制则是涉及整个通信链路的</li>
 <li>流量控制由通信双方各维护一个发送窗口和接收窗口，实际的发送窗口大小由拥塞控制窗口和发送窗口中最小的决定</li>
 </ol>
+<h2 id="算法">算法</h2>
+<div class="line-block">排序算法 | 平均时间复杂度 | 最好 | 最坏 |
+空间复杂度 | 稳定性 |</div>
+<p>|:---:|:-------------:|:----------------:|:----------------:|:-----------------:|:----------------:|</p>
+<div class="line-block">冒泡排序 | <span
+class="math inline">\(O(n^2)\)</span> | <span
+class="math inline">\(O(n)\)</span> | <span
+class="math inline">\(O(n^2)\)</span> | <span
+class="math inline">\(O(1)\)</span> | 稳定 |</div>
+<div class="line-block">选择排序 | <span
+class="math inline">\(O(n^2)\)</span> | <span
+class="math inline">\(O(n^2)\)</span> | <span
+class="math inline">\(O(n^2)\)</span> | <span
+class="math inline">\(O(1)\)</span> | 不稳定 |</div>
+<div class="line-block">插入排序 | <span
+class="math inline">\(O(n^2)\)</span> | <span
+class="math inline">\(O(n)\)</span> | <span
+class="math inline">\(O(n^2)\)</span> | <span
+class="math inline">\(O(1)\)</span> | 稳定 |</div>
+<div class="line-block">希尔排序 | <span
+class="math inline">\(O(n)\)</span> | <span
+class="math inline">\(O(nlog^2n)\)</span> | <span
+class="math inline">\(O(nlog^2n)\)</span> | <span
+class="math inline">\(O(1)\)</span> | 不稳定 |</div>
+<div class="line-block">归并排序 | <span
+class="math inline">\(O(nlogn)\)</span> | <span
+class="math inline">\(O(nlogn)\)</span> | <span
+class="math inline">\(O(nlogn)\)</span> | <span
+class="math inline">\(O(n)\)</span>| 稳定 |</div>
+<div class="line-block">快速排序 | <span
+class="math inline">\(O(nlogn)\)</span> | <span
+class="math inline">\(O(nlogn)\)</span> | <span
+class="math inline">\(O(n^2)\)</span> | <span
+class="math inline">\(O(logn)\)</span> | 不稳定 |</div>
+<div class="line-block">堆排序 | <span
+class="math inline">\(O(nlogn)\)</span> | <span
+class="math inline">\(O(nlogn)\)</span> | <span
+class="math inline">\(O(nlogn)\)</span> | <span
+class="math inline">\(O(1)\)</span> | 不稳定 |</div>
+<div class="line-block">基数排序 | <span class="math inline">\(O(n +
+k)\)</span> | <span class="math inline">\(O(n + k)\)</span> | <span
+class="math inline">\(O(n + k)\)</span> | <span
+class="math inline">\(O(k)\)</span> | 稳定 |</div>
+<div class="line-block">桶排序 | <span class="math inline">\(O(n +
+k)\)</span> | <span class="math inline">\(O(n + k)\)</span> | <span
+class="math inline">\(O(n^2)\)</span> | <span class="math inline">\(O(n
++ k)\)</span> | 稳定 |</div>
+<div class="line-block">基数排序 | <span class="math inline">\(O(n
+\times k)\)</span> | <span class="math inline">\(O(n \times k)\)</span>
+| <span class="math inline">\(O(n \times k)\)</span> | <span
+class="math inline">\(O(n + k)\)</span> | 稳定 |</div>
 ]]></content>
       <categories>
         <category>逆向</category>
