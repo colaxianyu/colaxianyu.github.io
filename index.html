@@ -183,13 +183,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -211,6 +211,119 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Colaxy's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/" class="post-title-link" itemprop="url">源码UE5启动项目</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-05-02 22:17:33 / 修改时间：22:41:02" itemprop="dateCreated datePublished" datetime="2025-05-02T22:17:33+08:00">2025-05-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/UE5/" itemprop="url" rel="index"><span itemprop="name">UE5</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1
+id="源码ue5启动项目的一些常见问题">源码UE5启动项目的一些常见问题</h1>
+<p>之前为了学习UE5的源代码，所以就直接从源码编译了UE5来使用，不过期间也是遇到了一些奇怪的坑，在这里记录一下</p>
+<h2 id="环境配置问题">环境配置问题</h2>
+<p>UE5对.NET、MSVC、Windows
+SDK的版本是有要求的，并不是越新越好，如果出现了环境配置上的错误，可以先打开Visual
+Studio Installer检查一下，推荐的配置如下</p>
+<p>Windows SDK版本：</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502212914076.png" /></p>
+<p>.NET版本（我这里是VS2022默认安装的配置）:</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502213048806.png" /></p>
+<p>MSVC版本，使用MSVC v143 - VS 2022 C++ x64/x86 生成工具(v14.38-17.8)
+这个版本：</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502213338395.png" /></p>
+<h2 id="启动ue5项目">启动UE5项目</h2>
+<p>如果用源码引擎第一次启动项目，即双击*.uproject的方式启动，大概率会遇到这个问题（蓝图项目不太清楚，但C++项目可能会遇到）</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502214216739.png" /></p>
+<p>首先看看有没有.sln文件，如果没有的话，右键*.uproject，选择Switch
+Unreal Engine version</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/4f4fed190298973a93b3a620325b9ebe.png" /></p>
+<p>然后会弹出下面这个窗口，如果引擎已经编译好，会自己选上，直接OK就行</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502215223094.png" /></p>
+<p>完成后会生成.sln文件，打开后按图中操作即可，注意：</p>
+<p><strong>不要Rebuild UE5！</strong>
+<strong>不要清理解决方案！</strong>
+<strong>不要重新生成解决方案！</strong></p>
+<p>因为可能会重新构建整个UE5</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220146287.png" /></p>
+<p>如果这个项目是老版本的UE5项目，这一步有可能会报错，比如下面的问题</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220446060.png" /></p>
+<p>解决的办法也提示了，打开XXXEditor.Target.cs，按提示加入这些内容，然后再次Build该项目即可</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220759141.png" /></p>
+<p>之后我们就可以正常启动项目了</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502221523952.png" /></p>
+<p>如果现在可以正常启动项目的话，之后双击*.uproject也可以正常启动项目</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 

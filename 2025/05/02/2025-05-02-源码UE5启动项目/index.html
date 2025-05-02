@@ -20,27 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能： 1. 无限阳光和无限金币 2. 取消植物放置的CD 3. 同一个位置可以重复放置植物 无限阳光 静态基址与动态地址  静态基址：是指静态基址中的内容，不会因程序的重新启动而改变，只有在程序重新编译后才会变动 动态地址：是指地址中的内容，会因程序的重新启动而变动的地址，也就是说，当前状态下，地址中保存的信息">
+    <meta name="description" content="源码UE5启动项目的一些常见问题 之前为了学习UE5的源代码，所以就直接从源码编译了UE5来使用，不过期间也是遇到了一些奇怪的坑，在这里记录一下 环境配置问题 UE5对.NET、MSVC、Windows SDK的版本是有要求的，并不是越新越好，如果出现了环境配置上的错误，可以先打开Visual Studio Installer检查一下，推荐的配置如下 Windows SDK版本：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="逆向之植物大战僵尸（一）">
-<meta property="og:url" content="https://colaxianyu.github.io/2023/02/21/2023-02-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:title" content="源码UE5启动项目">
+<meta property="og:url" content="https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/index.html">
 <meta property="og:site_name" content="Colaxy&#39;s Blog">
-<meta property="og:description" content="植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能： 1. 无限阳光和无限金币 2. 取消植物放置的CD 3. 同一个位置可以重复放置植物 无限阳光 静态基址与动态地址  静态基址：是指静态基址中的内容，不会因程序的重新启动而改变，只有在程序重新编译后才会变动 动态地址：是指地址中的内容，会因程序的重新启动而变动的地址，也就是说，当前状态下，地址中保存的信息">
+<meta property="og:description" content="源码UE5启动项目的一些常见问题 之前为了学习UE5的源代码，所以就直接从源码编译了UE5来使用，不过期间也是遇到了一些奇怪的坑，在这里记录一下 环境配置问题 UE5对.NET、MSVC、Windows SDK的版本是有要求的，并不是越新越好，如果出现了环境配置上的错误，可以先打开Visual Studio Installer检查一下，推荐的配置如下 Windows SDK版本：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-02-21T08:36:11.000Z">
-<meta property="article:modified_time" content="2025-03-29T09:31:58.105Z">
+<meta property="article:published_time" content="2025-05-02T14:17:33.000Z">
+<meta property="article:modified_time" content="2025-05-02T14:41:02.263Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://colaxianyu.github.io/2023/02/21/2023-02-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/">
+<link rel="canonical" href="https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colaxianyu.github.io/2023/02/21/2023-02-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/","path":"2023/02/21/2023-02-21-逆向之植物大战僵尸（一）/","title":"逆向之植物大战僵尸（一）"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/","path":"2025/05/02/2025-05-02-源码UE5启动项目/","title":"源码UE5启动项目"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>逆向之植物大战僵尸（一） | Colaxy's Blog</title>
+<title>源码UE5启动项目 | Colaxy's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-189780915-2","only_pageview":false,"measure_protocol_api_secret":null}</script>
@@ -171,7 +171,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E9%99%90%E9%98%B3%E5%85%89"><span class="nav-number">1.</span> <span class="nav-text">无限阳光</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%9F%BA%E5%9D%80%E4%B8%8E%E5%8A%A8%E6%80%81%E5%9C%B0%E5%9D%80"><span class="nav-number">1.1.</span> <span class="nav-text">静态基址与动态地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E9%98%B3%E5%85%89%E5%8A%A8%E6%80%81%E5%9C%B0%E5%9D%80"><span class="nav-number">1.2.</span> <span class="nav-text">寻找阳光动态地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E5%9F%BA%E5%9D%80"><span class="nav-number">1.3.</span> <span class="nav-text">寻找基址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%97%A0%E9%99%90%E9%98%B3%E5%85%89%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">1.4.</span> <span class="nav-text">实现无限阳光的功能</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E7%A0%81ue5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">源码UE5启动项目的一些常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">环境配置问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8ue5%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.2.</span> <span class="nav-text">启动UE5项目</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -224,7 +224,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2023/02/21/2023-02-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.png">
@@ -237,12 +237,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="逆向之植物大战僵尸（一） | Colaxy's Blog">
+      <meta itemprop="name" content="源码UE5启动项目 | Colaxy's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          逆向之植物大战僵尸（一）
+          源码UE5启动项目
         </h1>
 
         <div class="post-meta-container">
@@ -252,15 +252,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2023-02-21 16:36:11" itemprop="dateCreated datePublished" datetime="2023-02-21T16:36:11+08:00">2023-02-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-29 17:31:58" itemprop="dateModified" datetime="2025-03-29T17:31:58+08:00">2025-03-29</time>
+      <time title="创建时间：2025-05-02 22:17:33 / 修改时间：22:41:02" itemprop="dateCreated datePublished" datetime="2025-05-02T22:17:33+08:00">2025-05-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -268,7 +262,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+          <a href="/categories/UE5/" itemprop="url" rel="index"><span itemprop="name">UE5</span></a>
         </span>
     </span>
 
@@ -281,78 +275,41 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>植物大战僵尸是一款很适合逆向入门的游戏，而设计的辅助主要实现了下面几个功能：<br />
-1. 无限阳光和无限金币<br />
-2. 取消植物放置的CD<br />
-3. 同一个位置可以重复放置植物</p>
-<h3 id="无限阳光">无限阳光</h3>
-<h4 id="静态基址与动态地址">静态基址与动态地址</h4>
-<ol type="1">
-<li><p>静态基址：是指静态基址中的内容，不会因程序的重新启动而改变，只有在程序重新编译后才会变动</p></li>
-<li><p>动态地址：是指地址中的内容，会因程序的重新启动而变动的地址，也就是说，当前状态下，地址中保存的信息是我们所需的信息，但程序重新启动后，该地址中的内容就不再是我们所需的信息了</p></li>
-</ol>
-<span id="more"></span>
-<h4 id="寻找阳光动态地址">寻找阳光动态地址</h4>
-<ol type="1">
-<li>首先通过CE附加植物大战僵尸进程，因为阳光是一个精确的数值50，所以可以选择exact
-value来进行搜索，首次搜索会得到很多相关的结果</li>
-</ol>
-<figure>
-<img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光1.png"
-alt="1" />
-<figcaption aria-hidden="true">1</figcaption>
-</figure>
-<ol start="2" type="1">
-<li>收集一个阳光后，改变数值为75并再次搜索，此时搜索到唯一的一个结果</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光2.png" />
-为了验证这个结果是否正确，我们可以手动修改地址中的数值</p>
-<p>如何判断这个地址是否是静态基址，若CE标识的地址为绿色，则该地址为静态基址，而此处的地址并不是绿色的，所以这是个动态地址，因此我们需要寻找基址</p>
-<h4 id="寻找基址">寻找基址</h4>
-<ol type="1">
-<li>我们已经找到了阳光的动态地址，那么如何寻找基址，思路是，阳光每次变动就意味着一定有一条指令修改了这个地址中的值，那么我们可以下一个内存写入断点，看看哪条指令写入了这个地址，所以我们再CE中选中这个地址，右键找到find
-out what writes to this address</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光3.png" /></p>
-<p>之后我们收集一个阳光，发现得到了一条指令，我们双击打开</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光4.png" /></p>
-<p>此时我们可以知道，ecx的值0x19，也就是25，写入了阳光地址标识的内存中，因此阳光的地址
-= eax + 0x5560，该地址内存放了当前阳光的具体数值，其中eax =
-0x17326B58，而0x5560为偏移地址</p>
-<ol start="2" type="1">
-<li>此时我们猜想，内存中有没有一个位置存放了0x17326B58这个值，因此我们可以使用CE，并以16进制搜索0x17326B58，发现很多搜索结果，首先可以排除地址在0x00400000以下的内容，这部分是不进行映射的，以便捕获异常的空指针引用，因此我们找到第一个大于0x00400000的地址，这个值通常是我们需要的，即0x0290A938</li>
-</ol>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光5.png" /></p>
-<p>此时我们可以知道0x0290A938这个地址内保存了0x17326B58这个值，但是0x0290A938这个地址仍是个动态地址，所以我们还需要进一步寻找基址</p>
-<p>此时我们用CE下个内存访问断点，查看哪条指令访问了0x0290A938这个地址内的值，可以看到4个结果，我们点进第一个指令发现0x0290A938
-= edi + 0x768，其中edi = 0290A1D0，0x768也是偏移地址</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光6.png" /></p>
-<p>那么同理我们可以看看内存中哪里存放了0290A1D0，得到如下结果</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光7.png" /></p>
-<p>这时我们看到几个绿色的地址，这就代表这些地址就是静态基址，我们选择第一个，可以看到其地址为0x6A9EC0，这就是我们需要的静态基址，那么如何通过静态基址找到最后的阳光地址呢</p>
-<ol type="1">
-<li>现在梳理一下这个过程
-<ul>
-<li>阳光的动态地址 = 0x17326B58 +
-0x5560，而0x17326B58存在地址为0x0290A938的内存中，即[0x0290A938] =
-0x17326B58</li>
-<li>地址0x0290A938 = 0290A1D0 +
-0x768，而0290A1D0存在地址为静态基址为0x6A9EC0的内存中，即[0x6A9EC0] =
-0x0290A1D0</li>
-<li>所以我们可以得到，阳光地址 = [[0x6A9EC0] + 0x768] + 0x5560</li>
-</ul></li>
-</ol>
-<p>之后我们在CE中验证我们的结果，选择add address manually</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光8.png" /></p>
-<p>之后选择Point，因为此处包含两个偏移地址，因此再点击add
-offset，然后填入我们找到的基址与偏移地址</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光9.png" /></p>
-<p>最终我们可以看到，这个地址内，存的就是当前阳光的数值，修改后，游戏内的阳光也随之改变，且重启游戏后，该地址仍然存的是阳光的数值</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2023-02-21-阳光10.png" /></p>
-<h4 id="实现无限阳光的功能">实现无限阳光的功能</h4>
-<p>的到进程空间中阳光的地址，并向阳光地址处写入所需阳光数，即可实现无限阳光的功能，具体实现细节就不做赘述，给出核心代码</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将寻找地址功能封装成GetThirdLevelAddress()函数，方便后续寻找金币地址</span></span><br><span class="line">DWORD sunAddress = <span class="built_in">GetThirdLevelAddress</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义阳光数量</span></span><br><span class="line">DWORD dwSun = <span class="number">9999</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入             </span></span><br><span class="line"><span class="built_in">WriteProcessMemory</span>(hProcess, (LPVOID)sunAddress, (LPCVOID)&amp;dwSun, <span class="built_in">sizeof</span>(DWORD), &amp;pid)          </span><br></pre></td></tr></table></figure>
-<p>金币地址的寻找大同小异，这里也不再赘述，这样我们就完成了无限阳光与无限金币的功能</p>
+    <div class="post-body" itemprop="articleBody"><h1
+id="源码ue5启动项目的一些常见问题">源码UE5启动项目的一些常见问题</h1>
+<p>之前为了学习UE5的源代码，所以就直接从源码编译了UE5来使用，不过期间也是遇到了一些奇怪的坑，在这里记录一下</p>
+<h2 id="环境配置问题">环境配置问题</h2>
+<p>UE5对.NET、MSVC、Windows
+SDK的版本是有要求的，并不是越新越好，如果出现了环境配置上的错误，可以先打开Visual
+Studio Installer检查一下，推荐的配置如下</p>
+<p>Windows SDK版本：</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502212914076.png" /></p>
+<p>.NET版本（我这里是VS2022默认安装的配置）:</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502213048806.png" /></p>
+<p>MSVC版本，使用MSVC v143 - VS 2022 C++ x64/x86 生成工具(v14.38-17.8)
+这个版本：</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502213338395.png" /></p>
+<h2 id="启动ue5项目">启动UE5项目</h2>
+<p>如果用源码引擎第一次启动项目，即双击*.uproject的方式启动，大概率会遇到这个问题（蓝图项目不太清楚，但C++项目可能会遇到）</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502214216739.png" /></p>
+<p>首先看看有没有.sln文件，如果没有的话，右键*.uproject，选择Switch
+Unreal Engine version</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/4f4fed190298973a93b3a620325b9ebe.png" /></p>
+<p>然后会弹出下面这个窗口，如果引擎已经编译好，会自己选上，直接OK就行</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502215223094.png" /></p>
+<p>完成后会生成.sln文件，打开后按图中操作即可，注意：</p>
+<p><strong>不要Rebuild UE5！</strong>
+<strong>不要清理解决方案！</strong>
+<strong>不要重新生成解决方案！</strong></p>
+<p>因为可能会重新构建整个UE5</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220146287.png" /></p>
+<p>如果这个项目是老版本的UE5项目，这一步有可能会报错，比如下面的问题</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220446060.png" /></p>
+<p>解决的办法也提示了，打开XXXEditor.Target.cs，按提示加入这些内容，然后再次Build该项目即可</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220759141.png" /></p>
+<p>之后我们就可以正常启动项目了</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502221523952.png" /></p>
+<p>如果现在可以正常启动项目的话，之后双击*.uproject也可以正常启动项目</p>
 
     </div>
 
@@ -366,11 +323,11 @@ offset，然后填入我们找到的基址与偏移地址</p>
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2025/04/12/2025-04-12-%E8%8E%B7%E5%8F%96kernel32.dll/" rel="prev" title="获取kernel32.dll">
+                  <i class="fa fa-angle-left"></i> 获取kernel32.dll
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/02/24/2023-02-24-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="next" title="逆向之植物大战僵尸（二）">
-                  逆向之植物大战僵尸（二） <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
