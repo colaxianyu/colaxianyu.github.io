@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32-next.png">
@@ -14,11 +14,11 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="资源表 资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页 为了便于理解，先给出一张资源表的树形结构图">
 <meta property="og:type" content="article">
@@ -37,7 +37,6 @@
 <link rel="canonical" href="https://colaxianyu.github.io/2024/07/21/2024-07-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/">
 
 
-
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colaxianyu.github.io/2024/07/21/2024-07-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/","path":"2024/07/21/2024-07-21-PE文件解析（四）/","title":"PE文件解析（四）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
@@ -45,12 +44,41 @@
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-189780915-2","only_pageview":false,"measure_protocol_api_secret":null}</script>
-  <script src="/js/third-party/analytics/google-analytics.js"></script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
 
 
 
 
 
+
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
 
 
 
@@ -80,7 +108,6 @@
       <p class="site-title">Colaxy's Blog</p>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">知行合一</p>
   </div>
 
   <div class="site-nav-right">
@@ -93,7 +120,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-algorithm"><a href="/categories/algorithm/" rel="section"><i class="fa fa-code fa-fw"></i>算法</a></li><li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-user-secret fa-fw"></i>逆向</a></li><li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-ue5"><a href="/categories/UE5/" rel="section"><i class="fa fa-gamepad fa-fw"></i>UE5</a></li><li class="menu-item menu-item-c++"><a href="/categories/CPP/" rel="section"><i class="fa fa-coffee fa-fw"></i>C++</a></li><li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-bug fa-fw"></i>逆向</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -104,25 +131,25 @@
 
 
   <div class="search-pop-overlay">
-    <div class="popup search-popup"><div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close" role="button">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div class="search-result-container no-result">
-  <div class="search-result-icon">
-    <i class="fa fa-spinner fa-pulse fa-5x"></i>
-  </div>
-</div>
-
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -165,7 +192,7 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -260,10 +287,10 @@
 <p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-资源表树形.png" /></p>
 <span id="more"></span>
 <h4 id="资源目录结构">资源目录结构</h4>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY</span> &#123;</span></span><br><span class="line">    DWORD   Characteristics;        <span class="comment">//资源属性，但通常为0</span></span><br><span class="line">    DWORD   TimeDateStamp;          <span class="comment">// 资源建立时间</span></span><br><span class="line">    WORD    MajorVersion;           <span class="comment">// 资源的版本，但通常为0</span></span><br><span class="line">    WORD    MinorVersion;           </span><br><span class="line">    WORD    NumberOfNamedEntries;   <span class="comment">// 使用名字的资源条目的个数</span></span><br><span class="line">    WORD    NumberOfIdEntries;      <span class="comment">// 使用ID的资源条目个数</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">_IMAGE_RESOURCE_DIRECTORY</span> &#123;</span><br><span class="line">    DWORD   Characteristics;        <span class="comment">//资源属性，但通常为0</span></span><br><span class="line">    DWORD   TimeDateStamp;          <span class="comment">// 资源建立时间</span></span><br><span class="line">    WORD    MajorVersion;           <span class="comment">// 资源的版本，但通常为0</span></span><br><span class="line">    WORD    MinorVersion;           </span><br><span class="line">    WORD    NumberOfNamedEntries;   <span class="comment">// 使用名字的资源条目的个数</span></span><br><span class="line">    WORD    NumberOfIdEntries;      <span class="comment">// 使用ID的资源条目个数</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY</span><br></pre></td></tr></table></figure>
 <p>其中最关键的属性是NumberOfNamedEntries和NumberOfIdEntries，他们指出了本目录种目录项的总和（即资源类型的总个数）</p>
 <h4 id="资源目录入口结构">资源目录入口结构</h4>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIRECTORY_ENTRY</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD NameOffset:<span class="number">31</span>;</span><br><span class="line">            DWORD NameIsString:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME;</span><br><span class="line">        DWORD   Name;</span><br><span class="line">        WORD    Id;</span><br><span class="line">    &#125; DUMMYUNIONNAME;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        DWORD   OffsetToData;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            DWORD   OffsetToDirectory:<span class="number">31</span>;</span><br><span class="line">            DWORD   DataIsDirectory:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME2;</span><br><span class="line">    &#125; DUMMYUNIONNAME2;</span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY_ENTRY</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">_IMAGE_RESOURCE_DIRECTORY_ENTRY</span> &#123;</span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="keyword">struct</span> &#123;</span><br><span class="line">            DWORD NameOffset:<span class="number">31</span>;</span><br><span class="line">            DWORD NameIsString:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME;</span><br><span class="line">        DWORD   Name;</span><br><span class="line">        WORD    Id;</span><br><span class="line">    &#125; DUMMYUNIONNAME;</span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        DWORD   OffsetToData;</span><br><span class="line">        <span class="keyword">struct</span> &#123;</span><br><span class="line">            DWORD   OffsetToDirectory:<span class="number">31</span>;</span><br><span class="line">            DWORD   DataIsDirectory:<span class="number">1</span>;</span><br><span class="line">        &#125; DUMMYSTRUCTNAME2;</span><br><span class="line">    &#125; DUMMYUNIONNAME2;</span><br><span class="line">&#125; IMAGE_RESOURCE_DIRECTORY_ENTRY</span><br></pre></td></tr></table></figure>
 <p>可以看到其中有两个union结构，我们可以简单的理解为，资源目录入口结构包含两个属性Name（ID）、OffsetToData，根据情况的不同，他们有不同的含义</p>
 <ul>
 <li>Name（ID）属性：定义了目录项的名称或ID，当最高位（NameIsString）为0时，表示该属性通过ID使用；为1时，表示该属性通过Name使用，且资源名称使用Unicode编码，低31位为Name的Offset，但NameOffset并不直接指向字符串，而是指向一个IMAGE_RESOURCE_DIR_STRING_U结构，该结构如下所示
@@ -273,7 +300,7 @@
 <li>当用于第三层目录时，定义的时代码页的编号</li>
 </ul></li>
 </ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DIR_STRING_U</span> &#123;</span></span><br><span class="line">    WORD    Length;             <span class="comment">// 字符串的长度（不一定以0结尾，所以该属性很重要）</span></span><br><span class="line">    WCHAR   NameString[ <span class="number">1</span> ];    <span class="comment">// 具体的Unicode字符串</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIR_STRING_U</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">_IMAGE_RESOURCE_DIR_STRING_U</span> &#123;</span><br><span class="line">    WORD    Length;             <span class="comment">// 字符串的长度（不一定以0结尾，所以该属性很重要）</span></span><br><span class="line">    WCHAR   NameString[ <span class="number">1</span> ];    <span class="comment">// 具体的Unicode字符串</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DIR_STRING_U</span><br></pre></td></tr></table></figure>
 <ul>
 <li>OffsetToData属性：一个指针，当最高位为1时，低31位指向下一层IMAGE_RESOURCE_DIRECTORY的起始地址；当最高位为0时，指向IMAGE_RESOURCE_DATA_ENTRY结构</li>
 </ul>
@@ -346,7 +373,7 @@
 </tbody>
 </table>
 <h4 id="资源数据入口结构">资源数据入口结构</h4>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">IMAGE_RESOURCE_DATA_ENTRY</span> &#123;</span></span><br><span class="line">    DWORD   OffsetToData;       <span class="comment">// 资源数据的RVA</span></span><br><span class="line">    DWORD   Size;               <span class="comment">// 资源数据的长度</span></span><br><span class="line">    DWORD   CodePage;           <span class="comment">// 代码页，一般为0</span></span><br><span class="line">    DWORD   Reserved;           <span class="comment">// 保留字段</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DATA_ENTRY</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">_IMAGE_RESOURCE_DATA_ENTRY</span> &#123;</span><br><span class="line">    DWORD   OffsetToData;       <span class="comment">// 资源数据的RVA</span></span><br><span class="line">    DWORD   Size;               <span class="comment">// 资源数据的长度</span></span><br><span class="line">    DWORD   CodePage;           <span class="comment">// 代码页，一般为0</span></span><br><span class="line">    DWORD   Reserved;           <span class="comment">// 保留字段</span></span><br><span class="line">&#125; IMAGE_RESOURCE_DATA_ENTRY</span><br></pre></td></tr></table></figure>
 <p>该结构就是真正的资源数据的结构了，其中OffsetToData是RVA，而不是相对于资源块起始位置的Offset</p>
 <h3 id="实例">实例</h3>
 <p>我这里用一个Win32程序为实例，先用PE Tools查看其资源表内容</p>
@@ -408,7 +435,7 @@ id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE
 <h4 id="image_resource_dir_string_u">IMAGE_RESOURCE_DIR_STRING_U</h4>
 <p>因为示例程序比较简单，没有用到这个结构，所以这里单独找一个比较复杂的程序用来展示</p>
 <p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-复杂程序.png" /></p>
-<p>可以看到根目录下第一类资源是用Name标识的，其名字为"AFX_DIALOG_LAYOUT"，我们在16进制中观察其IMAGE_RESOURCE_DIRECTORY_ENTRY</p>
+<p>可以看到根目录下第一类资源是用Name标识的，其名字为”AFX_DIALOG_LAYOUT”，我们在16进制中观察其IMAGE_RESOURCE_DIRECTORY_ENTRY</p>
 <p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-复杂entry.png" /></p>
 <p>可以看到其Name（ID）属性值为：0x8000CB2E，其OffsetToData属性值为0x800000B0</p>
 <ul>
@@ -417,7 +444,7 @@ id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE
 <li>OffsetToData属性的最高位为1，表示它指向下一层目录</li>
 </ul>
 <p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-名字结构.png" /></p>
-<p>可以看到IMAGE_RESOURCE_DIR_STRING_U结构中Length为11h，而NameString为Unicode表示的"AFX_DIALOG_LAYOUT"（可以注意到字符串并没有以0结尾，所以Length属性很重要）</p>
+<p>可以看到IMAGE_RESOURCE_DIR_STRING_U结构中Length为11h，而NameString为Unicode表示的”AFX_DIALOG_LAYOUT”（可以注意到字符串并没有以0结尾，所以Length属性很重要）</p>
 
     </div>
 
@@ -483,36 +510,6 @@ id="第三层目录的image_resource_directory">第三层目录的IMAGE_RESOURCE
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
-
-
-  
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/js/third-party/search/local-search.js"></script>
-
-
-
-
-  <script src="/js/third-party/fancybox.js"></script>
-
-
-
-  
-
-
-
-
-  
-
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="/js/third-party/math/mathjax.js"></script>
-
-
 
 </body>
 </html>
