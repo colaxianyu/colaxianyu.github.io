@@ -183,7 +183,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -250,7 +250,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-05-07 12:16:02 / 修改时间：12:19:44" itemprop="dateCreated datePublished" datetime="2025-05-07T12:16:02+08:00">2025-05-07</time>
+      <time title="创建时间：2025-05-07 12:16:02 / 修改时间：12:26:03" itemprop="dateCreated datePublished" datetime="2025-05-07T12:16:02+08:00">2025-05-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -277,46 +277,103 @@
 <p>实际性能开销主要源自虚函数抑制了内联优化</p>
 </blockquote>
 <p>首先我们先看一下以下代码的输出 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">g</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">g</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> : <span class="keyword">public</span> B &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;C::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">g</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;C::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	A* a = <span class="keyword">new</span> <span class="built_in">A</span>();</span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	B* b = <span class="keyword">new</span> <span class="built_in">B</span>();</span><br><span class="line">	*(std::<span class="type">uint64_t</span>*)a = *(std::<span class="type">uint64_t</span>*)b;</span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	A aa = *a;</span><br><span class="line">	aa.<span class="built_in">f</span>();</span><br><span class="line">	aa.<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	a = <span class="keyword">new</span> <span class="built_in">C</span>();</span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>A::f() A::g()</p>
-<p>B::f() B::g()</p>
-<p>A::f() A::g()</p>
-<p>C::f() C::g()</p>
-</blockquote>
-<p>第一次输出很好理解，就是简单的函数调用，第二次和第四次输出a都指向了子类，所以调用了子类重写的虚函数，第三次输出是值语义，不表现多态</p>
-<p>我们再看另外一份代码</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">g</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">g</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> : <span class="keyword">public</span> B &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;C::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">g</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;C::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	A* a = <span class="keyword">new</span> <span class="built_in">B</span>();</span><br><span class="line">	C* c = <span class="keyword">new</span> <span class="built_in">C</span>();</span><br><span class="line"></span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	c-&gt;<span class="built_in">f</span>();</span><br><span class="line">	c-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	*(std::<span class="type">uint64_t</span>*)a = *(std::<span class="type">uint64_t</span>*)c;</span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">static_cast</span>&lt;B*&gt;(a)-&gt;<span class="built_in">f</span>();</span><br><span class="line">	<span class="built_in">static_cast</span>&lt;B*&gt;(a)-&gt;<span class="built_in">g</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>与之前的输出的原理一致</p>
-<blockquote>
-<p>B::f() B::g()</p>
-<p>C::f() C::g()</p>
-<p>C::f() C::g()</p>
-<p>C::f() C::g()</p>
-</blockquote>
-<p>观察汇编代码也可以很清楚的搞清其中的原理，所有的调用都在查询虚表（64位程序所以是+8）</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F17 <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F1A <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F1D FF <span class="number">10</span>                call        qword ptr [rax]  </span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F1F <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F22 <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F25 FF <span class="number">50</span> <span class="number">0</span>8             call        qword ptr [rax<span class="number">+8</span>]  </span><br><span class="line"></span><br><span class="line">	c-&gt;<span class="built_in">f</span>();</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F28 <span class="number">48</span> <span class="number">8</span>B <span class="number">07</span>             mov         rax,qword ptr [rdi]  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F2B <span class="number">48</span> <span class="number">8</span>B CF             mov         rcx,rdi  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F2E FF <span class="number">10</span>                call        qword ptr [rax]  </span><br><span class="line">	c-&gt;<span class="built_in">g</span>();</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F30 <span class="number">48</span> <span class="number">8</span>B <span class="number">07</span>             mov         rax,qword ptr [rdi]  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F33 <span class="number">48</span> <span class="number">8</span>B CF             mov         rcx,rdi  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F36 FF <span class="number">50</span> <span class="number">0</span>8             call        qword ptr [rax<span class="number">+8</span>]  </span><br><span class="line"></span><br><span class="line">	*(std::<span class="type">uint64_t</span>*)a = *(std::<span class="type">uint64_t</span>*)c;</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F39 <span class="number">48</span> <span class="number">8</span>B <span class="number">07</span>             mov         rax,qword ptr [rdi]  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F3C <span class="number">48</span> <span class="number">89</span> <span class="number">03</span>             mov         qword ptr [rbx],rax  </span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F3F <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F42 FF <span class="number">10</span>                call        qword ptr [rax]  </span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F44 <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F47 <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F4A FF <span class="number">50</span> <span class="number">0</span>8             call        qword ptr [rax<span class="number">+8</span>]  </span><br><span class="line"></span><br><span class="line">	<span class="built_in">static_cast</span>&lt;B*&gt;(a)-&gt;<span class="built_in">f</span>();</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F4D <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F50 <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F53 FF <span class="number">10</span>                call        qword ptr [rax]  </span><br><span class="line">	<span class="built_in">static_cast</span>&lt;B*&gt;(a)-&gt;<span class="built_in">g</span>();</span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F55 <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F58 <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF<span class="number">7E38F</span>4F5B FF <span class="number">50</span> <span class="number">0</span>8             call        qword ptr [rax<span class="number">+8</span>]   </span><br></pre></td></tr></table></figure>
-<p>现在我们稍微修改一下代码，对B的f函数加上Final，并对C的继承加上Final</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">g</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">override</span> <span class="keyword">final</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">g</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> <span class="keyword">final</span> : <span class="keyword">public</span> B &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// error</span></span><br><span class="line">	<span class="comment">//void f() override &#123;</span></span><br><span class="line">	<span class="comment">//	cout &lt;&lt; &quot;C::f()&quot; &lt;&lt; &quot;\n&quot;;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">g</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;C::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	A* a = <span class="keyword">new</span> <span class="built_in">B</span>();</span><br><span class="line">	C* c = <span class="keyword">new</span> <span class="built_in">C</span>();</span><br><span class="line"></span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	c-&gt;<span class="built_in">f</span>();</span><br><span class="line">	c-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	*(std::<span class="type">uint64_t</span>*)a = *(std::<span class="type">uint64_t</span>*)c;</span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">static_cast</span>&lt;B*&gt;(a)-&gt;<span class="built_in">f</span>();</span><br><span class="line">	<span class="built_in">static_cast</span>&lt;B*&gt;(a)-&gt;<span class="built_in">g</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出如下，可以观察到输出改变了</p>
-<blockquote>
-<p>B::f() B::g()</p>
-<p>B::f() C::g()</p>
-<p>B::f() C::g()</p>
-<p>B::f() C::g()</p>
-</blockquote>
-<p>现在回到汇编代码就可以很清晰的知道发生了什么</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line"><span class="number">00007</span>FF619A64F07 <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF619A64F0A <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF619A64F0D FF <span class="number">10</span>                call        qword ptr [rax]  </span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"><span class="number">00007</span>FF619A64F0F <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF619A64F12 <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF619A64F15 FF <span class="number">50</span> <span class="number">0</span>8             call        qword ptr [rax<span class="number">+8</span>]  </span><br><span class="line"></span><br><span class="line">	c-&gt;<span class="built_in">f</span>();</span><br><span class="line"><span class="number">00007</span>FF619A64F18 <span class="number">48</span> <span class="number">8</span>B CF             mov         rcx,rdi  </span><br><span class="line"><span class="number">00007</span>FF619A64F1B E8 <span class="number">7</span><span class="function">D C9 FF FF       call        <span class="title">B::f</span> <span class="params">(<span class="number">07</span>FF619A6189Dh)</span>  </span></span><br><span class="line"><span class="function">	c-&gt;<span class="title">g</span><span class="params">()</span></span>;</span><br><span class="line"><span class="number">00007</span>FF619A64F20 <span class="number">48</span> <span class="number">8</span>B CF             mov         rcx,rdi  </span><br><span class="line"><span class="number">00007</span>FF619A64F23 E8 <span class="number">1</span><span class="function">A C5 FF FF       call        <span class="title">C::g</span> <span class="params">(<span class="number">07</span>FF619A61442h)</span>  </span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">	*<span class="params">(std::<span class="type">uint64_t</span>*)</span>a </span>= *(std::<span class="type">uint64_t</span>*)c;</span><br><span class="line"><span class="number">00007</span>FF619A64F28 <span class="number">48</span> <span class="number">8</span>B <span class="number">07</span>             mov         rax,qword ptr [rdi]  </span><br><span class="line"><span class="number">00007</span>FF619A64F2B <span class="number">48</span> <span class="number">89</span> <span class="number">03</span>             mov         qword ptr [rbx],rax  </span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line"><span class="number">00007</span>FF619A64F2E <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF619A64F31 FF <span class="number">10</span>                call        qword ptr [rax]  </span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"><span class="number">00007</span>FF619A64F33 <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF619A64F36 <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF619A64F39 FF <span class="number">50</span> <span class="number">0</span>8             call        qword ptr [rax<span class="number">+8</span>]  </span><br><span class="line"></span><br><span class="line">	<span class="built_in">static_cast</span>&lt;B*&gt;(a)-&gt;<span class="built_in">f</span>();</span><br><span class="line"><span class="number">00007</span>FF619A64F3C <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF619A64F3F E8 <span class="number">59</span> <span class="function">C9 FF FF       call        <span class="title">B::f</span> <span class="params">(<span class="number">07</span>FF619A6189Dh)</span>  </span></span><br><span class="line"><span class="function">	<span class="keyword">static_cast</span>&lt;B*&gt;<span class="params">(a)</span>-&gt;<span class="title">g</span><span class="params">()</span></span>;</span><br><span class="line"><span class="number">00007</span>FF619A64F44 <span class="number">48</span> <span class="number">8</span>B <span class="number">03</span>             mov         rax,qword ptr [rbx]  </span><br><span class="line"><span class="number">00007</span>FF619A64F47 <span class="number">48</span> <span class="number">8</span>B CB             mov         rcx,rbx  </span><br><span class="line"><span class="number">00007</span>FF619A64F4A FF <span class="number">50</span> <span class="number">0</span>8             call        qword ptr [rax<span class="number">+8</span>]</span><br></pre></td></tr></table></figure>
-<p>对于第一次输出，父类指针a指向了子类B，所以调用采用查询虚表的形式，与之前一致</p>
-<p>对于第二次输出，由于C在继承时添加了Final，这表明了不会有别的类进一步继承C，因此C调用函数的过程在编译期可确定，不再查询虚表</p>
-<p>对于第三次输出，父类指针a指向了c，此时保持查询虚表的形式</p>
-<p>对于第四次输出，我们把指针a转换位B*类型，由于B中的f函数添加了final，可以确定继承B的子类不会进一步重写f函数，因此B调用函数f的过程也是编译期可以确定的，不再查询虚表</p>
-<p>通过上面的例子不难总结，当使用了final时：</p>
-<ol type="1">
-<li>对于指针指向子类对象时，调用虚函数依然需要查询虚表（编译期无法确定）</li>
-<li>对于指针指向自身类型时，调用虚函数可以根据final进行优化，一旦时编译期可以确定的行为，那么讲不再查询虚表</li>
-</ol>
-<p>这样的优化叫做去虚拟化</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/07/2025-05-07-C-%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/07/2025-05-07-cpp%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Colaxy's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/05/07/2025-05-07-cpp%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">C++学习之final优化</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-05-07 12:16:02 / 修改时间：12:24:29" itemprop="dateCreated datePublished" datetime="2025-05-07T12:16:02+08:00">2025-05-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>我们都知道虚函数在引用语义下表现出多态，但也多了一次寻址开销</p>
+<blockquote>
+<p>实际性能开销主要源自虚函数抑制了内联优化</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/07/2025-05-07-cpp%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -378,7 +435,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-03 12:05:01" itemprop="dateModified" datetime="2025-05-03T12:05:01+08:00">2025-05-03</time>
+      <time title="修改时间：2025-05-07 12:26:16" itemprop="dateModified" datetime="2025-05-07T12:26:16+08:00">2025-05-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -409,32 +466,14 @@ SDK的版本是有要求的，并不是越新越好，如果出现了环境配�
 Studio Installer检查一下，推荐的配置如下</p>
 <p>Windows SDK版本：</p>
 <p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502212914076.png" /></p>
-<p>.NET版本（我这里是VS2022默认安装的配置）:</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502213048806.png" /></p>
-<p>MSVC版本，使用’MSVC v143 - VS 2022 C++ x64/x86
-生成工具(v14.38-17.8)’这个版本：</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502213338395.png" /></p>
-<h2 id="启动ue5项目">启动UE5项目</h2>
-<p>如果用源码引擎第一次启动项目，即双击*.uproject的方式启动，大概率会遇到这个问题（蓝图项目不太清楚，但C++项目可能会遇到）</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502214216739.png" /></p>
-<p>首先看看有没有.sln文件，如果没有的话，右键*.uproject，选择Switch
-Unreal Engine version</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/4f4fed190298973a93b3a620325b9ebe.png" /></p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502215223094.png" /></p>
-<p>完成后会生成.sln文件，打开后按图中操作即可，注意：</p>
-<p><strong>不要Rebuild UE5！</strong>
-<strong>不要清理解决方案！</strong>
-<strong>不要重新生成解决方案！</strong></p>
-<p>因为可能会重新构建整个UE5</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220146287.png" /></p>
-<p>如果这个项目是老版本的UE5项目，这一步有可能会报错，比如下面的问题</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220446060.png" /></p>
-<p>解决的办法也提示了，打开XXXEditor.Target.cs，按提示加入这些内容，然后再次Build该项目即可</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220759141.png" /></p>
-<p>之后我们就可以正常启动项目了</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502221523952.png" /></p>
-<p>如果现在可以正常启动项目的话，之后双击*.uproject也可以正常启动项目</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1118,103 +1157,6 @@ href="https://colaxianyu.github.io/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/27/2023-02-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2023/02/24/2023-02-24-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/24/2023-02-24-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">逆向之植物大战僵尸（二）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-24 11:02:21" itemprop="dateCreated datePublished" datetime="2023-02-24T11:02:21+08:00">2023-02-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-29 17:37:42" itemprop="dateModified" datetime="2025-03-29T17:37:42+08:00">2025-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>回顾一下<a
-href="https://colaxianyu.github.io/2022/02/21/2022-2-21-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%80%EF%BC%89">上一章</a>实现无限阳光的方法，我们首先猜想有一个变量存储了当前阳光的值，即在内存中有一块空间存储了阳光的值，只需要找到该空间，再将期望的阳光数写入该空间即可实现无限阳光的功能，通过CE多次搜索阳光，我们最终通过基址
-+ 2次间址的形式定位到了阳光的具体地址</p>
-<h3 id="取消植物放置cd">取消植物放置CD</h3>
-<h4 id="思路">思路</h4>
-<p>现在我们实现取消植物放置CD的功能，可以猜想有一个变量存放了某个植物的放置CD，而另一个变量存放了CD计时器，然后通过一个函数判断，当<strong>CD计时器从0开始增长到大于等于CD时</strong>或<strong>CD计时器从CD值开始减少到0时</strong>，可以再次放置植物，即</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/24/2023-02-24-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
