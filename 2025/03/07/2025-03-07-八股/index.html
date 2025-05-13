@@ -28,7 +28,7 @@
 <meta property="og:description" content="C++ 简述C++语言的特点  以面向对象为主，还支持泛型，函数式编程等多种编程范式 C++既可以直接操作内存，也可以利用零成本抽象的特性和元编程等技巧提高运行效率 C++更安全，鼓励使用RAII机制自动管理资源，减少内存泄漏风险 C++是一个不断发展的语言，每3年增加一些新特性，例如C++11引入了智能指针，右值，移动语义等特性，c++20引入了module、concept、rang">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-07T14:36:59.000Z">
-<meta property="article:modified_time" content="2025-05-02T15:13:43.659Z">
+<meta property="article:modified_time" content="2025-05-13T16:08:33.336Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
@@ -120,7 +120,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-ue5"><a href="/categories/ue5/" rel="section"><i class="fa fa-gamepad fa-fw"></i>UE5</a></li><li class="menu-item menu-item-c++"><a href="/categories/cpp/" rel="section"><i class="fa fa-coffee fa-fw"></i>C++</a></li><li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-bug fa-fw"></i>逆向</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-ue5"><a href="/categories/ue5/" rel="section"><i class="fa fa-gamepad fa-fw"></i>UE5</a></li><li class="menu-item menu-item-c++"><a href="/categories/cpp/" rel="section"><i class="fa fa-coffee fa-fw"></i>C++</a></li><li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-bug fa-fw"></i>逆向</a></li><li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -183,7 +183,7 @@ a分别是什么，有什么特点</span></a></li><li class="nav-item nav-level-
 hashtable deque list 的实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E4%BD%A0%E6%9D%A5%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B-stl-%E7%9A%84%E5%88%86%E9%85%8D%E5%99%A8"><span class="nav-number">2.3.</span> <span class="nav-text">请你来介绍一下 STL 的分配器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stl-%E5%AE%B9%E5%99%A8%E7%94%A8%E8%BF%87%E5%93%AA%E4%BA%9B%E6%9F%A5%E6%89%BE%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%98%AF%E5%A4%9A%E5%B0%91%E4%B8%BA%E4%BB%80%E4%B9%88"><span class="nav-number">2.4.</span> <span class="nav-text">STL
 容器用过哪些，查找的时间复杂度是多少，为什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E8%A7%A3%E5%86%B3%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.</span> <span class="nav-text">说说解决哈希冲突的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="nav-number">2.6.</span> <span class="nav-text">说说迭代器失效问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text">操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%8D%8F%E7%A8%8B%E7%9A%84%E8%81%94%E7%B3%BB%E4%B8%8E%E5%8C%BA%E5%88%AB"><span class="nav-number">3.1.</span> <span class="nav-text">说说进程，线程和协程的联系与区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E5%A4%96%E4%B8%AD%E6%96%AD%E5%92%8C%E5%86%85%E4%B8%AD%E6%96%AD%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">3.2.</span> <span class="nav-text">说说外中断和内中断是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-number">3.3.</span> <span class="nav-text">说说进程调度算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="nav-number">3.4.</span> <span class="nav-text">说说Linux下的进程通信方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E5%8A%A8%E6%80%81%E5%88%86%E5%8C%BA%E7%AE%97%E6%B3%95"><span class="nav-number">3.5.</span> <span class="nav-text">说说动态分区算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E8%99%9A%E6%8B%9F%E6%8A%80%E6%9C%AF"><span class="nav-number">3.6.</span> <span class="nav-text">说说虚拟技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">3.7.</span> <span class="nav-text">说说虚拟内存的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E4%B8%80%E8%AF%B4%E5%B8%B8%E8%A7%81%E7%9A%84%E5%87%A0%E7%A7%8D%E9%94%81"><span class="nav-number">3.8.</span> <span class="nav-text">说一说常见的几种锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E4%B8%80%E8%AF%B4%E5%86%85%E5%AD%98%E4%BA%A4%E6%8D%A2"><span class="nav-number">3.9.</span> <span class="nav-text">说一说内存交换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E5%9C%B0%E5%9D%80%E5%8F%98%E6%8D%A2%E4%B8%AD%E6%9C%89%E5%BF%AB%E8%A1%A8%E5%92%8C%E6%B2%A1%E5%BF%AB%E8%A1%A8%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">3.10.</span> <span class="nav-text">说说地址变换中，有快表和没快表的流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4malloc%E7%94%B3%E8%AF%B7%E5%86%85%E5%AD%98%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">3.11.</span> <span class="nav-text">说说malloc申请内存的流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B"><span class="nav-number">3.12.</span> <span class="nav-text">说说守护进程，僵尸进程和孤儿进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B"><span class="nav-number">3.13.</span> <span class="nav-text">说说怎么处理僵尸进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E5%B8%B8%E8%A7%81%E7%9A%84%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-number">3.14.</span> <span class="nav-text">说说常见的磁盘调度算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E6%8A%96%E5%8A%A8%E7%8E%B0%E8%B1%A1"><span class="nav-number">3.15.</span> <span class="nav-text">说说抖动现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E6%AD%BB%E9%94%81%E4%BA%A7%E7%94%9F%E7%9A%84%E5%BF%85%E8%A6%81%E6%9D%A1%E4%BB%B6%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E8%A7%A3%E9%99%A4%E6%AD%BB%E9%94%81"><span class="nav-number">3.16.</span> <span class="nav-text">说说死锁产生的必要条件，以及如何解除死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E9%83%A8%E7%A2%8E%E7%89%87%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%96%E9%83%A8%E7%A2%8E%E7%89%87"><span class="nav-number">3.17.</span> <span class="nav-text">说说什么是内部碎片，什么是外部碎片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E7%BB%93%E6%9E%84%E4%BB%A5%E5%8F%8A%E5%88%86%E5%88%AB%E5%AF%B9%E5%BA%94%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%93%AA%E5%87%A0%E4%B8%AA%E6%A8%A1%E5%9D%97"><span class="nav-number">3.18.</span> <span class="nav-text">说说冯诺依曼结构，以及分别对应现代计算机的哪几个模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%A7%E7%AB%AF%E5%B0%8F%E7%AB%AF%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E5%A4%A7%E7%AB%AF%E5%B0%8F%E7%AB%AF"><span class="nav-number">3.19.</span> <span class="nav-text">说说什么是大端小端，如何判断大端小端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E8%BF%9B%E5%85%A5%E5%86%85%E6%A0%B8%E6%80%81%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">3.20.</span> <span class="nav-text">说说进入内核态的方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span class="nav-number">4.</span> <span class="nav-text">计算机网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE"><span class="nav-number">4.1.</span> <span class="nav-text">说说路由协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4dns%E6%9F%A5%E8%AF%A2%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="nav-number">4.2.</span> <span class="nav-text">说说DNS查询服务器的基本流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">4.3.</span> <span class="nav-text">说说TCP三次握手和四次挥手的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4tcp%E5%92%8Cudp%E7%9A%84%E5%8C%BA%E5%88%AB%E6%80%8E%E4%B9%88%E5%8D%B3%E5%88%A9%E7%94%A8udp%E7%9A%84%E4%BC%98%E5%8A%BF%E5%8F%88%E4%BF%9D%E8%AF%81%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-number">4.4.</span> <span class="nav-text">说说TCP和UDP的区别，怎么即利用UDP的优势，又保证可靠传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E5%A6%82%E6%9E%9C%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E6%97%B6%E5%80%99%E6%AF%8F%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%BF%A1%E6%81%AF%E5%AF%B9%E6%96%B9%E6%B2%A1%E6%94%B6%E5%88%B0%E4%BC%9A%E6%80%8E%E4%B9%88%E6%A0%B7%E5%88%86%E6%83%85%E5%86%B5%E4%BB%8B%E7%BB%8D"><span class="nav-number">4.5.</span> <span class="nav-text">说说如果三次握手时候每次握手信息对方没收到会怎么样，分情况介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E4%BB%80%E4%B9%88%E6%98%AF-msl%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5%E8%A6%81%E7%AD%89%E5%BE%852msl%E7%9A%84%E6%97%B6%E9%97%B4%E6%89%8D%E8%83%BD%E5%AE%8C%E5%85%A8%E5%85%B3%E9%97%AD"><span class="nav-number">4.6.</span> <span class="nav-text">说说什么是
 MSL，为什么客户端连接要等待2MSL的时间才能完全关闭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E4%BB%80%E4%B9%88%E6%98%AF-tcp-%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85"><span class="nav-number">4.7.</span> <span class="nav-text">说说什么是 TCP 粘包和拆包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%8E%E8%BE%93%E5%85%A5-url-%E5%88%B0%E5%B1%95%E7%8E%B0%E9%A1%B5%E9%9D%A2%E7%9A%84%E5%85%A8%E8%BF%87%E7%A8%8B"><span class="nav-number">4.8.</span> <span class="nav-text">说说浏览器从输入 URL
-到展现页面的全过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp%E5%A4%B4%E9%83%A8%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BF%A1%E6%81%AF"><span class="nav-number">4.9.</span> <span class="nav-text">TCP头部中有哪些信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%88%E8%B0%88%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E5%92%8C%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-number">4.10.</span> <span class="nav-text">谈谈流量控制和拥塞控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">算法</span></a></li></ol></div>
+到展现页面的全过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp%E5%A4%B4%E9%83%A8%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BF%A1%E6%81%AF"><span class="nav-number">4.9.</span> <span class="nav-text">TCP头部中有哪些信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%88%E8%B0%88%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E5%92%8C%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-number">4.10.</span> <span class="nav-text">谈谈流量控制和拥塞控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ue5%E7%9B%B8%E5%85%B3"><span class="nav-number">5.</span> <span class="nav-text">UE5相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gas%E7%B3%BB%E7%BB%9F%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">5.1.</span> <span class="nav-text">GAS系统是什么</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -198,13 +198,13 @@ MSL，为什么客户端连接要等待2MSL的时间才能完全关闭</span></a
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -272,7 +272,7 @@ MSL，为什么客户端连接要等待2MSL的时间才能完全关闭</span></a
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-02 23:13:43" itemprop="dateModified" datetime="2025-05-02T23:13:43+08:00">2025-05-02</time>
+      <time title="修改时间：2025-05-14 00:08:33" itemprop="dateModified" datetime="2025-05-14T00:08:33+08:00">2025-05-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -851,149 +851,18 @@ size字段告知对方自己当前的接受能力，如果接收窗口为0，那
 <li>拥塞控制用于网络全局发送数据的速率，拥塞控制算法包括慢启动，拥塞避免，超时重传和快重传快恢复算法，在慢启动阶段，拥塞窗口未达到阈值，大小呈指数级增长；在拥塞避免阶段，拥塞窗口达到阈值，呈线性增长；超时重传是指发生拥塞时直接将拥塞窗口重置为1，而快恢复快重传则是将拥塞窗口大小减半</li>
 <li>发送方的实际发送能力为发送窗口和拥塞窗口中最小的那个确定</li>
 </ol>
-<h1 id="算法">算法</h1>
-<table>
-<colgroup>
-<col style="width: 5%" />
-<col style="width: 16%" />
-<col style="width: 19%" />
-<col style="width: 19%" />
-<col style="width: 20%" />
-<col style="width: 19%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">排序算法</th>
-<th style="text-align: center;">平均时间复杂度</th>
-<th style="text-align: center;">最好</th>
-<th style="text-align: center;">最坏</th>
-<th style="text-align: center;">空间复杂度</th>
-<th style="text-align: center;">稳定性</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">冒泡排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(1)</span></td>
-<td style="text-align: center;">稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">选择排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(1)</span></td>
-<td style="text-align: center;">不稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">插入排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(1)</span></td>
-<td style="text-align: center;">稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">希尔排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><sup>2</sup><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><sup>2</sup><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(1)</span></td>
-<td style="text-align: center;">不稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">归并排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em>)</span></td>
-<td style="text-align: center;">稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">快速排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;">不稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">堆排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><em>l</em><em>o</em><em>g</em><em>n</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(1)</span></td>
-<td style="text-align: center;">不稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">基数排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> + <em>k</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> + <em>k</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> + <em>k</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>k</em>)</span></td>
-<td style="text-align: center;">稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">桶排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> + <em>k</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> + <em>k</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> + <em>k</em>)</span></td>
-<td style="text-align: center;">稳定</td>
-</tr>
-<tr>
-<td style="text-align: center;">基数排序</td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> × <em>k</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> × <em>k</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> × <em>k</em>)</span></td>
-<td style="text-align: center;"><span
-class="math inline"><em>O</em>(<em>n</em> + <em>k</em>)</span></td>
-<td style="text-align: center;">稳定</td>
-</tr>
-</tbody>
-</table>
+<h1 id="ue5相关">UE5相关</h1>
+<h2 id="gas系统是什么">GAS系统是什么</h2>
+<ol type="1">
+<li><p>Ability System component (ASC)
+ASC是用于管理Actor技能的组件，负责跟踪技能的状态、属性和时间</p></li>
+<li><p>Gameplay Ability (GA)
+GA用于实现具体技能的逻辑，例如技能的激活、效果、动画播放等</p></li>
+<li><p>Gameplay Effect (GE)
+GE用于管理影响Actor状态的效果，例如buff、debuff等</p></li>
+<li><p>Ability Set (AS)
+AS用于存储角色基础属性，如生命值、魔法值等</p></li>
+</ol>
 
     </div>
 

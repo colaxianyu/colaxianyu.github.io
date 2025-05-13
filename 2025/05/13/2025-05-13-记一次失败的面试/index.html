@@ -20,27 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="源码UE5启动项目的一些常见问题 之前为了学习UE5的源代码，所以就直接从源码编译了UE5来使用，不过期间也是遇到了一些奇怪的坑，在这里记录一下 环境配置问题 UE5对.NET、MSVC、Windows SDK的版本是有要求的，并不是越新越好，如果出现了环境配置上的错误，可以先打开Visual Studio Installer检查一下，推荐的配置如下 Windows SDK版本：">
+    <meta name="description" content="结束腾讯光子的二面，被自己蠢哭了，记录一下自己的抽象操作，希望面评不会烂完了 Q: 为什么要做PE解析工具 A: 小导原本在找量化交易相关的合作，让我去做一些这个方向的课题，但是小导生病所以暂时无事可做，所以在游戏demo和这个项目之间二选一，因为大导刚好要组一个CTF团队，就选了这个项目作为给本科生的一个演示 反思: 废话太多，虽然确实小导住院了，但是这些无关信息没必要说，直接明了的说做">
 <meta property="og:type" content="article">
-<meta property="og:title" content="源码UE5启动项目">
-<meta property="og:url" content="https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:title" content="2025-05-13-记一次失败的面试">
+<meta property="og:url" content="https://colaxianyu.github.io/2025/05/13/2025-05-13-%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%9D%A2%E8%AF%95/index.html">
 <meta property="og:site_name" content="Colaxy&#39;s Blog">
-<meta property="og:description" content="源码UE5启动项目的一些常见问题 之前为了学习UE5的源代码，所以就直接从源码编译了UE5来使用，不过期间也是遇到了一些奇怪的坑，在这里记录一下 环境配置问题 UE5对.NET、MSVC、Windows SDK的版本是有要求的，并不是越新越好，如果出现了环境配置上的错误，可以先打开Visual Studio Installer检查一下，推荐的配置如下 Windows SDK版本：">
+<meta property="og:description" content="结束腾讯光子的二面，被自己蠢哭了，记录一下自己的抽象操作，希望面评不会烂完了 Q: 为什么要做PE解析工具 A: 小导原本在找量化交易相关的合作，让我去做一些这个方向的课题，但是小导生病所以暂时无事可做，所以在游戏demo和这个项目之间二选一，因为大导刚好要组一个CTF团队，就选了这个项目作为给本科生的一个演示 反思: 废话太多，虽然确实小导住院了，但是这些无关信息没必要说，直接明了的说做">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-05-02T14:17:33.000Z">
-<meta property="article:modified_time" content="2025-05-07T04:26:16.479Z">
+<meta property="article:published_time" content="2025-05-13T13:44:06.000Z">
+<meta property="article:modified_time" content="2025-05-13T16:49:18.301Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/">
+<link rel="canonical" href="https://colaxianyu.github.io/2025/05/13/2025-05-13-%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%9D%A2%E8%AF%95/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/","path":"2025/05/02/2025-05-02-源码UE5启动项目/","title":"源码UE5启动项目"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colaxianyu.github.io/2025/05/13/2025-05-13-%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%9D%A2%E8%AF%95/","path":"2025/05/13/2025-05-13-记一次失败的面试/","title":"2025-05-13-记一次失败的面试"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>源码UE5启动项目 | Colaxy's Blog</title>
+<title>2025-05-13-记一次失败的面试 | Colaxy's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-189780915-2","only_pageview":false,"measure_protocol_api_secret":null}</script>
@@ -158,7 +158,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -171,7 +171,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E7%A0%81ue5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">源码UE5启动项目的一些常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">环境配置问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8ue5%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.2.</span> <span class="nav-text">启动UE5项目</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -224,7 +223,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/13/2025-05-13-%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%9D%A2%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.png">
@@ -237,12 +236,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="源码UE5启动项目 | Colaxy's Blog">
+      <meta itemprop="name" content="2025-05-13-记一次失败的面试 | Colaxy's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          源码UE5启动项目
+          2025-05-13-记一次失败的面试
         </h1>
 
         <div class="post-meta-container">
@@ -253,14 +252,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2025-05-02 22:17:33" itemprop="dateCreated datePublished" datetime="2025-05-02T22:17:33+08:00">2025-05-02</time>
+      <time title="创建时间：2025-05-13 21:44:06" itemprop="dateCreated datePublished" datetime="2025-05-13T21:44:06+08:00">2025-05-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-07 12:26:16" itemprop="dateModified" datetime="2025-05-07T12:26:16+08:00">2025-05-07</time>
+      <time title="修改时间：2025-05-14 00:49:18" itemprop="dateModified" datetime="2025-05-14T00:49:18+08:00">2025-05-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -268,7 +267,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/ue5/" itemprop="url" rel="index"><span itemprop="name">ue5</span></a>
+          <a href="/categories/essay/" itemprop="url" rel="index"><span itemprop="name">essay</span></a>
         </span>
     </span>
 
@@ -281,41 +280,23 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1
-id="源码ue5启动项目的一些常见问题">源码UE5启动项目的一些常见问题</h1>
-<p>之前为了学习UE5的源代码，所以就直接从源码编译了UE5来使用，不过期间也是遇到了一些奇怪的坑，在这里记录一下</p>
-<h2 id="环境配置问题">环境配置问题</h2>
-<p>UE5对.NET、MSVC、Windows
-SDK的版本是有要求的，并不是越新越好，如果出现了环境配置上的错误，可以先打开Visual
-Studio Installer检查一下，推荐的配置如下</p>
-<p>Windows SDK版本：</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502212914076.png" /></p>
-<span id="more"></span>
-<p>.NET版本（我这里是VS2022默认安装的配置）:</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502213048806.png" /></p>
-<p>MSVC版本，使用’MSVC v143 - VS 2022 C++ x64/x86
-生成工具(v14.38-17.8)’这个版本：</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502213338395.png" /></p>
-<h2 id="启动ue5项目">启动UE5项目</h2>
-<p>如果用源码引擎第一次启动项目，即双击*.uproject的方式启动，大概率会遇到这个问题（蓝图项目不太清楚，但C++项目可能会遇到）</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502214216739.png" /></p>
-<p>首先看看有没有.sln文件，如果没有的话，右键*.uproject，选择Switch
-Unreal Engine version</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/4f4fed190298973a93b3a620325b9ebe.png" /></p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502215223094.png" /></p>
-<p>完成后会生成.sln文件，打开后按图中操作即可，注意：</p>
-<p><strong>不要Rebuild UE5！</strong>
-<strong>不要清理解决方案！</strong>
-<strong>不要重新生成解决方案！</strong></p>
-<p>因为可能会重新构建整个UE5</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220146287.png" /></p>
-<p>如果这个项目是老版本的UE5项目，这一步有可能会报错，比如下面的问题</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220446060.png" /></p>
-<p>解决的办法也提示了，打开XXXEditor.Target.cs，按提示加入这些内容，然后再次Build该项目即可</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502220759141.png" /></p>
-<p>之后我们就可以正常启动项目了</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502221523952.png" /></p>
-<p>如果现在可以正常启动项目的话，之后双击*.uproject也可以正常启动项目</p>
+    <div class="post-body" itemprop="articleBody"><p>结束腾讯光子的二面，被自己蠢哭了，记录一下自己的抽象操作，希望面评不会烂完了</p>
+<p>Q: 为什么要做PE解析工具 A:
+小导原本在找量化交易相关的合作，让我去做一些这个方向的课题，但是小导生病所以暂时无事可做，所以在游戏demo和这个项目之间二选一，因为大导刚好要组一个CTF团队，就选了这个项目作为给本科生的一个演示
+反思:
+废话太多，虽然确实小导住院了，但是这些无关信息没必要说，直接明了的说做这个项目可以提升本科生对CTF的兴趣即可</p>
+<p>Q: 做这个项目遇到哪些困难 A: 阿巴阿巴
+反思：思路还是有些混乱，虽然明确了具体遇到什么问题，但是怎么解决的没有讲好，从东扯到西，从具体实现扯到设计模式，还是要再好好梳理这个项目</p>
+<p>Q: 项目代码中的AddImport里xxxx代码做了什么 A: 阿巴阿巴 反思:
+蠢哭第一步，首先这段代码就是在做一个逻辑上很抽象的事，存在一个已经初始化过的内存里(new_section)，new了一个新内存，然后初始化，然后copy过去，然后释放新内存，自己看了一圈也没想明白自己当时在干嘛，然后跟面试官说不太记得当时在干嘛了(被自己的sb代码绕晕)，所以为什么不直接说这一段代码逻辑是有问题的呢</p>
+<p>Q: 项目中TcharToString函数有什么问题，修改之后看看 A: 内存泄漏 反思:
+犯蠢第二步，首先这一圈的代码存在内存泄漏只是一个问题，另外一点，new的使用方式也是错的，char*
+p = new[sizeof(char) *
+lenth]，死去嵌入式的回忆还在攻击我，不过这个先不说，当时也没注意到，毕竟这还不是最蠢的。最蠢的在于，解决这个问题的方法，也就是我释放内存用的是free，虽然后面说了new和delete要成对使用，巴拉了一堆试图掩盖错误(所以我当时到底为什么没用delete)，但是关键是free也写错了，写成了free(p,
+lenth)，原地去世</p>
+<p>唉，不知道今晚的面试在干嘛，有种张嘴从东吹到西，结果面试官出了个1+1的题没算对的感觉</p>
+<p>感觉面试官尽力了，技术栈不匹配的情况下还专门看了github的项目代码给我一个机会多聊下，结果自己什么都没接住</p>
+<p>用这个帖子记录一下这次失败的面试，对自己很失望，满瓶不动半瓶摇说的就是我吧，看着屏幕一个多小时也不知道要写什么了，收拾下心情继续准备吧，面评烂了也是自己作的</p>
 
     </div>
 
@@ -329,14 +310,11 @@ Unreal Engine version</p>
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/04/12/2025-04-12-%E8%8E%B7%E5%8F%96kernel32.dll/" rel="prev" title="获取kernel32.dll">
-                  <i class="fa fa-angle-left"></i> 获取kernel32.dll
+                <a href="/2025/05/07/2025-05-07-cpp%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/" rel="prev" title="C++学习之final优化">
+                  <i class="fa fa-angle-left"></i> C++学习之final优化
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/05/07/2025-05-07-cpp%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/" rel="next" title="C++学习之final优化">
-                  C++学习之final优化 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
