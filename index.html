@@ -183,7 +183,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -211,6 +211,100 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Colaxy's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/" class="post-title-link" itemprop="url">2025-05-23-C++20学习之module</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-05-23 16:15:08 / 修改时间：16:39:07" itemprop="dateCreated datePublished" datetime="2025-05-23T16:15:08+08:00">2025-05-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="头文件存在的一些问题">头文件存在的一些问题</h1>
+<p>使用头文件主要存在以下一些问题</p>
+<blockquote>
+<p>头文件被重复处理导致编译速度过慢</p>
+<p>宏和全局命名污染的问题</p>
+<p>头文件依赖问题</p>
+</blockquote>
+<p>头文件被重复处理主要是因为它是在预处理阶段直接展开的，也就是直接进行文本替换，考虑在<code>B.h</code>中include了<code>A.h</code>，然后在<code>Utils.cpp</code>和<code>Main.cpp</code>中都include了<code>B.h</code>，那么在这两个翻译单元中都会间接的包含<code>A.h</code>。并且，如果对<code>A.h</code>中的内容做了任何修改，那么其他所有包含<code>A.h</code>的翻译单元都需要重新编译</p>
+<p>宏和全局命名污染的问题的原因同上，预处理阶段对头文件进行简单的文本替换导致了这个问题</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1080,106 +1174,6 @@ Virtual Address），虚拟地址与相对虚拟地址存在如下关系：虚�
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/07/01/2024-07-01-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2023/02/27/2023-02-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/27/2023-02-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/" class="post-title-link" itemprop="url">逆向之植物大战僵尸（三）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-27 13:44:51" itemprop="dateCreated datePublished" datetime="2023-02-27T13:44:51+08:00">2023-02-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-29 17:40:39" itemprop="dateModified" datetime="2025-03-29T17:40:39+08:00">2025-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a
-href="https://colaxianyu.github.io/2022/02/27/2022-2-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%BA%8C%EF%BC%89">上一章</a>我们实现了植物无CD的功能，主要使通过定位CDTimers间接定位到了if判断的位置，并通过使用nop填充jle指令，改变了程序的执行流程，使其总是运行植物不处于CD状态中的代码</p>
-<p>现在我们希望实现另一个功能，即在同一个位置能够重复的放置植物</p>
-<h3 id="同一格重复放置植物">同一格重复放置植物</h3>
-<h4 id="思路">思路</h4>
-<ol type="1">
-<li><p>思路一：我们假设放置植物是通过一个二维数组记录的，当二维数组中记录如-1之类的值时，代表位置空闲，可以放置植物，当数组中记录植物编号时，代表位置被占用，不可放置，该思路需要我们能定位到该二维数组，在放置植物时保证二维数组中的值不变，使该位置为空位置</p></li>
-<li><p>思路二：在我们放置植物时，我们需要一个if判断，用于判断该位置是否可放植物，若可放置，则阳光会减少放置植物所需的cost，即该思路需要我们定位一个cmp指令，即</p></li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/27/2023-02-27-%E9%80%86%E5%90%91%E4%B9%8B%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%EF%BC%88%E4%B8%89%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/uploads/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="头文件存在的一些问题 使用头文件主要存在以下一些问题  头文件被重复处理导致编译速度过慢 宏和全局命名污染的问题 头文件依赖问题  头文件被重复处理主要是因为它是在预处理阶段直接展开的，也就是直接进行文本替换，考虑在B.h中include了A.h，然后在Utils.cpp和Main.cpp中都include了B.h，那么在这两个翻译单元中都会间接的包含A.h。并且，如果对A.h中的内">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025-05-23-C++20学习之module">
+<meta property="og:url" content="https://colaxianyu.github.io/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/index.html">
+<meta property="og:site_name" content="Colaxy&#39;s Blog">
+<meta property="og:description" content="头文件存在的一些问题 使用头文件主要存在以下一些问题  头文件被重复处理导致编译速度过慢 宏和全局命名污染的问题 头文件依赖问题  头文件被重复处理主要是因为它是在预处理阶段直接展开的，也就是直接进行文本替换，考虑在B.h中include了A.h，然后在Utils.cpp和Main.cpp中都include了B.h，那么在这两个翻译单元中都会间接的包含A.h。并且，如果对A.h中的内">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-23T08:15:08.000Z">
+<meta property="article:modified_time" content="2025-05-23T08:39:07.274Z">
+<meta property="article:author" content="Colaxy">
+<meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://colaxianyu.github.io/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colaxianyu.github.io/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/","path":"2025/05/23/2025-05-23-cpp20学习之module/","title":"2025-05-23-C++20学习之module"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2025-05-23-C++20学习之module | Colaxy's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-189780915-2","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Colaxy's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-ue5"><a href="/categories/ue5/" rel="section"><i class="fa fa-gamepad fa-fw"></i>UE5</a></li><li class="menu-item menu-item-c++"><a href="/categories/cpp/" rel="section"><i class="fa fa-coffee fa-fw"></i>C++</a></li><li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-bug fa-fw"></i>逆向</a></li><li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6%E5%AD%98%E5%9C%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">头文件存在的一些问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#module%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">module简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#module%E5%A3%B0%E6%98%8E"><span class="nav-number">2.1.1.</span> <span class="nav-text">(1) module声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E5%A3%B0%E6%98%8E"><span class="nav-number">2.1.2.</span> <span class="nav-text">(2, 3) 导出声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E5%A3%B0%E6%98%8E"><span class="nav-number">2.1.3.</span> <span class="nav-text">(4, 5, 6) 导入声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E6%A8%A1%E5%9D%97%E7%89%87%E6%AE%B5"><span class="nav-number">2.1.4.</span> <span class="nav-text">(7) 全局模块片段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%81%E6%9C%89%E6%A8%A1%E5%9D%97%E7%89%87%E6%AE%B5"><span class="nav-number">2.1.5.</span> <span class="nav-text">(8) 私有模块片段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%89%80%E6%9C%89%E6%9D%83"><span class="nav-number">2.2.</span> <span class="nav-text">模块所有权</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84module%E7%94%A8%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">简单的module用例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#module%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">module的一些问题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Colaxy"
+      src="/uploads/avatar.png">
+  <p class="site-author-name" itemprop="name">Colaxy</p>
+  <div class="site-description" itemprop="description">知行合一</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/colaxianyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;colaxianyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2025-05-23-C++20学习之module | Colaxy's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2025-05-23-C++20学习之module
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-05-23 16:15:08 / 修改时间：16:39:07" itemprop="dateCreated datePublished" datetime="2025-05-23T16:15:08+08:00">2025-05-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="头文件存在的一些问题">头文件存在的一些问题</h1>
+<p>使用头文件主要存在以下一些问题</p>
+<blockquote>
+<p>头文件被重复处理导致编译速度过慢</p>
+<p>宏和全局命名污染的问题</p>
+<p>头文件依赖问题</p>
+</blockquote>
+<p>头文件被重复处理主要是因为它是在预处理阶段直接展开的，也就是直接进行文本替换，考虑在<code>B.h</code>中include了<code>A.h</code>，然后在<code>Utils.cpp</code>和<code>Main.cpp</code>中都include了<code>B.h</code>，那么在这两个翻译单元中都会间接的包含<code>A.h</code>。并且，如果对<code>A.h</code>中的内容做了任何修改，那么其他所有包含<code>A.h</code>的翻译单元都需要重新编译</p>
+<p>宏和全局命名污染的问题的原因同上，预处理阶段对头文件进行简单的文本替换导致了这个问题</p>
+<span id="more"></span>
+<p>头文件依赖问题算是最常踩的一个坑，头文件循环依赖，或者include顺序不对应该大部分人都遇到过，虽然利用include
+guards或者规范include顺序可以尽可能的规避这些问题，但毕竟还是会在一些意想不到的时候出错</p>
+<blockquote>
+<p>推荐的头文件include顺序：<br />
+1.配套的头文件<br />
+2.C语言系统库头文件<br />
+3.C++标准库头文件<br />
+4.第三方库头文件<br />
+5.本项目的其他头文件</p>
+</blockquote>
+<h1 id="module简介">module简介</h1>
+<p>cppreference是这样介绍module的</p>
+<blockquote>
+<p>模块是一个用于在翻译单元间分享声明和定义的语言特性。
+它们可以在某些地方替代标头的使用</p>
+</blockquote>
+<p>说白了就是用来取代头文件的东西，简单的，记住以下几个概念即可</p>
+<blockquote>
+<p>1.含有export的模块是一个接口单元，类似于头文件定义和实现分离，模块也允许有模块实现单元<br />
+2.模块可以分为具名模块（主模块，例如模块X）和模块分区（子模块，例如模块X
+: Y）<br />
+3.导入的声明可以在接口单元中再次导出</p>
+</blockquote>
+<h2 id="语法">语法</h2>
+<p>具体的语法如下</p>
+<blockquote>
+<p>(1)<code>export</code>(可选) <code>module</code> <em>模块名</em>
+<em>模块分区</em> (可选) <em>属性</em> (可选) <br />
+(2)<code>export</code> <em>声明</em><br />
+(3)<code>export &#123;</code> <em>声明序列</em> (可选) <code>&#125;</code><br />
+(4)<code>export</code>(可选) <code>import</code> <em>模块名
+属性</em> (可选)<br />
+(5)<code>export</code>(可选) <code>import</code> <em>模块分区
+属性</em> (可选)<br />
+(6)<code>export</code>(可选) <code>import</code> <em>头名
+属性</em> (可选)<br />
+(7)<code>module</code><br />
+(8)<code>module : private</code></p>
+</blockquote>
+<h3 id="module声明">(1) module声明</h3>
+<p>就是将当前翻译单元声明为一个模块，例如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> MainModule; <span class="comment">// 声明一个具名模块接口单元</span></span><br><span class="line"><span class="keyword">module</span> MainModule; <span class="comment">// 声明一个具名模块实现单元</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> MainModule.Module1 <span class="comment">// 声明一个具名模块接口单元</span></span><br><span class="line"><span class="keyword">module</span> MainModule.Module1 <span class="comment">// 声明一个具名模块实现单元</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> MainModule :Moudle2; <span class="comment">// 声明一个模块分区接口单元</span></span><br><span class="line"><span class="keyword">module</span> MainModule :Moudle2; <span class="comment">// 声明一个模块分区实现单元</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的是，<code>X.Y</code>中的<code>.</code>没有内在含义，只是非正式的表达一个层次结构，更推荐的拆分模块的方案是使用模块分区，如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具名模块接口单元 Math.ixx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math;</span><br><span class="line"><span class="keyword">import</span> :Add;</span><br><span class="line"><span class="keyword">import</span> :Sub;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------------    模块分区 Add.ixx     ------------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math :Add;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------------    模块分区 Sub.ixx     ------------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math :Sub;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是</p>
+<blockquote>
+<p>1)模块分区仅自己所在的具名模块内部可见，其他的翻译单元不能直接导入这些模块分区<br />
+2)模块分区内的所有声明和定义在将它导入的模块单元中均可见，无论它们是否被导出<br />
+3)模块分区可以是模块接口单元</p>
+</blockquote>
+<p>简单解释下</p>
+<p>1)是指其他翻译单元无法直接导入模块分区，只有具名模块和具名模块下的其他模块分区可以直接导入</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main.cpp</span></span><br><span class="line"><span class="keyword">import</span> Math :Add <span class="comment">// error, 不能直接导入模块分区，无论该模块分区是否被导出</span></span><br><span class="line"><span class="keyword">import</span> Math       <span class="comment">// ok</span></span><br></pre></td></tr></table></figure>
+<p>2)是指模块分区中的所有声明和实现，在该具名模块下所有的模块分区中都是可见的（具名模块内也可见）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具名模块接口单元 Math.ixx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math;</span><br><span class="line"><span class="keyword">import</span> :Add;</span><br><span class="line"><span class="keyword">import</span> :Sub;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------------    模块分区 Add.ixx     ------------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math :Add;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------------    模块分区 Sub.ixx     ------------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math :Sub;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> :Add       <span class="comment">//ok, Add和Sub都在Math这一具名模块下</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ok, 即使add是不导出的，但依然可见</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">calculate</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> c = <span class="built_in">add</span>(<span class="number">1</span>, <span class="number">2</span>); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3)模块分区可以被导出，但需要在具名模块接口单元中导入的同时再导出</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具名模块接口单元 Math.ixx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math;</span><br><span class="line"><span class="keyword">import</span> :Add;         <span class="comment">// 仅内部使用</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">import</span> :Sub;  <span class="comment">// 作为接口单元被导入的同时又被导出</span></span><br></pre></td></tr></table></figure>
+<h3 id="导出声明">(2, 3) 导出声明</h3>
+<p>导出一个声明或序列内的所有声明</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 导出序列内的所有声明</span></span><br><span class="line"><span class="keyword">export</span> &#123;</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">mul</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="导入声明">(4, 5, 6) 导入声明</h3>
+<p>导入一个模块单元，模块分区，或标头单元</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> MainModule;  <span class="comment">// 导入一个模块</span></span><br><span class="line"><span class="keyword">import</span> &lt;vector&gt;;    <span class="comment">// 导入头文件</span></span><br><span class="line"><span class="keyword">import</span> :Module1;   <span class="comment">// 在具名模块内导入一个模块分区</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的是，在模块单元里不能使用<code>#include</code>，因为所有被包含的声明和定义都会被当作模块的一部分，这不符合模块<code>显式控制接口是否对外暴露</code>的设计理念
+(MSVC会提示一个警告)</p>
+<blockquote>
+<p>#include &lt;vector&gt; in the purview of module Math appears
+erroneous. Consider moving that directive before the module declaration,
+or replace the textual inclusion with import &lt;vector&gt;;.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> MainModule;</span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span>     <span class="comment">// error</span></span></span><br><span class="line"><span class="keyword">import</span> &lt;vector&gt;       <span class="comment">// ok</span></span><br></pre></td></tr></table></figure>
+<p>不过<code>import &lt;标头单元&gt;</code>并不是一个好的解决方案，可能会遇到一些奇奇怪怪的问题，最佳解决方案我们后续给出</p>
+<h3 id="全局模块片段">(7) 全局模块片段</h3>
+<p>模块单元可以使用<code>module</code>前缀来表明后续是一个全局模块片段（准确来说应该是<code>module</code>之后，模块声明之前的内容），并且，一旦使用<code>module</code>，那么它必须是首个声明。它的作用是什么呢，就是为了解决我们之前提到的<code>#include</code>的问题，直接上例子</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span>;                 <span class="comment">// 必须是文件内的首个声明</span></span><br><span class="line">                        <span class="comment">// begin</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> PI 3.14159     <span class="comment">//  |</span></span></span><br><span class="line"><span class="meta"># <span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span>   <span class="comment">// 全局模块片段 </span></span></span><br><span class="line"><span class="meta"># <span class="keyword">include</span> <span class="string">&lt;vector&gt;</span>      <span class="comment">//  |</span></span></span><br><span class="line">                        <span class="comment">// end</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> MainModule; <span class="comment">// 具名模块声明</span></span><br></pre></td></tr></table></figure>
+<p>通过该方法就很好的兼容了老文件，避免<code>import &lt;标头单元&gt;</code>出现的一些神奇的问题</p>
+<h3 id="私有模块片段">(8) 私有模块片段</h3>
+<p>具名模块接口单元可以在最后申请一个私有模块片段，这样可以在不把所有内容暴露给导入方的情况下将模块表示为一个翻译单元。需要注意的就下面两点</p>
+<blockquote>
+<p>(1)仅具名模块接口单元可以包含私有模块片段，也就是说具名模块的实现单元不允许包含，模块分区接口单元和实现单元也不允许包含<br />
+(2)私有模块片段提供了一种轻量的声明和定义分离的方法，所以我们即可以在具名模块接口单元中导出声明，在私有模块片段中提供定义，也可以像传统方案一样，在接口单元导出声明，在实现单元中提供定义</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具名模块接口单元 Math.ixx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math;</span><br><span class="line"><span class="keyword">import</span> :Add;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">import</span> :<span class="function">Sub</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">void</span> <span class="title">calculate</span><span class="params">()</span></span>;   <span class="comment">// 导出声明</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> : <span class="keyword">private</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 私有模块片段内</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">calculate</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> result = <span class="built_in">add</span>(<span class="number">1</span>, <span class="number">2</span>) + <span class="built_in">sub</span>(<span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line">	cout &lt;&lt; result &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="模块所有权">模块所有权</h2>
+<p>cppreference中这样描述模块的所有权</p>
+<blockquote>
+<p>(1)通常来说，在模块单元中的模块声明后出现的声明都附着于该模块<br />
+(2)如果一个实体的声明附着于一个具名模块，该实体只能在该模块中定义。每个这种实体的所有声明都必须附着于同一模块<br />
+(3)如果一个声明附着于一个具名模块，并且该声明没有被导出，那么声明的名字具有<a
+target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/storage_duration#.E6.A8.A1.E5.9D.97.E9.93.BE.E6.8E.A5">模块链接</a><br />
+(4)如果同一实体的两个声明附着于不同的模块，那么程序非良构；如果两个声明都无法从对方可及，那么不要求诊断
+(5)具有外部链接的<a
+target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/namespace">命名空间</a>定义和在<a
+target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/language_linkage">语言链接</a>说明中的声明不附着于任何具名模块（因此声明的这些实体可以在模块外定义）</p>
+</blockquote>
+<p>(1, 2,
+3)比较容易理解，直接用cppreference中的例子说明，函数f没有被导出，所以具有模块连接，并依附于自身所在的模块，所以lib_A和lib_B中的函数f是不同的实体，它们的定义也必须在各自的模块单元中提供</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------    具名模块接口单元 lib_A.ixx     ---------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> lib_A;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125; <span class="comment">// f 具有模块链接</span></span><br><span class="line"><span class="keyword">export</span> <span class="type">int</span> x = <span class="built_in">f</span>();   <span class="comment">// x 等于 0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------    具名模块接口单元 lib_B.ixx     ---------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> lib_B;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="number">1</span>; &#125; <span class="comment">// OK，lib_A 中的 f 和 lib_B 中的 f 指代不同的实体</span></span><br><span class="line"><span class="keyword">export</span> <span class="type">int</span> y = <span class="built_in">f</span>(); <span class="comment">// y 等于 1</span></span><br></pre></td></tr></table></figure>
+<p>(4)还是cppreference中的例子</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// decls.h</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">()</span></span>; <span class="comment">// #1，附着于全局模块</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">g</span><span class="params">()</span></span>; <span class="comment">// #2，附着于全局模块</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// M 的模块接口</span></span><br><span class="line"><span class="keyword">module</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;decls.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> M;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">using</span> ::f; <span class="comment">// OK，不声明实体，导出 #1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">g</span><span class="params">()</span></span>;          <span class="comment">// 错误：与 #2 匹配，但附着于 M</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">h</span><span class="params">()</span></span>;   <span class="comment">// #3</span></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">k</span><span class="params">()</span></span>;   <span class="comment">// #4</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 其他翻译单元</span></span><br><span class="line"><span class="keyword">import</span> M;</span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">h</span><span class="params">()</span></span>;   <span class="comment">// 错误：与 #3 匹配</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">k</span><span class="params">()</span></span>;          <span class="comment">// 错误：与 #4 匹配</span></span><br></pre></td></tr></table></figure>
+<p>简单解释一下，我们首先在<code>decls.h</code>中声明了函数<code>f()</code>和函数<code>g()</code>，它们是依附于全局模块的（预处理阶段直接展开，只要<code>#include "decls.h"</code>就可见），所以当我们在具名模块接口单元<code>M</code>中导入了<code>decls.h</code>时，就已经存在了函数<code>f()</code>和函数<code>g()</code>的声明，它们依附于全局模块，而后续的<code>int g();</code>依附于模块<code>M</code>，因此导致了错误</p>
+<p>对于<code>export int h();</code>和<code>export int k();</code>，由于使用了<code>export</code>，所以它们并不是模块链接，而是外部链接，当我们<code>import M;</code>之后，后续的函数<code>static int h()</code>和<code>int k()</code>就是可及的（即从当前翻译单元到达模块<code>M</code>中的声明），因此也出现了和上面一样的错误</p>
+<p>(5)实际就是 (1)
+中的例外，同样是cppreference中的例子，命名空间这个比较容易理解，简单连说就是命名空间是不附着于模块的，这也是为什么cppreference中说</p>
+<blockquote>
+<p>模块和命名空间是正交的</p>
+</blockquote>
+<p>函数<code>f()</code>和函数<code>g()</code>也容易理解，即它们是<code>语言链接说明中的声明</code>，而函数<code>h()</code>是依附于模块<code>lib_A</code>的，必须在当前模块中提供定义</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> lib_A;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">namespace</span> ns <span class="comment">// ns 不附着于 lib_A</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">extern</span> <span class="string">&quot;C++&quot;</span> <span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">()</span></span>; <span class="comment">// f 不附着于 lib_A</span></span><br><span class="line">           <span class="keyword">extern</span> <span class="string">&quot;C++&quot;</span> <span class="function"><span class="type">int</span> <span class="title">g</span><span class="params">()</span></span>; <span class="comment">// g 不附着于 lib_A</span></span><br><span class="line">    <span class="function"><span class="keyword">export</span>              <span class="type">int</span> <span class="title">h</span><span class="params">()</span></span>; <span class="comment">// h 附着于 lib_A</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ns::h 必须在 lib_A 中定义，但 ns::f 和 ns::g 可以在其他地方定义</span></span><br><span class="line"><span class="comment">// （例如在传统源文件中）</span></span><br></pre></td></tr></table></figure>
+<h1 id="简单的module用例">简单的module用例</h1>
+<p>介绍完module之后就上个简单的例子吧</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// ------    Character.ixx 具名模块接口单元     ------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span>;  <span class="comment">// 声明全局模块片段，用于导入头文件</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Character;       <span class="comment">// 声明具名模块接口单元Character</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">import</span> :CharacterBase;  <span class="comment">// 导出模块分区接口单元CharacterBase</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">import</span> :Ranger;         <span class="comment">// 导出模块分区接口单元Ranger</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">import</span> :Warrior;        <span class="comment">// 导出模块分区接口单元Warrior</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> std::unique_ptr&lt;CharacterBase&gt; <span class="title">create_character</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> std::string&amp; type,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> std::string&amp; name,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">float</span> health = <span class="number">100</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">float</span> base_speed = <span class="number">20</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">float</span> base_attack = <span class="number">10</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> :<span class="keyword">private</span>;  <span class="comment">// 声明私有模块片段</span></span><br><span class="line"></span><br><span class="line"><span class="function">std::unique_ptr&lt;CharacterBase&gt; <span class="title">create_character</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> std::string&amp; type,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> std::string&amp; name,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">float</span> health,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">float</span> base_speed,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">float</span> base_attack</span></span></span><br><span class="line"><span class="params"><span class="function">)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (type == <span class="string">&quot;Warrior&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">make_unique</span>&lt;Warrior&gt;(name, health, base_speed, base_attack);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (type == <span class="string">&quot;Ranger&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">make_unique</span>&lt;Ranger&gt;(name, health, base_speed, base_attack);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Error Character Type;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// ----    CharacterBase.ixx 模块分区接口单元     ----</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Character :CharacterBase;  <span class="comment">// 声明模块分区接口单元CharacterBase</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">CharacterBase</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">CharacterBase</span>(std::string name, <span class="type">float</span> health, <span class="type">float</span> base_speed, <span class="type">float</span> base_attack) <span class="keyword">noexcept</span></span><br><span class="line">		: <span class="built_in">name_</span>(name), <span class="built_in">health_</span>(health), <span class="built_in">base_speed_</span>(base_speed), <span class="built_in">base_attack_</span>(base_attack) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">virtual</span> ~<span class="built_in">CharacterBase</span>() <span class="keyword">noexcept</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">show_attack</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123;</span><br><span class="line">		std::cout &lt;&lt; <span class="string">&quot;attack is: &quot;</span> &lt;&lt; base_attack_ &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">show_speed</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123;</span><br><span class="line">		std::cout &lt;&lt; <span class="string">&quot;speed is: &quot;</span> &lt;&lt; base_speed_ &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">show_name</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123;</span><br><span class="line">		std::cout &lt;&lt; name_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	std::string name_;</span><br><span class="line">	<span class="type">float</span> health_;</span><br><span class="line">	<span class="type">float</span> base_speed_;</span><br><span class="line">	<span class="type">float</span> base_attack_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------    Ranger.ixx 模块分区接口单元     --------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Character :Ranger; <span class="comment">// 声明模块分区接口单元Ranger</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> :CharacterBase;           <span class="comment">// 导入模块分区接口单元CharacterBase</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Ranger</span> : <span class="keyword">public</span> CharacterBase &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Ranger</span>(std::string name, <span class="type">float</span> health, <span class="type">float</span> base_speed, <span class="type">float</span> base_attack) <span class="keyword">noexcept</span></span><br><span class="line">		: <span class="built_in">CharacterBase</span>(name, health, base_speed, base_attack)&#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">virtual</span> ~<span class="built_in">Ranger</span>() <span class="keyword">noexcept</span> <span class="keyword">override</span> &#123;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">show_speed</span><span class="params">()</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		std::cout &lt;&lt; <span class="string">&quot;speed is: &quot;</span> &lt;&lt; base_speed_ + speed_buff_ &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> speed_buff_ = <span class="number">5</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// --------    Warrior.ixx 模块分区接口     ---------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Character :Warrior; <span class="comment">// 声明模块分区接口单元Warrior</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> :CharacterBase;            <span class="comment">// 导入模块分区接口单元CharacterBase</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Warrior</span> : <span class="keyword">public</span> CharacterBase &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Warrior</span>(std::string name, <span class="type">float</span> health, <span class="type">float</span> base_speed, <span class="type">float</span> base_attack) <span class="keyword">noexcept</span></span><br><span class="line">		: <span class="built_in">CharacterBase</span>(name, health, base_speed, base_attack) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">virtual</span> ~<span class="built_in">Warrior</span>() <span class="keyword">noexcept</span> <span class="keyword">override</span> &#123;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">show_attack</span><span class="params">()</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		std::cout &lt;&lt; <span class="string">&quot;attack is: &quot;</span> &lt;&lt; base_attack_ + attack_buff_ &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">float</span> attack_buff_ = <span class="number">10</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Character;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">auto</span> player1 = <span class="built_in">create_character</span>(<span class="string">&quot;Warrior&quot;</span>, <span class="string">&quot;jugg&quot;</span>);</span><br><span class="line">	<span class="keyword">auto</span> player2 = <span class="built_in">create_character</span>(<span class="string">&quot;Ranger&quot;</span>, <span class="string">&quot;windrunner&quot;</span>);</span><br><span class="line"></span><br><span class="line">	player1-&gt;<span class="built_in">show_name</span>();</span><br><span class="line">	cout  &lt;&lt; <span class="string">&quot; info: &quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">	player1-&gt;<span class="built_in">show_attack</span>();</span><br><span class="line">	player1-&gt;<span class="built_in">show_speed</span>();</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;-------------------------------\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">	player2-&gt;<span class="built_in">show_name</span>();</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot; info: &quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	player2-&gt;<span class="built_in">show_attack</span>();</span><br><span class="line">	player2-&gt;<span class="built_in">show_speed</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出为</p>
+<blockquote>
+<p>jugg info:<br />
+attack is: 20<br />
+speed is: 20<br />
+-——————————<br />
+windrunner info:<br />
+attack is: 10<br />
+speed is: 25</p>
+</blockquote>
+<h1 id="module的一些问题">module的一些问题</h1>
+<p>总体使用感觉还是很不错的，如果是从零开始的新项目，其实完全可以使用module进行开发了，只有一些小问题</p>
+<ul>
+<li>IDE支持有时候会失效，这个有点奇怪，偶尔会出现没有智能提示，或者是跳转到函数定义失败的问题<br />
+</li>
+<li>和宏混用容易出错<br />
+</li>
+<li>报错的支持还有待提升，这个应该是最麻烦的问题，有些奇怪的报错几乎是无法阅读的</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/05/13/2025-05-13-%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%9D%A2%E8%AF%95/" rel="prev" title="2025-05-13-记一次失败的面试">
+                  <i class="fa fa-angle-left"></i> 2025-05-13-记一次失败的面试
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Colaxy</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
