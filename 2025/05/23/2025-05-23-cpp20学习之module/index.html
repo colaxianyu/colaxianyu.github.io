@@ -28,7 +28,7 @@
 <meta property="og:description" content="头文件存在的一些问题 使用头文件主要存在以下一些问题  头文件被重复处理导致编译速度过慢 宏和全局命名污染的问题 头文件依赖问题  头文件被重复处理主要是因为它是在预处理阶段直接展开的，也就是直接进行文本替换，考虑在B.h中include了A.h，然后在Utils.cpp和Main.cpp中都include了B.h，那么在这两个翻译单元中都会间接的包含A.h。并且，如果对A.h中的内">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-23T08:15:08.000Z">
-<meta property="article:modified_time" content="2025-05-23T08:39:07.274Z">
+<meta property="article:modified_time" content="2025-05-23T08:59:35.507Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
@@ -254,7 +254,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-05-23 16:15:08 / 修改时间：16:39:07" itemprop="dateCreated datePublished" datetime="2025-05-23T16:15:08+08:00">2025-05-23</time>
+      <time title="创建时间：2025-05-23 16:15:08 / 修改时间：16:59:35" itemprop="dateCreated datePublished" datetime="2025-05-23T16:15:08+08:00">2025-05-23</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -289,11 +289,11 @@
 guards或者规范include顺序可以尽可能的规避这些问题，但毕竟还是会在一些意想不到的时候出错</p>
 <blockquote>
 <p>推荐的头文件include顺序：<br />
-1.配套的头文件<br />
-2.C语言系统库头文件<br />
-3.C++标准库头文件<br />
-4.第三方库头文件<br />
-5.本项目的其他头文件</p>
+(1)配套的头文件<br />
+(2)C语言系统库头文件<br />
+(3)C++标准库头文件<br />
+(4)第三方库头文件<br />
+(5)本项目的其他头文件</p>
 </blockquote>
 <h1 id="module简介">module简介</h1>
 <p>cppreference是这样介绍module的</p>
@@ -303,10 +303,10 @@ guards或者规范include顺序可以尽可能的规避这些问题，但毕竟�
 </blockquote>
 <p>说白了就是用来取代头文件的东西，简单的，记住以下几个概念即可</p>
 <blockquote>
-<p>1.含有export的模块是一个接口单元，类似于头文件定义和实现分离，模块也允许有模块实现单元<br />
-2.模块可以分为具名模块（主模块，例如模块X）和模块分区（子模块，例如模块X
+<p>(1)含有export的模块是一个接口单元，类似于头文件定义和实现分离，模块也允许有模块实现单元<br />
+(2)模块可以分为具名模块（主模块，例如模块X）和模块分区（子模块，例如模块X
 : Y）<br />
-3.导入的声明可以在接口单元中再次导出</p>
+(3)导入的声明可以在接口单元中再次导出</p>
 </blockquote>
 <h2 id="语法">语法</h2>
 <p>具体的语法如下</p>
@@ -331,16 +331,16 @@ guards或者规范include顺序可以尽可能的规避这些问题，但毕竟�
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具名模块接口单元 Math.ixx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math;</span><br><span class="line"><span class="keyword">import</span> :Add;</span><br><span class="line"><span class="keyword">import</span> :Sub;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------------    模块分区 Add.ixx     ------------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math :Add;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------------    模块分区 Sub.ixx     ------------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math :Sub;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>需要注意的是</p>
 <blockquote>
-<p>1)模块分区仅自己所在的具名模块内部可见，其他的翻译单元不能直接导入这些模块分区<br />
-2)模块分区内的所有声明和定义在将它导入的模块单元中均可见，无论它们是否被导出<br />
-3)模块分区可以是模块接口单元</p>
+<p>(1)模块分区仅自己所在的具名模块内部可见，其他的翻译单元不能直接导入这些模块分区<br />
+(2)模块分区内的所有声明和定义在将它导入的模块单元中均可见，无论它们是否被导出<br />
+(3)模块分区可以是模块接口单元</p>
 </blockquote>
 <p>简单解释下</p>
-<p>1)是指其他翻译单元无法直接导入模块分区，只有具名模块和具名模块下的其他模块分区可以直接导入</p>
+<p>(1)是指其他翻译单元无法直接导入模块分区，只有具名模块和具名模块下的其他模块分区可以直接导入</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main.cpp</span></span><br><span class="line"><span class="keyword">import</span> Math :Add <span class="comment">// error, 不能直接导入模块分区，无论该模块分区是否被导出</span></span><br><span class="line"><span class="keyword">import</span> Math       <span class="comment">// ok</span></span><br></pre></td></tr></table></figure>
-<p>2)是指模块分区中的所有声明和实现，在该具名模块下所有的模块分区中都是可见的（具名模块内也可见）</p>
+<p>(2)是指模块分区中的所有声明和实现，在该具名模块下所有的模块分区中都是可见的（具名模块内也可见）</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具名模块接口单元 Math.ixx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math;</span><br><span class="line"><span class="keyword">import</span> :Add;</span><br><span class="line"><span class="keyword">import</span> :Sub;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------------    模块分区 Add.ixx     ------------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math :Add;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"><span class="comment">// -------------    模块分区 Sub.ixx     ------------</span></span><br><span class="line"><span class="comment">// -------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math :Sub;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> :Add       <span class="comment">//ok, Add和Sub都在Math这一具名模块下</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ok, 即使add是不导出的，但依然可见</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">calculate</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> c = <span class="built_in">add</span>(<span class="number">1</span>, <span class="number">2</span>); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>3)模块分区可以被导出，但需要在具名模块接口单元中导入的同时再导出</p>
+<p>(3)模块分区可以被导出，但需要在具名模块接口单元中导入的同时再导出</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 具名模块接口单元 Math.ixx</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">module</span> Math;</span><br><span class="line"><span class="keyword">import</span> :Add;         <span class="comment">// 仅内部使用</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">import</span> :Sub;  <span class="comment">// 作为接口单元被导入的同时又被导出</span></span><br></pre></td></tr></table></figure>
 <h3 id="导出声明">(2, 3) 导出声明</h3>
 <p>导出一个声明或序列内的所有声明</p>
@@ -375,7 +375,7 @@ or replace the textual inclusion with import &lt;vector&gt;;.</p>
 (2)如果一个实体的声明附着于一个具名模块，该实体只能在该模块中定义。每个这种实体的所有声明都必须附着于同一模块<br />
 (3)如果一个声明附着于一个具名模块，并且该声明没有被导出，那么声明的名字具有<a
 target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/storage_duration#.E6.A8.A1.E5.9D.97.E9.93.BE.E6.8E.A5">模块链接</a><br />
-(4)如果同一实体的两个声明附着于不同的模块，那么程序非良构；如果两个声明都无法从对方可及，那么不要求诊断
+(4)如果同一实体的两个声明附着于不同的模块，那么程序非良构；如果两个声明都无法从对方可及，那么不要求诊断<br />
 (5)具有外部链接的<a
 target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/namespace">命名空间</a>定义和在<a
 target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/language_linkage">语言链接</a>说明中的声明不附着于任何具名模块（因此声明的这些实体可以在模块外定义）</p>
@@ -408,7 +408,7 @@ target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/
 <p>jugg info:<br />
 attack is: 20<br />
 speed is: 20<br />
--——————————<br />
+——————————-<br />
 windrunner info:<br />
 attack is: 10<br />
 speed is: 25</p>
