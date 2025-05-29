@@ -20,25 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="知行合一">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Colaxy&#39;s Blog">
-<meta property="og:url" content="https://colaxianyu.github.io/index.html">
+    <meta name="description" content="也算是一边看文档和各种教程，一边用蓝图做了一个简单的demo出来，不过还是感觉很多东西的云里雾里的，正好打算把部分蓝图内容转换为C++实现，所以趁这个机会记录一下 PaperCharacter 地图的制作感觉可以先放一放，因为整个流程还是比较简单的，主要就是素材的导入，给必要的Tile添加碰撞，然后自由组合即可，等后续需要和角色产生交互再统一记录吧，所以这里就先记录一下角色制作的一些关键流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025-05-29-UE5之横版2D游戏">
+<meta property="og:url" content="https://colaxianyu.github.io/2025/05/29/2025-05-29-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F/index.html">
 <meta property="og:site_name" content="Colaxy&#39;s Blog">
-<meta property="og:description" content="知行合一">
+<meta property="og:description" content="也算是一边看文档和各种教程，一边用蓝图做了一个简单的demo出来，不过还是感觉很多东西的云里雾里的，正好打算把部分蓝图内容转换为C++实现，所以趁这个机会记录一下 PaperCharacter 地图的制作感觉可以先放一放，因为整个流程还是比较简单的，主要就是素材的导入，给必要的Tile添加碰撞，然后自由组合即可，等后续需要和角色产生交互再统一记录吧，所以这里就先记录一下角色制作的一些关键流程">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-29T06:21:59.000Z">
+<meta property="article:modified_time" content="2025-05-29T14:40:32.000Z">
 <meta property="article:author" content="Colaxy">
 <meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://colaxianyu.github.io/">
+<link rel="canonical" href="https://colaxianyu.github.io/2025/05/29/2025-05-29-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colaxianyu.github.io/2025/05/29/2025-05-29-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F/","path":"2025/05/29/2025-05-29-UE5之横版2D游戏/","title":"2025-05-29-UE5之横版2D游戏"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Colaxy's Blog</title>
+<title>2025-05-29-UE5之横版2D游戏 | Colaxy's Blog</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-189780915-2","only_pageview":false,"measure_protocol_api_secret":null}</script>
@@ -103,7 +105,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Colaxy's Blog</h1>
+      <p class="site-title">Colaxy's Blog</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -156,7 +158,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -169,6 +171,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#papercharacter"><span class="nav-number">1.</span> <span class="nav-text">PaperCharacter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#enhanced-input"><span class="nav-number">1.1.</span> <span class="nav-text">Enhanced Input</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#camera"><span class="nav-number">1.2.</span> <span class="nav-text">Camera</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">最终实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E8%AE%BE%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text">一些有意思的设定</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -210,16 +213,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/29/2025-05-29-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -233,13 +237,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
+      <meta itemprop="name" content="2025-05-29-UE5之横版2D游戏 | Colaxy's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/05/29/2025-05-29-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F/" class="post-title-link" itemprop="url">2025-05-29-UE5之横版2D游戏</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          2025-05-29-UE5之横版2D游戏
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -271,8 +275,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-          <p>也算是一边看文档和各种教程，一边用蓝图做了一个简单的demo出来，不过还是感觉很多东西的云里雾里的，正好打算把部分蓝图内容转换为C++实现，所以趁这个机会记录一下</p>
+    <div class="post-body" itemprop="articleBody"><p>也算是一边看文档和各种教程，一边用蓝图做了一个简单的demo出来，不过还是感觉很多东西的云里雾里的，正好打算把部分蓝图内容转换为C++实现，所以趁这个机会记录一下</p>
 <h1 id="papercharacter">PaperCharacter</h1>
 <p>地图的制作感觉可以先放一放，因为整个流程还是比较简单的，主要就是素材的导入，给必要的Tile添加碰撞，然后自由组合即可，等后续需要和角色产生交互再统一记录吧，所以这里就先记录一下角色制作的一些关键流程</p>
 <h2 id="enhanced-input">Enhanced Input</h2>
@@ -356,7 +359,6 @@
 <p>现在我们看看<code>Pawn控制旋转 + 将旋转朝向运动</code>的组合，最大的区别就在于最开始我按<code>A</code>和<code>D</code>时，角色会转向运动的方向，并且最后我只按<code>W</code>，用鼠标改变控制器正方向时，也是正常的，所以这个组合可以看作一个满血的第三人称控制，那么<code>Pawn控制旋转 + 使用控制器所需的旋转</code>组合有什么用途呢，假设我们的游戏提供了一个AutoRun的功能，此时玩家便无需按<code>W、A、S、D</code>控制角色运动，只需要移动鼠标控制方向即可</p>
 <p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-05-29-505833ac649ff233664fe5c4ff858c8f.gif" /></p>
 
-      
     </div>
 
     
@@ -364,404 +366,18 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/" class="post-title-link" itemprop="url">2025-05-23-C++20学习之module</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-05-23 16:15:08 / 修改时间：17:08:24" itemprop="dateCreated datePublished" datetime="2025-05-23T16:15:08+08:00">2025-05-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="头文件存在的一些问题">头文件存在的一些问题</h1>
-<p>使用头文件主要存在以下一些问题</p>
-<blockquote>
-<p>头文件被重复处理导致编译速度过慢</p>
-<p>宏和全局命名污染的问题</p>
-<p>头文件依赖问题</p>
-</blockquote>
-<p>头文件被重复处理主要是因为它是在预处理阶段直接展开的，也就是直接进行文本替换，考虑在<code>B.h</code>中include了<code>A.h</code>，然后在<code>Utils.cpp</code>和<code>Main.cpp</code>中都include了<code>B.h</code>，那么在这两个翻译单元中都会间接的包含<code>A.h</code>。并且，如果对<code>A.h</code>中的内容做了任何修改，那么其他所有包含<code>A.h</code>的翻译单元都需要重新编译</p>
-<p>宏和全局命名污染的问题的原因同上，预处理阶段对头文件进行简单的文本替换导致了这个问题</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/13/2025-05-13-%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%9D%A2%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/05/13/2025-05-13-%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E9%9D%A2%E8%AF%95/" class="post-title-link" itemprop="url">2025-05-13-记一次失败的面试</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-05-13 21:44:06" itemprop="dateCreated datePublished" datetime="2025-05-13T21:44:06+08:00">2025-05-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-14 11:09:18" itemprop="dateModified" datetime="2025-05-14T11:09:18+08:00">2025-05-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/essay/" itemprop="url" rel="index"><span itemprop="name">essay</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>更新: 果然一晚上没睡好，闭上眼睛就是free(p,
-lenth)，转眼已经5月中旬了，感觉机会不多时间也不充裕了，人总要为自己的失误买单，还是抓紧时间继续准备吧</p>
-<p>最后，深感自己技术不足且基础不扎实，或许大厂之路还很遥远，想要从事游戏开发唯有付出一切努力继续用心沉淀，而不是沉浸在当下的失败中，也不是沉浸短暂的自我感动中。虽然时间不多，但还是用dota2小骷髅的一句语音鼓励一下自己吧，与其感慨路难行，不如马上出发。仅以此贴警示自己，浮于表面和糟糕的习惯总会给你当头一棒</p>
-<hr />
-<p>结束腾讯光子的二面，喜提鹅厂二面挂*2，被自己蠢哭了，记录一下自己的抽象操作</p>
-<p>Q: 为什么要做PE解析工具</p>
-<p>A:
-小导原本在找量化交易平台开发的相关合作，后续可能会有些项目相关的工作，让我去做一些这个方向的准备，但是后面小导生病导致课题没有后续所以暂时无事可做，就打算在游戏demo和这个项目之间二选一，正好大导要组一个CTF团队，就选了这个项目作为给本科生的一个演示</p>
-<p>反思:
-真想给自己两巴掌，说一堆废话，确实小导住院了，项目没了下文，科研的课题又是新方向只能自己琢磨，但是这些东西和面试有啥关系，直接明了的说做这个项目是因为自己感兴趣，并且刚好可以提升本科生对CTF的兴趣即可，也不知道自己到底在说什么</p>
-<p>Q: 做这个项目遇到哪些困难</p>
-<p>A: 阿巴阿巴</p>
-<p>反思:
-描述还是有些混乱，虽然明确了具体遇到什么问题，但是怎么解决的没有讲好，从东扯到西，一下在说具体实现，一下又扯到设计模式，还是要再好好梳理这个项目</p>
-<p>Q: 项目中的AddImport.ixx里的xxxx代码做了什么</p>
-<p>A: 阿巴阿巴</p>
-<p>反思:
-蠢哭第一步，首先这段代码做了一个逻辑上很抽象的事，具体来说，已经存在一个被初始化的buffer(new_section)，之后我又new了一块新内存并进行初始化，然后把初始化后的新内存中的内容copy到buffer中，然后释放新内存，自己看了一圈也没想明白自己当时在干嘛，然后跟面试官说不太记得当时在干嘛了(被自己的sb代码绕晕)，所以为什么不直接说这一段代码逻辑是有问题的呢，面试里遇到一时间答不上来问题还是太着急了，正常表达这段代码有问题就行，不用去扯当时在干什么</p>
-<p>Q: 项目中TcharToString函数有什么问题，你会怎么修改</p>
-<p>A: 内存泄漏</p>
-<p>反思:
-犯蠢第二步，首先这一圈的代码存在内存泄漏只是一个问题，另外一点，new的使用方式也是错的，char*
-p = new[sizeof(char) *
-lenth]，死去嵌入式的回忆还在攻击我，不过这个先不说，当时也没注意到，毕竟这还不是最蠢的。最蠢的在于，解决这个问题的方法，也就是我释放内存用的是free，虽然后面说了new和delete要成对使用，巴拉了一堆试图掩盖错误(所以我当时到底为什么没用delete)，但是关键是free也写错了，写成了free(p,
-lenth)，原地去世</p>
-<p>唉，不知道今晚的面试在干嘛，有种张嘴从东吹到西，结果面试官出了个1+1的题没算对的感觉</p>
-<p>感觉面试官真尽力了，虽然我的技术栈不匹配，但还是专门看了我的项目代码给我一个机会多聊下，结果自己什么都没接住，关键时刻掉链子就算了，还是这种最低级的错误</p>
-<p>用这个帖子记录一下这次失败的面试，对自己很失望，满瓶不动半瓶摇说的就是我吧，满嘴的新特性，实际连最基础的东西都做不好。看着屏幕一个多小时了也不知道要写什么，或许这就是以前糟糕的编码习惯，不经大脑的胡乱用C写C++的恶果，面评烂了也是自己作的</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/07/2025-05-07-cpp%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/05/07/2025-05-07-cpp%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">C++学习之final优化</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-05-07 12:16:02 / 修改时间：12:31:21" itemprop="dateCreated datePublished" datetime="2025-05-07T12:16:02+08:00">2025-05-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>我们都知道虚函数在引用语义下表现出多态，但也多了一次寻址开销</p>
-<blockquote>
-<p>实际性能开销主要源自虚函数抑制了内联优化</p>
-</blockquote>
-<p>首先我们先看一下以下代码的输出 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">g</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">g</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> : <span class="keyword">public</span> B &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;C::f()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">g</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;C::g()&quot;</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	A* a = <span class="keyword">new</span> <span class="built_in">A</span>();</span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	B* b = <span class="keyword">new</span> <span class="built_in">B</span>();</span><br><span class="line">	*(std::<span class="type">uint64_t</span>*)a = *(std::<span class="type">uint64_t</span>*)b;</span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	A aa = *a;</span><br><span class="line">	aa.<span class="built_in">f</span>();</span><br><span class="line">	aa.<span class="built_in">g</span>();</span><br><span class="line"></span><br><span class="line">	a = <span class="keyword">new</span> <span class="built_in">C</span>();</span><br><span class="line">	a-&gt;<span class="built_in">f</span>();</span><br><span class="line">	a-&gt;<span class="built_in">g</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/07/2025-05-07-cpp%E5%AD%A6%E4%B9%A0-final%E4%BC%98%E5%8C%96/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/05/23/2025-05-23-cpp20%E5%AD%A6%E4%B9%A0%E4%B9%8Bmodule/" rel="prev" title="2025-05-23-C++20学习之module">
+                  <i class="fa fa-angle-left"></i> 2025-05-23-C++20学习之module
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/" class="post-title-link" itemprop="url">源码UE5启动项目</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-05-02 22:17:33" itemprop="dateCreated datePublished" datetime="2025-05-02T22:17:33+08:00">2025-05-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-07 12:26:16" itemprop="dateModified" datetime="2025-05-07T12:26:16+08:00">2025-05-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/ue5/" itemprop="url" rel="index"><span itemprop="name">ue5</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1
-id="源码ue5启动项目的一些常见问题">源码UE5启动项目的一些常见问题</h1>
-<p>之前为了学习UE5的源代码，所以就直接从源码编译了UE5来使用，不过期间也是遇到了一些奇怪的坑，在这里记录一下</p>
-<h2 id="环境配置问题">环境配置问题</h2>
-<p>UE5对.NET、MSVC、Windows
-SDK的版本是有要求的，并不是越新越好，如果出现了环境配置上的错误，可以先打开Visual
-Studio Installer检查一下，推荐的配置如下</p>
-<p>Windows SDK版本：</p>
-<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/20250502212914076.png" /></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/02/2025-05-02-%E6%BA%90%E7%A0%81UE5%E5%90%AF%E5%8A%A8%E9%A1%B9%E7%9B%AE/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+            <div class="post-nav-item">
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          </div>
     </footer>
   </article>
 </div>
@@ -769,488 +385,7 @@ Studio Installer检查一下，推荐的配置如下</p>
 
 
 
-    
 
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/04/12/2025-04-12-%E8%8E%B7%E5%8F%96kernel32.dll/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/04/12/2025-04-12-%E8%8E%B7%E5%8F%96kernel32.dll/" class="post-title-link" itemprop="url">获取kernel32.dll</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-04-12 23:01:39" itemprop="dateCreated datePublished" datetime="2025-04-12T23:01:39+08:00">2025-04-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-02 20:50:07" itemprop="dateModified" datetime="2025-05-02T20:50:07+08:00">2025-05-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="fs寄存器">FS寄存器</h1>
-<p>fs寄存器记录了当前活动线程的TEB结构，具体信息如下 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x000</span> 指向SEH链指针</span><br><span class="line"><span class="number">0x004</span> 线程堆栈顶部</span><br><span class="line"><span class="number">0x008</span> 线程堆栈底部</span><br><span class="line"><span class="number">0x00C</span> SubSystemTib</span><br><span class="line"><span class="number">0x010</span> FiberData</span><br><span class="line"><span class="number">0x014</span> ArbitraryUserPointer</span><br><span class="line"><span class="number">0x018</span> FS段寄存器在内存中的镜像地址</span><br><span class="line"><span class="number">0x020</span> 进程PID</span><br><span class="line"><span class="number">0x024</span> 线程ID</span><br><span class="line"><span class="number">0x02C</span> 指向线程局部存储指针</span><br><span class="line"><span class="number">0x030</span> PEB结构地址（进程结构）</span><br><span class="line"><span class="number">0x034</span> 上个错误号</span><br></pre></td></tr></table></figure></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/04/12/2025-04-12-%E8%8E%B7%E5%8F%96kernel32.dll/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/03/07/2025-03-07-%E5%85%AB%E8%82%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/03/07/2025-03-07-%E5%85%AB%E8%82%A1/" class="post-title-link" itemprop="url">八股</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-03-07 22:36:59" itemprop="dateCreated datePublished" datetime="2025-03-07T22:36:59+08:00">2025-03-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-14 00:08:33" itemprop="dateModified" datetime="2025-05-14T00:08:33+08:00">2025-05-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="c">C++</h1>
-<h2 id="简述c语言的特点">简述C++语言的特点</h2>
-<ol type="1">
-<li>以面向对象为主，还支持泛型，函数式编程等多种编程范式</li>
-<li>C++既可以直接操作内存，也可以利用零成本抽象的特性和元编程等技巧提高运行效率</li>
-<li>C++更安全，鼓励使用RAII机制自动管理资源，减少内存泄漏风险</li>
-<li>C++是一个不断发展的语言，每3年增加一些新特性，例如C++11引入了智能指针，右值，移动语义等特性，c++20引入了module、concept、ranges等特性</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/03/07/2025-03-07-%E5%85%AB%E8%82%A1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2024/07/21/2024-07-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/21/2024-07-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/" class="post-title-link" itemprop="url">PE文件解析（四）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-07-21 15:19:09" itemprop="dateCreated datePublished" datetime="2024-07-21T15:19:09+08:00">2024-07-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-29 17:52:36" itemprop="dateModified" datetime="2025-03-29T17:52:36+08:00">2025-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="资源表">资源表</h3>
-<p>资源表的结构相对复杂，采用了类似磁盘目录结构的方式保存，通常目录有3层，第1层目录类似于一个文件系统的根目录，指出了整个资源表中有多少种不同的类型（如光标、菜单、快捷键等）；第2层目录指明了当前类型的资源中，有多少个资源；而第3层目录被称为资源代码页</p>
-<p>为了便于理解，先给出一张资源表的树形结构图</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/colaxianyu/imgbed/img/2024-07-21-资源表树形.png" /></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/07/21/2024-07-21-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E5%9B%9B%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2024/07/15/2024-07-15-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/15/2024-07-15-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89/" class="post-title-link" itemprop="url">PE文件解析（三）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-07-15 22:12:54" itemprop="dateCreated datePublished" datetime="2024-07-15T22:12:54+08:00">2024-07-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-29 17:50:01" itemprop="dateModified" datetime="2025-03-29T17:50:01+08:00">2025-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>之前讲解了输入表与输入地址表以及他们的工作原理，现在我们开始分析输出表与重定位表</p>
-<h3 id="输出表">输出表</h3>
-<p>创建一个DLL时，实际上创建了一组能让exe或其他DLL调用的函数，而PE装载器将根据DLL文件中的输出信息修正正被执行文件中的IAT。通常exe文件中不存在输出表（并不绝对），而大部分DLL文件中则存在输出表</p>
-<h4 id="输出表的结构">输出表的结构</h4>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">_IMAGE_EXPORT_DIRECTORY</span> &#123;</span><br><span class="line">    DWORD   Characteristics;            <span class="comment">// 旗标，未使用，总是为0</span></span><br><span class="line">    DWORD   TimeDateStamp;</span><br><span class="line">    WORD    MajorVersion;               <span class="comment">// 主版本号，一般为0</span></span><br><span class="line">    WORD    MinorVersion;               <span class="comment">// 次版本号，一般为0</span></span><br><span class="line">    DWORD   Name;</span><br><span class="line">    DWORD   Base;</span><br><span class="line">    DWORD   NumberOfFunctions;</span><br><span class="line">    DWORD   NumberOfNames;</span><br><span class="line">    DWORD   AddressOfFunctions;     </span><br><span class="line">    DWORD   AddressOfNames;         </span><br><span class="line">    DWORD   AddressOfNameOrdinals;  </span><br><span class="line">&#125; IMAGE_EXPORT_DIRECTORY</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/07/15/2024-07-15-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2024/07/03/2024-07-03-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.png">
-      <meta itemprop="name" content="Colaxy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Colaxy's Blog">
-      <meta itemprop="description" content="知行合一">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Colaxy's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/07/03/2024-07-03-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">PE文件解析（二）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-07-03 14:36:59" itemprop="dateCreated datePublished" datetime="2024-07-03T14:36:59+08:00">2024-07-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-02 23:14:03" itemprop="dateModified" datetime="2025-05-02T23:14:03+08:00">2025-05-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/reverse/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>之前已经对PE文件的总体结构进行了解析，但PE文件中的很多重要的数据还存放在各类数据表中，因此我们还需要对这些表信息进行解析，这里主要包块输入表与输入地址表、输出表、重定位表、资源表五个部分</p>
-<h3 id="输入表与输入地址表">输入表与输入地址表</h3>
-<h4 id="什么是输入表">什么是输入表</h4>
-<p>可执行文件使用来自其他DLL的代码与数据的行为称为输入，当PE文件载入内存时，Windows加载器的工作之一就是找到这些输入的函数与数据，并让文件可以使用这些代码与数据的正确地址，而这个过程正是通过输入表（Import
-Table）完成的，输入表中保存了输入的函数名和这些函数所在的DLL名称</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/07/03/2024-07-03-PE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
 
 </div>
   </main>
