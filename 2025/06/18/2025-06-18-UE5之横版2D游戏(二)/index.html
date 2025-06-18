@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/uploads/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" integrity="sha256-zM8WXtG4eUn7dKKNMTuoWZub++VnSfaOpA/8PJfvTBo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colaxianyu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.23.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="之前我们已经完成了角色的移动功能，但还不具备相应的动画，所以在这一部分完成角色动画的相应设置 材料准备 PaperZD 首先需要准备的就是PaperZD这个插件，使用该插件我们可以方便的设置动画状态机，在BP_PaperCharacterBase中我们也可以看到多出来一个Animation Component组件  简单介绍一下PaperZD的三个基础模块，分别是 1. Animat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE5之横版2D游戏(二)">
+<meta property="og:url" content="https://colaxianyu.github.io/2025/06/18/2025-06-18-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F(%E4%BA%8C)/index.html">
+<meta property="og:site_name" content="Colaxy&#39;s Blog">
+<meta property="og:description" content="之前我们已经完成了角色的移动功能，但还不具备相应的动画，所以在这一部分完成角色动画的相应设置 材料准备 PaperZD 首先需要准备的就是PaperZD这个插件，使用该插件我们可以方便的设置动画状态机，在BP_PaperCharacterBase中我们也可以看到多出来一个Animation Component组件  简单介绍一下PaperZD的三个基础模块，分别是 1. Animat">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-06-18T13:35:54.000Z">
+<meta property="article:modified_time" content="2025-06-18T13:40:46.260Z">
+<meta property="article:author" content="Colaxy">
+<meta property="article:tag" content="C++,Reverse Engineering,Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://colaxianyu.github.io/2025/06/18/2025-06-18-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F(%E4%BA%8C)/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colaxianyu.github.io/2025/06/18/2025-06-18-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F(%E4%BA%8C)/","path":"2025/06/18/2025-06-18-UE5之横版2D游戏(二)/","title":"UE5之横版2D游戏(二)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>UE5之横版2D游戏(二) | Colaxy's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-189780915-2"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-189780915-2","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" integrity="sha256-hiUEBwFEpLF6DlB8sGXlKo4kPZ46Ui4qGpd0vrVkOm4=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Colaxy's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-ue5"><a href="/categories/UE5/" rel="section"><i class="fa fa-gamepad fa-fw"></i>UE5</a></li><li class="menu-item menu-item-c++"><a href="/categories/CPP/" rel="section"><i class="fa fa-coffee fa-fw"></i>C++</a></li><li class="menu-item menu-item-reverse"><a href="/categories/reverse/" rel="section"><i class="fa fa-bug fa-fw"></i>逆向</a></li><li class="menu-item menu-item-essay"><a href="/categories/essay/" rel="section"><i class="fa fa-pencil-ruler fa-fw"></i>随笔</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%90%E6%96%99%E5%87%86%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">材料准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#paperzd"><span class="nav-number">1.1.</span> <span class="nav-text">PaperZD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAflipbook"><span class="nav-number">1.2.</span> <span class="nav-text">创建FlipBook</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E5%8A%A8%E7%94%BB%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">制作动画状态机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAanimationsource%E5%92%8Canimationsequence"><span class="nav-number">2.1.</span> <span class="nav-text">创建AnimationSource和AnimationSequence</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%8A%A8%E7%94%BB%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">2.2.</span> <span class="nav-text">设置动画状态机</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Colaxy"
+      src="/uploads/avatar.png">
+  <p class="site-author-name" itemprop="name">Colaxy</p>
+  <div class="site-description" itemprop="description">知行合一</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/colaxianyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;colaxianyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://colaxianyu.github.io/2025/06/18/2025-06-18-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F(%E4%BA%8C)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.png">
+      <meta itemprop="name" content="Colaxy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Colaxy's Blog">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="UE5之横版2D游戏(二) | Colaxy's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE5之横版2D游戏(二)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-18 21:35:54 / 修改时间：21:40:46" itemprop="dateCreated datePublished" datetime="2025-06-18T21:35:54+08:00">2025-06-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ue5/" itemprop="url" rel="index"><span itemprop="name">ue5</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>之前我们已经完成了角色的移动功能，但还不具备相应的动画，所以在这一部分完成角色动画的相应设置</p>
+<h2 id="材料准备">材料准备</h2>
+<h3 id="paperzd">PaperZD</h3>
+<p>首先需要准备的就是<a
+href="%5BPaperZD%20%7C%20Fab%5D(https://www.fab.com/listings/6664e3b5-e376-47aa-a0dd-f7bbbd5b93c0)">PaperZD</a>这个插件，使用该插件我们可以方便的设置动画状态机，在<code>BP_PaperCharacterBase</code>中我们也可以看到多出来一个Animation
+Component组件</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-15-41-307f8e35e0475c257de211abe5542a6b.png" /></p>
+<p>简单介绍一下PaperZD的三个基础模块，分别是<br />
+1. AnimationSequence：用于绑定一个2D FlipBook 2.
+AnimationSource：类似于一个管理器，可以集中的创建和设置AnimationSequence
+3. PaperZD AnimBP：在此蓝图中设置我们的动画状态机</p>
+<span id="more"></span>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-16-09-73373b9a2ce723c0b23f4601d7e8d995.png" /></p>
+<h3 id="创建flipbook">创建FlipBook</h3>
+<p>既然可以利用PaperZD来设置动画状态机，那么接下来只需要准备动画素材即可，UE5中的2D动画被称为FlipBook，选择需要的Sprite序列，然后右键创建图像序列，最后在FlipBook中调节每秒帧数即可</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-16-29-81780ee71541fc747afa2cc786b75574.png" /></p>
+<p>制作好相应的FlipBook即可正式开工</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-16-34-b5f8f520ad57e47099491246480c8a7c.png" /></p>
+<h2 id="制作动画状态机">制作动画状态机</h2>
+<h3
+id="创建animationsource和animationsequence">创建AnimationSource和AnimationSequence</h3>
+<p>首先我们创建一个<code>LukeAnimSource</code>，然后在<code>LukeAnimSource</code>中我们创建三个Animation
+Sequence，<code>LukeIdle</code>、<code>LukeRun</code>、<code>LukeJump</code>，然后选择相应的Animation
+Sequence，在Asset Detail面板中的Animation Data绑定对应的FlipBook即可</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-16-46-5ac7d4de20930bf7a8051de017ee96df.png" /></p>
+<p><strong>Note: 选择Animation
+Sequence的操作有点反直觉，必须要双击才能切换过去，单击只是选中，可以观察图中，左侧虽然选中了LukeIdle，但当前打开的是LukeJump（时间轴左侧有当前打开的Animation
+Sequence名称）</strong></p>
+<h3 id="设置动画状态机">设置动画状态机</h3>
+<p>确定为每一个Animation
+Sequence都设置好对应的FlipBook后就可以开始制作动画状态机了，从PaperZD
+AnimBP创建蓝图<code>BP_LukeAnimBP</code>，然后选择之前制作好的AnimationSource即可</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-17-00-cd9e54b2825ae15e6ad5497e84aee3f5.png" /></p>
+<p>与UE5提供的3D动画蓝图类似，我们从引脚创建一个新的状态机，然后双击进入状态机内部</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-17-04-15996e087ddf0512bd2e73e6bfe20679.png" /></p>
+<p>接下来就是创建状态机的状态和状态转移的条件，目前我们只有三个状态，Idle、Run和Jump，所以依次创建它们即可</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-17-09-80c546c86ead5265310a1426128a1296.png" /></p>
+<p>值得一提的是，Jump状态可以设计为下图的模式，也可以采用另外一种方式实现</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-19-54-d91dd4744fdbe97b52589535b5819237.png" /></p>
+<p>我们在空白的位置右键，可以发现我们能够创建四类节点，简单介绍一下：</p>
+<ol type="1">
+<li>Animation State: 也就是我们最常用的状态节点，如之前的Idle等</li>
+<li>Comment: 注释节点</li>
+<li>Conduit: 条件判断节点，主要用于集中管理和复用否个逻辑</li>
+<li>Jump: 跳转节点，类似于goto</li>
+</ol>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-19-56-0e233d2d263547931991e42975a64023.png" /></p>
+<p>考虑到我们既可以通过判断z轴的速度转移到Jump状态，也可以通过跳跃事件的触发转移到Jump状态，所以动画状态机还可以有如下的实现方式，我们创建了一个Jump节点，然后重命名为<code>JumpState</code></p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-20-13-808ca5ffd0da24c1231065675c85413b.png" /></p>
+<p>之后我们来到<code>BP_PaperCharacterBase</code>中，点击标注的位置找到<code>跳跃时</code>，即可像图中一样设置On
+Jumped事件，我们通过蓝图组件获取Anim
+Instance，然后搜索<code>Jump to Node</code>就可以调用动画状态机蓝图中的Jump节点，只需要把Jump
+Name该为Jump节点的名称即可，也就是<code>JumpState</code>（图中的下拉菜单没有<code>跳跃时</code>这个事件，因为我已经在蓝图中设置了，所以不允许再次重载）</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-20-17-73512721f58e093964cb518d8f304063.png" /></p>
+<p>然后需要在Animation Component中和动画状态机完成绑定</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-21-01-a65a4c5bd0154cfe44bac8529056fb4c.png" /></p>
+<p>然后我们回到动画状态机蓝图<code>BP_LukeAnimBP</code>中，现在我们的状态机还需设置每个状态对应的动画和状态转移的条件，我们首先完成每个状态的动画设置，以Idle为例，双击进入，选择对应的动画即可</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-21-12-39c34179ea93fd4e99b60ea9eec85561.png" /></p>
+<p>接下来是状态转移条件的设置，可以想到，如果我们知道角色在X轴和Z轴上的速度，就可知道角色应该转移至什么样的状态，因此，我们来到<code>BP_LukeAnimBP</code>中的<code>事件图表</code>，之前我们已经完成了角色和状态机的绑定，那么我们可以通过<code>Get Owning Actor</code>来获取，然后将其转换为<code>BP_PaperCharacterBase</code>类型，并将结果<code>提升为变量</code>方便后续使用，这里我们将变量重命名为<code>PaperCharacterBaseRef</code></p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-20-47-fe9277b3f1e336866709b304fd6a771c.png" /></p>
+<p>现在我们回到动画状态机中，以<code>Idle-&gt;Run</code>这个状态转换为例，获取一下速度，如果X轴的速度不为0，那么就可以转移至Run状态</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-21-08-9c6079001a25ca6ace8f0ecc3a433711.png" /></p>
+<p>现在我们就已经完成了动画状态机的设置，简单测试一下，可以看到已经可以按我们设想的播放动画，但还存在一个问题，想做移动时角色朝向没有改变，所以我们还需要去Move函数中进行一些修改</p>
+<p><img data-src="https://raw.githubusercontent.com/colaxianyu/imgbed/master/img/2025-06-18-21-29-e73fbfb88af8c4005f7909841ccc2c5a.gif" /></p>
+<p>简单来说，我们判断一下当前是在向左移动还是向右移动，如果是向左移动，那么把Sprite旋转180度即可</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">APaperCharacterBase::Move</span><span class="params">(<span class="type">const</span> FInputActionValue&amp; Value)</span> </span>&#123;</span><br><span class="line">	FVector ForwardDirection = <span class="built_in">FVector</span>(<span class="number">1.0f</span>, <span class="number">0.0f</span>, <span class="number">0.0f</span>);</span><br><span class="line">	FVector2D MovementValue = Value.<span class="built_in">Get</span>&lt;FVector2D&gt;();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (MovementValue.X &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">GetSprite</span>()-&gt;<span class="built_in">SetRelativeRotation</span>(<span class="built_in">FRotator</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">		<span class="built_in">AddMovementInput</span>(ForwardDirection, MovementValue.X);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">GetSprite</span>()-&gt;<span class="built_in">SetRelativeRotation</span>(<span class="built_in">FRotator</span>(<span class="number">0</span>, <span class="number">180</span>, <span class="number">0</span>));</span><br><span class="line">		<span class="built_in">AddMovementInput</span>(ForwardDirection, MovementValue.X);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/05/29/2025-05-29-UE5%E4%B9%8B%E6%A8%AA%E7%89%882D%E6%B8%B8%E6%88%8F(%E4%B8%80)/" rel="prev" title="UE5之横版2D游戏(一)">
+                  <i class="fa fa-angle-left"></i> UE5之横版2D游戏(一)
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Colaxy</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
